@@ -72,15 +72,15 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'clockTowerSidebar',
+            sidebarId: 'conceptsSidebar',
             position: 'left',
-            label: 'V1',
+            label: 'Concepts',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
-            position: 'right',
+            type: 'docSidebar',
+            sidebarId: 'contractsSidebar',
+            position: 'left',
+            label: 'Contracts',
           },
         ],
       },
@@ -91,8 +91,8 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/intro',
+                label: 'Contracts',
+                to: '/docs/clocktower_protocol',
               },
             ],
           },
@@ -127,7 +127,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Clocktower LLC. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
