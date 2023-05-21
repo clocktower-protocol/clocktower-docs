@@ -82,6 +82,16 @@ const config = {
             position: 'left',
             label: 'Contracts',
           },
+          {
+            label: 'Whitepaper',
+            href: 'https://zerohedge.com',
+            position: 'right'
+          },
+          {
+            label: 'Github',
+            href: 'https://zerohedge.com',
+            position: 'right'
+          }
         ],
       },
       footer: {
