@@ -91,6 +91,10 @@ const config = {
             title: 'Docs',
             items: [
               {
+                label: 'Concepts',
+                to: '/docs/concepts',
+              },
+              {
                 label: 'Contracts',
                 to: '/docs/clocktower_protocol',
               },
