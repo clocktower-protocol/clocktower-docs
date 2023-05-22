@@ -114,7 +114,7 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Stack Overflow',
+                label: 'Telegram',
                 href: 'https://stackoverflow.com/questions/tagged/docusaurus',
               },
               {
@@ -131,8 +131,8 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
+                label: 'Whitepaper',
+                to: 'https://zerohedge.com',
               },
               {
                 label: 'GitHub',
