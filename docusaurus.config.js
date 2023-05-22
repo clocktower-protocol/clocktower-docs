@@ -83,9 +83,10 @@ const config = {
             label: 'Contracts',
           },
           {
+            type: 'docSidebar',
+            sidebarId: 'whitepaperSidebar',
+            position: 'right',
             label: 'Whitepaper',
-            href: 'https://zerohedge.com',
-            position: 'right'
           },
           {
             label: 'Github',
@@ -107,6 +108,10 @@ const config = {
               {
                 label: 'Contracts',
                 to: '/docs/clocktower_protocol',
+              },
+              {
+                label: 'Whitepaper',
+                to: '/docs/whitepaper',
               },
             ],
           },
@@ -130,10 +135,6 @@ const config = {
           {
             title: 'More',
             items: [
-              {
-                label: 'Whitepaper',
-                to: 'https://zerohedge.com',
-              },
               {
                 label: 'GitHub',
                 href: 'https://github.com/facebook/docusaurus',
