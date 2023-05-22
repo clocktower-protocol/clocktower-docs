@@ -8,14 +8,10 @@ Clocktower is a decentralized system that allows for time aware processes. The C
 
 ## The Problem
 
-One of the main limitations of decentralized smart contracts is that they must be acted upon by outside users. This makes it impossible to automatically schedule any actions in the future like you would with a cron job in normal computing. Without the ability to schedule transactions in the future commonplace financial services like payroll, subscriptions, regular payments, escrow and many others become impossible or overly complicated.
+One of the main limitations of decentralized smart contracts is that they must be acted upon by outside users. This makes it impossible to automatically schedule any actions in the future. These future processes are the heart of modern transactions familiar to everyone. Subscriptions, for instance, are simply regular payments that occur in the future. But without the ability of smart contracts to be time aware commonplace financial services like payroll, subscriptions, regular payments, escrow and many others become impossible or overly complicated. This limits the potential and scope of dentralized applications. 
 
 ## The Solution
 
 The Ethereum blockchain in many ways is like a giant decentralized clock, currently creating a block every twelve seconds. For each node, seconds matter, as they go through the task of creating blocks and gossiping them to the network. Its ironic that even with this elaborate timing mechanism smart contracts are unable to know what time it is unless asked, like a person with an expensive watch who can't look at it unless told to.
 
-But if instead an external source was incentivized to poll a contract at regular intervals then that contract could then reliably schedule processes in the future between two parties. 
-
-## Future Processes
-
-These future processes are the heart of modern transactions familiar to everyone. Subscriptions, for instance, are simply regular payments that occur in the future. And they are now possible through this method. 
+But if instead an external source was incentivized to poll a contract at regular intervals then that contract could then reliably schedule processes in the future between two parties thus unlocking a world of potential use cases. 
