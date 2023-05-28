@@ -49,8 +49,10 @@ In order to understand the way the Clocktower protocol works its best to think a
 
 - Receiver: This user wishes to receive tokens at some point in the future. For subscriptions we call this a Provider, who provides some sort of service in exchange for receiving tokens on a regular basis. 
 
-- Caller: This user calls the contract at a regular interval and is rewarded for their effort and gas costs by receiving compensation. 
+- Caller: This user calls the contract at a regular interval and is rewarded for their effort and gas costs by receiving [compensation](./04_fees.md). 
 
-## The importance of incentives
+## The importance of the Caller
 
-In our subscription contract the Sender Receiver and Caller also be called the Subscriber, Provider and Caller. Most people understand what a Subscriber is. 
+While sending and receiving is one of the simplest functions of blockchains as seen in simple transfer it is the inclusion of the Caller who polls the contract at regular intervals that gives the ClockTower protocol its time awareness. 
+
+While it might seem simple to just add an additional user that polls the contract. We will see in the next section how incentives and structure all work together to make each user stay in their lanes. 
