@@ -3,3 +3,54 @@ id: three_users
 title: The Three Users
 sidebar_position: 1
 ---
+
+# The Three Users
+
+One of the many ways to categorize the evolution of smart contract design is by counting how many primary users exist for the basic functionality of the protocol to work. 
+
+## First Generation (One User)
+
+In many contracts there is a single user who interacts with the contract and the contract alone. Some examples of these types of protocols:
+
+- Contract Wallets
+- "Vaults" where users stake or deposit tokens
+- Transactions where users transfer assets between addresses controlled by the same user. 
+- Accounts at central exchanges
+
+In each of these examples their is a single user who only interacts with the contract. The existence of any other users is parallel to their experience and not involved in their interaction. 
+
+## Second Generation (Two Users)
+
+A more complex example is where two users use contracts as an intermediary to interact with the each other. Sometimes this interaction is understood, sometimes the contract blinds each of the user to the existence of the other. Examples are:
+
+- Transfers of tokens between users
+- AMM Dexes where users swap or pool
+- Lending protocols where users deposit and borrow
+
+## Third Generation (Three Users)
+
+Up until now most protocols have added third user functionality to do behind the scenes utility functions for the protocol such as:
+
+- Lending protocol liquidations
+- Farming protocols to sweep earnings 
+- Privacy protocols to increment governance rewards
+
+While all of these functions are useful and sometimes critical for the overall protocol to function most do not use them primarily for focusing on polling for time. The Clocktower protocol attempts to harness a three user setup to gain better control of the temporal element. 
+
+## Sender Receiver Caller
+
+In order to understand the way the Clocktower protocol works its best to think about these three users. For simplicity lets name them after their basic function:
+
+- Sender: The user whose primary motivation is sending tokens. This can be done as a subscriber to a subscription or just a transfer. 
+
+- Receiver: This user wishes to receive tokens at some point in the future. For subscriptions we call this a Provider, who provides some sort of service in exchange for receiving tokens on a regular basis. 
+
+- Caller: This user calls the contract at a regular interval and is rewarded for their effort and gas costs by receiving compensation. 
+
+## What is a User?
+
+While we have called these entities users up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being all three roles at the same time or combinations of two out three which can sometimes lead to unexpected outcomes. 
+
+## The importance of incentives
+
+In our subscription contract
