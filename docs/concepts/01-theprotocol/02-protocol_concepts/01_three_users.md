@@ -49,8 +49,8 @@ In order to understand the way the Clocktower protocol works its best to think a
 
 ## What is a User?
 
-While we have called these entities users up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being all three roles at the same time or combinations of two out three which can sometimes lead to unexpected outcomes. 
+While we have called these entities users up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being all three roles at the same time or combinations of two out three which can sometimes lead to unexpected outcomes. Its important that incentives are calibrated so that each user doesn't try to game the system. 
 
 ## The importance of incentives
 
-In our subscription contract
+In our subscription contract the Sender Receiver and Caller also be called the Subscriber, Provider and Caller. Most people understand what a Subscriber is. 
