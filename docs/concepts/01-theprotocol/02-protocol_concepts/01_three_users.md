@@ -8,6 +8,10 @@ sidebar_position: 1
 
 One of the many ways to categorize the evolution of smart contract design is by counting how many primary users exist for the basic functionality of the protocol to work. 
 
+## What is a User?
+
+While we have called these entities users up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being multiple roles at the same time although in our protocol we seek to avoid this. 
+
 ## First Generation (One User)
 
 In many contracts there is a single user who interacts with the contract and the contract alone. Some examples of these types of protocols:
@@ -46,10 +50,6 @@ In order to understand the way the Clocktower protocol works its best to think a
 - Receiver: This user wishes to receive tokens at some point in the future. For subscriptions we call this a Provider, who provides some sort of service in exchange for receiving tokens on a regular basis. 
 
 - Caller: This user calls the contract at a regular interval and is rewarded for their effort and gas costs by receiving compensation. 
-
-## What is a User?
-
-While we have called these entities users up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being all three roles at the same time or combinations of two out three which can sometimes lead to unexpected outcomes. Its important that incentives are calibrated so that each user doesn't try to game the system. 
 
 ## The importance of incentives
 
