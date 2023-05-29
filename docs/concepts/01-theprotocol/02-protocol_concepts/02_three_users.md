@@ -1,7 +1,7 @@
 ---
 id: three_users
 title: The Three Users
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 # The Three Users
@@ -50,6 +50,23 @@ In order to understand the way the Clocktower protocol works its best to think a
 - Receiver: This user wishes to receive tokens at some point in the future. For subscriptions we call this a Provider, who provides some sort of service in exchange for receiving tokens on a regular basis. 
 
 - Caller: This user calls the contract at a regular interval and is rewarded for their effort and gas costs by receiving [compensation](./02_incentives.md). 
+
+## Differing relationships
+
+### One to One
+
+- Transactions
+- Escrow Payments
+
+### One to Many
+
+- Payroll
+- Bulk Payments
+- Estate Planning
+
+### Many to One
+
+Subscriptions
 
 ## The importance of the Caller
 
