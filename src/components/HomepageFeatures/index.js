@@ -17,7 +17,7 @@ const FeatureList = [
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Traditional payment and subscription services may limit what you're allowed to say, based on politics. Clocktower is free speech.
+        Traditional payment and subscription services may limit what you're allowed to say or support. Clocktower is free and open.
       </>
     ),
   },
