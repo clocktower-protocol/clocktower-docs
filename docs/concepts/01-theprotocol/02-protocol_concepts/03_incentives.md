@@ -1,5 +1,5 @@
 ---
-id: fees
+id: incentives
 title: Incentives
 sidebar_position: 3
 ---
