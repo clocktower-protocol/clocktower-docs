@@ -42,6 +42,12 @@ If the subscriber/sender and caller are the same while the receiver pays the fee
 
 If the receiver can't be the one paying the caller it must the sender/subscriber. But this choice presents additional issues that must be considered. 
 
+The biggest issues revolve around the problem of failed transactions which we will go into in the next sections, [failed transactions](./04_failed_transactions) and [fee balances](./05_fee_balance.md).
+
+
+
+
+
 - gas costs of per round fee
 - need for fee balance to avoid griefing
 

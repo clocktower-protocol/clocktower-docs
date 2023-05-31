@@ -1,0 +1,31 @@
+---
+id: failed_transactions
+title: Failed Transactions
+sidebar_position: 4
+---
+
+# Failed Transactions
+
+### Reasons for failure
+
+In an open ended setup like subscriptions where transactions are scheduled indefinitley into the future there will occur situations where a subscriber fails. This can occur for two reasons:
+
+- Not enough approval
+- Not enough funds
+
+Therefore when the Caller script makes its periodic check for scheduled transactions it checks whether the subscriber has enough approval and funds. 
+
+### DOS and Griefing attacks
+
+The biggest problem with failed transactions is that due to the subscribers account being empty or blocked from approval means the Caller has no way of directly receiving compensation in that transaction for the gas costs of checking that particular subscriber. 
+
+This money losing situation could be exploited by a malicious user to slow down or stop the Caller. 
+
+In order to avoid attacks on the contract the protocol must create expenses born by they subscriber that make failure an expense that even a malicious user would want to avoid. 
+
+Lets see how this is done in both failed states. 
+
+### Not enough approval
+
+If the subscriber has revoked their approval for Clocktower to move funds from their account the transaction will fail. 
+
