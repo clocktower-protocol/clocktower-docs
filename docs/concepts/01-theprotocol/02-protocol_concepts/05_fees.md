@@ -8,6 +8,15 @@ sidebar_position: 5
 
 As described in [failed transactions](./04_failed_transactions) the best way to pay fees to the caller is by having a reserve of ERC-20 tokens per subscriber per subscription. This reserve serves the dual purpose of both paying the caller fees for the periodic remitance of transactions and disincentivizing actions contrary to the protocol. 
 
+### What is the amount of the caller fee?
+
+Currently the caller fee is different based upon the average gas levels of the chain the contract is on. The fee can be adjusted by the protocol. The fees are as follows:
+
+| Chain | Fee Percentage |
+|---|---|
+| Ethereum | 2% |
+
+
 ### The Reserve
 
 #### When is it filled?
@@ -15,7 +24,7 @@ As described in [failed transactions](./04_failed_transactions) the best way to 
 The reserve for subscribers is filled at two points in time:
 
 1. When a user first subscribes 
-2. When a user's reserve becomes less than the Caller Fee
+2. When a user's reserve becomes less than the caller fee
 
 #### Is it the same amount for each subscription?
 
@@ -39,8 +48,6 @@ Depending on the reason for the refund the is sent to different locations based 
 | Subscriber | Unsubscribes | All remaining | Subscriber | 
 | Receiver | Receiver unsubscribers subscriber | All remaining | Subscriber |
 | Receiver | Cancels overall subscription | All remaining on all subscribers | Contract? or Caller? |
-
-
 
 ## System Fees
 
