@@ -8,7 +8,7 @@ sidebar_position: 3
 
 As shown in the previous section the Caller must be incentivized to poll the contract at regular intervals. So how is this done?
 
-### Why ETH fees don't work
+### Why not pay the caller in ETH?
 
 One might think that paying the Caller in ETH would be the most appropriate since the Caller must pay for the gas of polling the contract. But there are a few reasons this won't work. 
 
@@ -48,16 +48,6 @@ The solutions is having a [fee balance](05_fee_balance.md) where fees can be res
 
 
 
-
-
-- gas costs of per round fee
-- need for fee balance to avoid griefing
-
-
-
-- Percentage of ERC20 used
-- Must be paid by the sender
-- Must have a fee balance
 - Low gas costs benefit the protocol
 
 
