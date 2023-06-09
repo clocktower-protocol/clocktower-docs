@@ -18,6 +18,26 @@ While humans (and computers) prefer to think of abstractions in discrete terms. 
 
 #### Incrementing Systems
 
-One of the easiest ways to measure time is to pick an arbitrary point in the past and increment a number at a regular interval. In computers one finds this in [Unix Time](https://en.wikipedia.org/wiki/Unix_time) which is a system where a number increments every second past midnight January 1st 1970. 
+One of the easiest ways to measure time is to pick an arbitrary point in the past and increment a number at a regular interval. In computers one finds this most often in [Unix Time](https://en.wikipedia.org/wiki/Unix_time) which is a system where a number increments every second past midnight January 1st 1970. 
 
-The ancient Romans used a similar system where there were a fixed amount of days 
+##### Leap Days and Leap Seconds
+
+The problem is that nature doesn't increment so cleanly. In order to deal with the more analog and variable aspects of the slowing rotaion of the earth and the fractional days of the year, time must be added or subtracted to the incrementation in order not to become disconnected from nature. 
+
+Thus, leap days and leap seconds are added to keep things in sync. 
+
+#### Julian and Gregorian
+
+In order to deal with the days of the year problem two systems are most commonly used in the world, named after the men who applied them, [Julius Caesar](https://en.wikipedia.org/wiki/Julius_Caesar) and [Pope Gregory XIII](https://en.wikipedia.org/wiki/Pope_Gregory_XIII).
+
+## Issues
+
+### 15 second block timestamp drift
+- changing day cutoff away from midnight
+
+
+### Leap seconds
+- changing cutoff away from midnight
+
+### Translating unix time to gregorian time. 
+- No oracles. So the contract internally converts using Julian Days as intermediary between gregorian and unix time. 
