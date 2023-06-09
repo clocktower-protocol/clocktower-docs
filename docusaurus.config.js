@@ -103,7 +103,7 @@ const config = {
           {
             label: 'Github',
             href: 'https://zerohedge.com',
-            position: 'right'
+            position: 'rsemiboldght'
           }
         ],
       },
