@@ -16,28 +16,49 @@ Our systmes of time are ways for humans to capture regular natural occurances. Y
 
 While humans (and computers) prefer to think of abstractions in discrete terms. Nature usually is not so cut and dry. For example, years don't perfectly line up with 365 days and the rotation of the earth slows down slightly over time. These variances have led to the evolution of two distinct time systems. 
 
-#### Incrementing Systems
+#### Unix Time
 
 One of the easiest ways to measure time is to pick an arbitrary point in the past and increment a number at a regular interval. In computers one finds this most often in [Unix Time](https://en.wikipedia.org/wiki/Unix_time) which is a system where a number increments every second past midnight January 1st 1970. 
 
 ##### Leap Days and Leap Seconds
 
-The problem is that nature doesn't increment so cleanly. In order to deal with the more analog and variable aspects of the slowing rotaion of the earth and the fractional days of the year, time must be added or subtracted to the incrementation in order not to become disconnected from nature. 
+The problem is that nature doesn't increment so cleanly. In order to deal with the more analog and variable aspects of the slowing rotation of the earth and the fractional days of the year, time must be added or subtracted to the incrementation in order not to become disconnected from nature. 
 
 Thus, leap days and leap seconds are added to keep things in sync. 
 
-#### Julian and Gregorian
+#### Gregorian Time
 
-In order to deal with the days of the year problem two systems are most commonly used in the world, named after the men who applied them, [Julius Caesar](https://en.wikipedia.org/wiki/Julius_Caesar) and [Pope Gregory XIII](https://en.wikipedia.org/wiki/Pope_Gregory_XIII).
+In order to deal with the days of the year problem most of the world uses the [Gregorian Calendar](https://en.wikipedia.org/wiki/Gregorian_calendar) credited to [Pope Gregory XIII](https://en.wikipedia.org/wiki/Pope_Gregory_XIII) and based on an [earlier version](https://en.wikipedia.org/wiki/Julian_calendar) designed by [Julius Caesar](https://en.wikipedia.org/wiki/Julius_Caesar). The key aspect of the Gregorian calendar is the addition of leap days on February 29th so sync up the calendar with the solar rotation of the earth. 
 
-## Issues
+## Saving Subscription Time Points
+
+Subscriptions are an open ended time series. You can't save an open ended series with an incrementing number. For instance theres no sane way to save the date "every 5th day of the month" using just unix time. You could theoretically save a long series of calculated dates in seconds after midnight Jan. 1st 1970. But this is inefficient and what happens if the subscription goes longer than the initial series of numbers. Now you have to recalculate somehow and add more. A MUCH simpler solution is to use a Gregorian calendar point. 
+
+So for each type of frequency of subscription we simply create a range of numbers:
+
+| Frequency | Range |
+|---|---|
+| Weekly | 1 - 7 |
+| Monthly | 1 - 28 |
+| Quarterly | 1 - 90 |
+| Yearly | 1 - 365 |
+
+But now we've run into a problem. How do we translate this range number back and forth to unix time?
+
+### Julian Days
+
+
 
 ### 15 second block timestamp drift
 - changing day cutoff away from midnight
 
-
 ### Leap seconds
 - changing cutoff away from midnight
 
+### Leap years
+- don't allow February 29th to be a subscription day or there to be a 366th day in the yearly series
+
 ### Translating unix time to gregorian time. 
-- No oracles. So the contract internally converts using Julian Days as intermediary between gregorian and unix time. 
+- No oracles. 
+- Its much more efficient to save simply the frequency range number in an open ended time series. But in order to do this you have to translate the Gregorian range number to the unix time number in seconds. 
+- So the contract internally converts using Julian Days as intermediary between gregorian and unix time. 
