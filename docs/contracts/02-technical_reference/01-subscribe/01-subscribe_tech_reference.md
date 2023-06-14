@@ -433,3 +433,5 @@ Return Values:
 |---|---|---|
 | `FeeEstimate[]` | FeeEstimate | Array of [FeeEstimate](./subscribe_tech_reference#feeestimate) structs |
 
+#### Time Functions
+
