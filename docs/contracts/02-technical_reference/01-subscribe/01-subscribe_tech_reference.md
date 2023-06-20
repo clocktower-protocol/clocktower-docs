@@ -581,10 +581,13 @@ if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month 
 
 ##### getDaysOfWeek
 ```
-function getDaysInMonth(
+function getDaysofWeek(
     uint unixTime
 ) returns (uint16 dayOfWeek)
 ```
+
+Returns the number of the day of the week
+
 Parameter:
 
 | Name | Type | Description |
@@ -606,5 +609,71 @@ dayOfWeek = uint16(dayOfWeekuint);
 ```
 
 ##### getdayOfQuarter
+```
+function getdayOfQuarter(
+    uint yearDays, 
+    uint year
+) returns (uint16 quarterDay)
+```
 
+Returns the day of the quarter range day based the year and the day of the year
 
+Parameters:
+
+| Name | Type | Description |
+|---|---|---|
+| `yearDays` | uint | Day of the year (Between 1 - 365) |
+| `year`| uint | Number of year in Gregorian Calendar |
+
+Return Value:
+
+| Name | Type | Description |
+|---|---|---|
+| `quarterDay` | uint16 | Day of the quarter (1 - 90) |
+
+Code:
+```
+uint leapDay;
+if(isLeapYear(year)) {
+    leapDay = 1;
+} else {
+    leapDay = 0;
+}
+
+if(yearDays <= (90 + leapDay)) {
+    quarterDay = uint16(yearDays);
+} else if((90 + leapDay) < yearDays && yearDays <= (181 + leapDay)) {
+    quarterDay = uint16(yearDays - (90 + leapDay));
+} else if((181 + leapDay) < yearDays && yearDays <= (273 + leapDay)) {
+    quarterDay = uint16(yearDays - (181 + leapDay));
+} else {
+    quarterDay = uint16(yearDays - (273 + leapDay));
+}
+```
+
+##### unixToDays
+```
+function unixToDays (
+    uint40 unixTime
+) returns (uint40 dayCount)
+```
+
+Returns the amount of days (rounded down) since unix epoch based on a provided unix time
+
+Parameter:
+
+| Name | Type | Description |
+|---|---|---|
+| `unixTime` | uint | Unix time value |
+
+Return Value:
+
+| Name | Type | Description |
+|---|---|---|
+| `dayCount` | uint16 | Number of days (rounded down) since unix epoch |
+
+Code:
+
+```
+dayCount = unixTime/86400;
+```
