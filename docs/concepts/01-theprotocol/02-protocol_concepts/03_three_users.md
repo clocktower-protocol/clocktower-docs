@@ -1,7 +1,7 @@
 ---
 id: three_users
 title: The Three Users
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # The Three Users

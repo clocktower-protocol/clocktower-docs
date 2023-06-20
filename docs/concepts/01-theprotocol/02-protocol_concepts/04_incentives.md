@@ -1,7 +1,7 @@
 ---
 id: incentives
 title: Incentives
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 ## Paying the Caller

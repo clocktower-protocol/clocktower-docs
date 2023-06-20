@@ -1,7 +1,7 @@
 ---
 id: failed_transactions
 title: Failed Transactions
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # Failed Transactions
@@ -48,7 +48,7 @@ A subscriber could intentionally fail to create unremeimbursed gas costs for the
 
 But by giving enough of the forfeited fee balance to compensate for gas costs on failure these losses are mitigated. But why not give ALL the forfeited balance to the caller?
 
-#### Fail attack
+#### Freeloader attack
 
 Another attack involves a malicious subscriber being both subscriber and caller while intentionally failing.  If the caller was refunded all of the forfeited [fee balance](./05_fee_balance.md) then they could get a free cycle of goods or services from the creator of the subscription since they would be paying themselves back as caller. In order to mitigate this, a majority of the fee balance must be refunded to the receiver in order to pay for goods or services rendered within the time period and a smaller portion refunded to the caller to pay for gas costs. 
 
