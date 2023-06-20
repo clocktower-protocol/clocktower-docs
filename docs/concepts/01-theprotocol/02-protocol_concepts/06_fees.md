@@ -1,7 +1,7 @@
 ---
 id: fees
 title: Fees
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 ## Caller Fees
