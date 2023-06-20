@@ -8,7 +8,7 @@ sidebar_position: 1
 
 (While Clocktower Protocol can support many different contracts supporting different types of timed transactions. For Versions 1.0 we will focus on subscriptions only)
 
-Version 1 of the Clocktower Protocol is a decentralized blockchain based subscription service targeting three sets of users: Providers, Subscribers and Callers. 
+Version 1 of the Clocktower Protocol is a decentralized blockchain based subscription service targeting [three sets of users](/docs/concepts/01-theprotocol/02-protocol_concepts/03_three_users.md): Providers, Subscribers and Callers. 
 
 ### Providers
 
