@@ -45,8 +45,8 @@ The following are the data structs required by external functions:
 | `token` | address | ERC20 address of token used in subscription |
 | `exists` | bool | True if subscription exists |
 | `cancelled` | bool | True if subscription is cancelled |
-| `frequency` | Frequency | [Frequency](./subscribe_tech_reference#frequency) |
-| `dueDay` | uint16 | Day in frequency [range](./subscribe_tech_reference#allowed-time-ranges) when subscription is paid |
+| `frequency` | Frequency | [Frequency](#frequency) |
+| `dueDay` | uint16 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
 | `description` | string | Description of subscription |
 
 
@@ -60,8 +60,8 @@ The following are the data structs required by external functions:
 ```
 | Name | Type | Description|
 |---|---|---|
-| `subscription` | Subscription | [Subscription](./subscribe_tech_reference#subscription) |
-| `status` | Status | [Status](./subscribe_tech_reference#status) |
+| `subscription` | Subscription | [Subscription](#subscription) |
+| `status` | Status | [Status](#status) |
 | `totalsubscribers` | uint | Total number of subscribers |
 
 ##### FeeEstimate
@@ -206,7 +206,7 @@ Log emitted during subscriber events
 | `subscriber` | address | :heavy_check_mark: | Address of subscriber |
 | `timestamp` | uint40 | | Unix Epoch timestamp |
 | `amount` | uint | | ERC20 subscription amount in wei |
-| `subEvent` | SubEvent | :heavy_check_mark: | [SubEvent](./subscribe_tech_reference#subevent)
+| `subEvent` | SubEvent | :heavy_check_mark: | [SubEvent](#subevent)
 
 ##### CallerLog
 ```
@@ -248,7 +248,7 @@ Log emitted during Provider events
 | `timestamp` | uint40 | | Unix epoch timestamp |
 | `success` | bool | | Shows if event was successful |
 | `errorCode` | uint8 | | Errorcode if there was a problem |
-| `provEvent` | ProvEvent | :heavy_check_mark: | [ProvEvent](./subscribe_tech_reference#provevent) |
+| `provEvent` | ProvEvent | :heavy_check_mark: | [ProvEvent](#provevent) |
 
 
 ## Functions
@@ -273,8 +273,8 @@ Parameters:
 | `amount` | uint | Amount of subscription in wei |
 | `token` | address | ERC20 address of token used in subscription |
 | `description` | string | Description of subscription |
-| `frequency` | Frequency | [Frequency](https://github.com/vhmarx/clocktower#frequency) |
-| `dueDay` | uint16 | Day in [range](./subscribe_tech_reference#allowed-time-ranges) based on frequency when subscription is paid |
+| `frequency` | Frequency | [Frequency](#frequency) |
+| `dueDay` | uint16 | Day in [range](#allowed-time-ranges) based on frequency when subscription is paid |
 
 ##### subscribe
 ```
@@ -288,7 +288,7 @@ Parameters:
 
 | Name | Type | Description |
 |---|---|---|
-| `subscription` | Subscription | [Subscription](./subscribe_tech_reference#subscription) |
+| `subscription` | Subscription | [Subscription](#subscription) |
 
 
 ##### unsubscribe
@@ -340,7 +340,7 @@ Parameters:
 
 | Name | Type | Description |
 |---|---|---|
-| `subscription` | Subscription | [Subscription](./subscribe_tech_reference#subscription) |
+| `subscription` | Subscription | [Subscription](#subscription) |
 
 
 #### View Functions
@@ -387,7 +387,7 @@ Return Values:
 
 | Name | Type | Description |
 |---|---|---|
-| `SubView[]` | SubView | Array of [Subview](./subscribe_tech_reference#subview) structs |
+| `SubView[]` | SubView | Array of [Subview](#subview) structs |
 
 ##### getSubscribersById
 ```
@@ -408,7 +408,7 @@ Return Values:
 
 | Name | Type | Description |
 |---|---|---|
-| `SubscriberView[]` | SubscriberView | Array of [SubscriberView](./subscribe_tech_reference#subscriberview) structs |
+| `SubscriberView[]` | SubscriberView | Array of [SubscriberView](#subscriberview) structs |
 
 ##### getSubByIndex
 ```
@@ -426,14 +426,14 @@ Parameters:
 | Name | Type | Description |
 |---|---|---|
 | `id` | bytes32 | Unique subscription id |
-| `frequency` | Frequency | [Frequency](./subscribe_tech_reference#frequency) |
-| `dueDay` | uint16 | Day in [range](./subscribe_tech_reference#allowed-time-ranges) based on frequency when subscription is paid |
+| `frequency` | Frequency | [Frequency](#frequency) |
+| `dueDay` | uint16 | Day in [range](#allowed-time-ranges) based on frequency when subscription is paid |
 
 Return Values:
 
 | Name | Type | Description |
 |---|---|---|
-| `subscription` | Subscription | [Subscription](./subscribe_tech_reference#subscription) |
+| `subscription` | Subscription | [Subscription](#subscription) |
 
 
 ##### feeEstimate
@@ -448,7 +448,7 @@ Return Values:
 
 | Name | Type | Description |
 |---|---|---|
-| `FeeEstimate[]` | FeeEstimate | Array of [FeeEstimate](./subscribe_tech_reference#feeestimate) structs |
+| `FeeEstimate[]` | FeeEstimate | Array of [FeeEstimate](#feeestimate) structs |
 
 #### Time Functions
 
