@@ -51,6 +51,10 @@ In order to understand the way the Clocktower protocol works its best to think a
 
 - Caller: This user calls the contract at a regular interval and is rewarded for their effort and gas costs by receiving [compensation](./02_incentives.md). 
 
+## Subscriber Provider Caller
+
+Since we are focusing on subscriptions for the first version of the protocol we will hereafter refer to the Sender Receiver and Caller as the more Subscriber, Provider and Caller which are more specific to subscriptions. 
+
 ## Differing relationships
 
 ### One to One
