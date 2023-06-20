@@ -88,6 +88,23 @@ struct SubscriberView {
 | `subscriber` | address | Subscriber address |
 | `feeBalance` | uint | Fee balance of subscriber in wei |
 
+##### Time
+```
+struct Time {
+    uint16 day;
+    uint16 weekDay;
+    uint16 quarterDay;
+    uint16 yearDay;
+}
+```
+| Name | Type | Description|
+|---|---|---|
+| `day` | uint16 | Day of month |
+| `weekDay` | uint16 | Day of week |
+| `quarterDay` | uint16 | Day of quarter |
+| `yearDay` | uint16 | Day of year |
+
+
 #### Enums
 (Enum values are represented by numbers starting at zero)
 
@@ -434,4 +451,160 @@ Return Values:
 | `FeeEstimate[]` | FeeEstimate | Array of [FeeEstimate](./subscribe_tech_reference#feeestimate) structs |
 
 #### Time Functions
+
+##### unixToTime
+```
+function unixToTime(
+    uint unix
+) returns(Time time)
+```
+Converts a unix time value to [Time](#time) struct
+
+Parameter:
+
+| Name | Type | Description |
+|---|---|---|
+| `unix` | uint | Unix time value |
+
+Return Value:
+
+| Name | Type | Description |
+|---|---|---|
+| `time` | Time | [Time](#time) struct |
+
+Code:
+
+```
+uint _days = unix/86400;
+uint16 day;
+uint16 yearDay;
+       
+int __days = int(_days);
+
+int L = __days + 68569 + 2440588;
+int N = 4 * L / 146097;
+L = L - (146097 * N + 3) / 4;
+int _year = 4000 * (L + 1) / 1461001;
+L = L - 1461 * _year / 4 + 31;
+int _month = 80 * L / 2447;
+int _day = L - 2447 * _month / 80;
+L = _month / 11;
+_month = _month + 2 - 12 * L;
+_year = 100 * (N - 49) + _year + L;
+
+uint uintyear = uint(_year);
+uint month = uint(_month);
+uint uintday = uint(_day);
+
+day = uint16(uintday);        
+
+uint dayCounter;
+
+//loops through months to get current day of year
+for(uint monthCounter = 1; monthCounter <= month; monthCounter++) {
+    if(monthCounter == month) {
+        dayCounter += day;
+    } else {
+        dayCounter += getDaysInMonth(uintyear, month);
+    }
+}
+
+    yearDay = uint16(dayCounter);
+
+    //gets day of quarter
+    time.quarterDay = getdayOfQuarter(yearDay, uintyear);
+    time.weekDay = getDayOfWeek(unix);
+    time.day = day;
+    time.yearDay = yearDay;
+```
+
+##### isLeapYear
+```
+function isLeapYear(
+    uint year
+) returns (bool leapYear)
+```
+
+Checks if year is a leap year
+
+Parameter:
+
+| Name | Type | Description |
+|---|---|---|
+| `year` | uint | Number of year in Gregorian Calendar |
+
+Return Value:
+
+| Name | Type | Description |
+|---|---|---|
+| `leapYear` | bool | True if leap year |
+
+Code:
+
+```
+leapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+```
+
+##### getDaysInMonth
+```
+function getDaysInMonth(
+    uint year, 
+    uint month
+) returns (uint daysInMonth)
+```
+Returns the number of days in the month based on Gregorian year and month calendar values
+
+Parameters:
+
+| Name | Type | Description |
+|---|---|---|
+| `year` | uint | Number of year in Gregorian Calendar |
+| `month`| uint | Number of month in Gregorian Calendar |
+
+Return Value:
+
+| Name | Type | Description |
+|---|---|---|
+| `daysInMonth` | uint | Number of days in the month |
+
+Code: 
+
+```
+if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+    daysInMonth = 31;
+} else if (month != 2) {
+    daysInMonth = 30;
+} else {
+    daysInMonth = isLeapYear(year) ? 29 : 28;
+}
+```
+
+##### getDaysOfWeek
+```
+function getDaysInMonth(
+    uint unixTime
+) returns (uint16 dayOfWeek)
+```
+Parameter:
+
+| Name | Type | Description |
+|---|---|---|
+| `unixTime` | uint | Unix time value |
+
+Return Value:
+
+| Name | Type | Description |
+|---|---|---|
+| `dayOfWeek` | uint16 | Day of the week (1 = Monday, 7 = Sunday) |
+
+Code:
+
+```
+uint _days = unixTime / 86400;
+uint dayOfWeekuint = (_days + 3) % 7 + 1;
+dayOfWeek = uint16(dayOfWeekuint);
+```
+
+##### getdayOfQuarter
+
 
