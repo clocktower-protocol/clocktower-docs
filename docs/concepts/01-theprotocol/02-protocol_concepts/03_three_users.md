@@ -53,7 +53,7 @@ In order to understand the way the Clocktower protocol works its best to think a
 
 ## Subscriber Provider Caller
 
-Since we are focusing on subscriptions for the first version of the protocol we will hereafter refer to the Sender Receiver and Caller as the more Subscriber, Provider and Caller which are more specific to subscriptions. 
+Since we are focusing on subscriptions for the first version of the protocol we will hereafter refer to the Sender Receiver and Caller as Subscriber, Provider and Caller which are more specific to subscriptions. 
 
 ## Differing relationships
 

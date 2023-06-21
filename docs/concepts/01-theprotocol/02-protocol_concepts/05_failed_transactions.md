@@ -13,9 +13,9 @@ In an open ended setup like subscriptions where transactions are scheduled indef
 - Not enough approval
 - Not enough funds
 
-Therefore when the Caller script makes its periodic check for scheduled transactions it checks whether the subscriber has enough approval and funds. 
+Therefore when the caller script makes its periodic check for scheduled transactions it checks whether the Subscriber has enough approval and funds. 
 
-In order to avoid attacks on the contract the protocol must create expenses born by they subscriber that make failure costly enough that even a malicious user would want to avoid failing. 
+In order to avoid attacks on the contract the protocol must create expenses born by the subscriber that make failure costly enough that even a malicious user would want to avoid failing. 
 
 Lets see how this works based on different situations. 
 
@@ -26,7 +26,7 @@ If the subscriber has revoked their approval for Clocktower to move funds from t
 When a subscription fails because of lack of approval two things must be done
 
 - The subscriber must be unsubscribed by the caller.
-- A majority of the [fee balance](./05_fee_balance.md) must be refunded to the receiver/provider with a smaller amount going to the caller. 
+- A majority of the [fee balance](./05_fee_balance.md) must be refunded to the Provider with a smaller amount going to the caller. 
 
 But why are these necessary?
 

@@ -43,11 +43,11 @@ Depending on the reason for the refund the is sent to different locations based 
 
 | Initiator | Action | Amount | Refunds Sent to |
 |---|---|---|---|
-| Subscriber | Fail due to Approval | Partial caller / Partial Receiver | Caller / Receiver |
-| Subscriber | Fail due to low funds | Partial caller / Partial Receiver | Caller / Receiver |
+| Subscriber | Fail due to Approval | Partial Caller / Partial Provider | Caller / Provider |
+| Subscriber | Fail due to low funds | Partial Caller / Partial Provider | Caller / Provider |
 | Subscriber | Unsubscribes | All remaining | Subscriber | 
-| Receiver | Receiver unsubscribers subscriber | All remaining | Subscriber |
-| Receiver | Cancels overall subscription | All remaining on all subscribers | Contract? or Caller? |
+| Provider | Provider unsubscribers subscriber | All remaining | Subscriber |
+| Provider | Cancels overall subscription | All remaining on all subscribers | Contract? or Caller? |
 
 ## System Fees
 
