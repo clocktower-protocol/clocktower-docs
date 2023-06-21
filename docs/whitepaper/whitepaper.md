@@ -1,7 +1,11 @@
-**Clocktower**  
-*It's Time.*
+---
+title: Clocktower V1
+subtitle: An on-chain payment and subscription service
+author: Hugo Marx and George Atkinson
+date: June 16, 2023
+---
 
-A decentralized payment and subscription service. 
+ 
 
 ## Background
 
