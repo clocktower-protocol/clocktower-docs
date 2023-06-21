@@ -68,12 +68,8 @@ This is why in the above [ranges](#time-ranges) we simply don't allow the 29th d
 Leap seconds are less of a concern for the protocol for several reasons. 
 
 1. The timestamp on a block is calculated currently with a [fifteen second variance](https://consensys.github.io/smart-contract-best-practices/development-recommendations/solidity-specific/timestamp-dependence/) between what the actual time is and the time a validator can put to a block. This fifteen seconds causes more drift than a potential leap second would cause. 
-2. The smallest time unit used in subscriptions is a day. So even if a timestamp is incorrect it would only matter if it occurred at midnight. By allowing a potential drift of a day or two from the set day range this should be mitigated. 
+2. The smallest time unit used in subscriptions is a day. So even if a timestamp is incorrect it would only matter if it occurred at midnight. And this would only give the caller a head start on calling the next day if they were a malicious validator which is a low probability and would only jump the gun by a few seconds. 
 3. By not allowing the 29th day of the month or higher or the 366 day of the year we mitigate the timestamp drifting the time over into a nonallowable day range. 
 
-### 15 second block timestamp drift
-- changing day cutoff away from midnight
 
-### Leap seconds
-- changing cutoff away from midnight
 
