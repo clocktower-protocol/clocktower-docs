@@ -2,12 +2,17 @@
 title: Clocktower V1
 subtitle: An on-chain payment and subscription service
 author: Hugo Marx and George Atkinson
-date: June 16, 2023
+date: June 2023
 ---
 
  
+## Abstract
 
-## Background
+Clocktower is a decentralized protocol for subscriptions and payments. Providers and subscribers collaborate off-chain for the initial set-up and third-party agents are financially incentivized to call the protocol contract regularly. This system allows for regular payments to be processed into the future with this V1 allowing up to daily granularity. This whitepaper will explore the economic mechanisms and code behind the protocol.
+
+
+
+## Introduction
 
 As web-based services proliferate, subscription payment systems have become an important source of recurring revenue for digital content providers. Centralized payment services have reduced the friction of payments on the web, and have made traditional forms of payment (credit/debit/bank transfer) common and simple. However, this convenience comes at a price--online content and providers frequently pay [more than 3% for this functionality](https://www.helcim.com/visa-usa-interchange-rates/) and these costs are passed to the consumer. Furthermore, payment platforms have become a critical beachhead for censorship of people and ideas on the web, inspiring some to [leave popular crowdfunding platorms in favor of their own platforms](https://www.businessinsider.com/sam-harris-deletes-patreon-account-after-platform-boots-conservatives-2018-12). While the major payment networks have generally not (yet) taken an activist role in online political speech, they remain a potential choke-point for free speech and an open internet.
 
