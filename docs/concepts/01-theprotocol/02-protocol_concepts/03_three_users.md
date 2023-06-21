@@ -10,9 +10,9 @@ One of the many ways to categorize the evolution of smart contract design is by 
 
 ## What is a User?
 
-While we have called these entities users up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being multiple roles at the same time although in our protocol we seek to avoid this. 
+While we have called these entities "users" up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being multiple roles at the same time although in our protocol we seek to avoid this. 
 
-## First Generation (One User)
+## One User
 
 In many contracts there is a single user who interacts with the contract and the contract alone. Some examples of these types of protocols:
 
@@ -23,7 +23,7 @@ In many contracts there is a single user who interacts with the contract and the
 
 In each of these examples their is a single user who only interacts with the contract. The existence of any other users is parallel to their experience and not involved in their interaction. 
 
-## Second Generation (Two Users)
+## Two Users
 
 A more complex example is where two users use contracts as an intermediary to interact with the each other. Sometimes this interaction is understood, sometimes the contract blinds each of the user to the existence of the other. Examples are:
 
@@ -31,7 +31,7 @@ A more complex example is where two users use contracts as an intermediary to in
 - AMM Dexes where users swap or pool
 - Lending protocols where users deposit and borrow
 
-## Third Generation (Three Users)
+## Three Users
 
 Up until now most protocols have added third user functionality to do behind the scenes utility functions for the protocol such as:
 
