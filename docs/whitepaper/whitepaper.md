@@ -3,6 +3,7 @@ title: Clocktower V1
 subtitle: An on-chain payment and subscription service
 author: Hugo Marx and George Atkinson
 date: June 2023
+bibliography: whitepaper.bib
 ---
 
  
@@ -13,9 +14,9 @@ Clocktower is a decentralized protocol for subscriptions and payments. Providers
 
 ## Introduction
 
-As web-based services proliferate, subscription payment systems have become an important source of recurring revenue for digital content providers. Centralized payment services have reduced the friction of payments on the web, and have made traditional forms of payment (credit/debit/bank transfer) common and simple. However, this convenience comes at a price--online content and providers frequently pay more than 3% for this functionality (1) and these costs are passed to the consumer. Furthermore, payment platforms have become a critical beachhead for censorship of people and ideas on the web, inspiring some to leave popular crowdfunding platorms in favor of their own platforms (2). While the major payment networks have generally remained neutral politically, they remain a potential choke-point for free speech and an open internet.
+As web-based services proliferate, subscription payment systems have become an important source of recurring revenue for digital content providers. Centralized payment services have reduced the friction of payments on the web, and have made traditional forms of payment (credit/debit/bank transfer) common and simple. However, this convenience comes at a price--online content and providers frequently pay more than 3% for this functionality [@visarates] and these costs are passed to the consumer. Furthermore, payment platforms have become a critical beachhead for censorship of people and ideas on the web, inspiring some to leave popular crowdfunding platorms in favor of their own platforms [@bizinsider]. While the major payment networks have generally remained neutral politically, they remain a potential choke-point for free speech and an open internet.
 
-At the same time, we have witnessed a new type of currency layer evolve over the past decades: the cryptocurrency (3). These systems exist outside of national borders and live on distributed networks called blockchains. While many groups have experimented with payment systems on these networks, the problem of recurrent future payments and subscriptions has not yet been adequately addressed.
+At the same time, we have witnessed a new type of currency layer evolve over the past decades: the cryptocurrency [@btcwhitepaper]. These systems exist outside of national borders and live on distributed networks called blockchains. While many groups have experimented with payment systems on these networks, the problem of recurrent future payments and subscriptions has not yet been adequately addressed.
 
 The problem is actually two-fold. The first part relates to the network fee, which on the Ethereum network is referred to as 'gas' and is paid in the native token. The gas price is always in flux, increasing and decreasing with the demand for blockspace on the network. Thus the most immediate issue is how to account for an unknown future gas price on a future transaction. The closely-related second issue is that a decentralized smart contract cannot act on its own--it must triggered to take action. In a sense, it is unaware of time. This limitation makes it impossible to schedule actions in the future, as with a cron job in normal computing. Without the ability to schedule transactions in the future, common financial services like payroll, subscriptions, regular payments, and many others are impossible in these decentralized systems.
 
@@ -68,17 +69,17 @@ Weekly -
 
 symbols:
 
-subscription triggered by call      lower case sigma        σ
-value of a subscription triggered   lower case sigma sub v  σᵥ
+# subscription triggered by call      lower case sigma        σ
+# value of a subscription triggered   lower case sigma sub v  σᵥ
 fee %                               lower case phi          φ or F
 gas per subscription                lower case gamma        γ or G
 
 total sum of the value of all subscriptions per remit call * fee percentage = Per subscription gas cost *  # of subscriptions per call
-φ * Σσᵥⁿ   =  γ * Σσⁿ
+# φ * Σσᵥⁿ   =  γ * Σσⁿ
 
 or 
 
-F * Σσᵥⁿ   =  G * Σσⁿ
+# F * Σσᵥⁿ   =  G * Σσⁿ
 
 
 ## The Caller
@@ -96,7 +97,7 @@ cost remit:   35000 gwei
 gas price:    20
 eth price:    1500
 
-F * Σσᵥⁿ   =  G* n * σⁿ
+# F * Σσᵥⁿ   =  G* n * σⁿ
 0.02 * 20           =  35000 Gwei * 20 * n (total remitted subs)
 n = 100 subs
 fee = 2%
@@ -146,3 +147,5 @@ Snippets
 
 The Clocktower project seeks to solve this problem by acting as a public service unlocking the potential of the future from the limitations of a system stuck in the perpetual present. 
 
+
+# pandoc snippet.md  --from=markdown --to=pdf --filter=pandoc-citeproc --bibliography=whitepaper.bib  --output=whitepaper.pdf
