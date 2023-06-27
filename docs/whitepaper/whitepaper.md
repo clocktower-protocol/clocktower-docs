@@ -12,7 +12,7 @@ bibliography: whitepaper.bib
 Clocktower is a decentralized protocol for subscriptions and payments. Providers and subscribers collaborate off-chain for the initial set-up and third-party agents are financially incentivized to call the protocol contract regularly. This system allows for regular payments to be processed into the future with this V1 allowing up to daily granularity. This whitepaper will explore the economic mechanisms and code behind the protocol.
 
 
-## Introduction
+## 1. Introduction
 
 As web-based services proliferate, subscription payment systems have become an important source of recurring revenue for digital content providers. Centralized payment services have reduced the friction of payments on the web, and have made traditional forms of payment (credit/debit/bank transfer) common and simple. However, this convenience comes at a price--online content and providers frequently pay more than 3% for this functionality [@visarates] and these costs are passed to the consumer. Furthermore, payment platforms have become a critical beachhead for censorship of people and ideas on the web, inspiring some to leave popular crowdfunding platorms in favor of their own platforms [@bizinsider]. While the major payment networks have generally remained neutral politically, they remain a potential choke-point for free speech and an open internet.
 
@@ -22,14 +22,11 @@ The problem is actually two-fold. The first part relates to the network fee, whi
 
 The Clocktower protocol solves these issues by creating EVM-compliant smart contracts that are polled at regularly timed intervals by other economically incentivized actors. Users will be able to schedule transactions at a future time of their choosing. By incorporating such features as subscriptions, future payments, batch transactions, reversible transactions and ERC20 compatibility, we hope to unlock the potential of fintech and defi projects seeking recurrent payments while staying true to the principle of decentralization. 
 
+## 2. Timing System
 
-## Timing System
+There are many ways to measure time in a scheduling system, the most common being Unix Epoch time which has been incrementing seconds since Thursday January 1st 1970 0:00. Unfortunately, polling a smart contract every second on a public blockchain would be too expensive and inefficent in the context of subscriptions and payments. Furthermore, the EVM currently creates blocks ever 12 seconds, so measuring times less than block size are not really possible. 
 
-The Ethereum blockchain is like a giant decentralized clock, currently creating a block every twelve seconds. For each node, seconds matter, as they go through the task of creating blocks and gossiping them to the network. Its therefore ironic that even with this elaborate timing mechanism smart contracts are unable to know what time it is unless asked, like a person with an expensive watch who can't look down at it unless told to do so.
-
-There are many ways to measure time in a scheduling system, the most common being Unix Epoch time which has been incrementing seconds since Thursday January 1st 1970 0:00. However, polling the contract every second would be too expensive and inefficent in the context of subscriptions and payments. 
-
-Another option would be using Ethereum blocks themselves as our time increment. Blocks are sometimes used to represent moments in time on Ethereum based systems. The problem with this approach is that there is no guarantee that a block will be set at twelve seconds in the future and one of the critical goals of Clocktower is to eventually be able to schedule transactions years into the future.
+What about using Ethereum blocks themselves as our time increment? In addition to only being slightly more efficient than the one second interval, there is no guarantee that a block will be set at twelve seconds in the future. One of the goals of Clocktower is to allow transactions to be scheduled years into the future, and a change in the block production interval could cause significant problems around future transaction timing. In order to keep the system as resilient as possible
 
 The situation is further complicated when considering that timed transactions need to be set at standard increments. But these increments, or time triggers as we call them, have differing scopes. For instance, a weekly subscription needs to be scheduled for a day of the week while a monthly subscription needs a day of the month. And not every month has the same number of days. 
 
@@ -149,3 +146,30 @@ The Clocktower project seeks to solve this problem by acting as a public service
 
 
 # pandoc snippet.md  --from=markdown --to=pdf --filter=pandoc-citeproc --bibliography=whitepaper.bib  --output=whitepaper.pdf
+
+
+The Ethereum blockchain is a decentralized clock creating a block every twelve seconds. For each node, seconds matter, as they go through the task of creating blocks and gossiping them to the network. Its therefore ironic that even with this elaborate timing mechanism smart contracts are unable to know what time it is unless asked, like a person with an expensive watch who can't look down at it unless told to do so.
+
+
+## 2. Goals
+
+Decentralized
+While centralized payment facilitators are the norm they bring with them a myriad of problems from high fees to censorship. But with a decentralized blockchain contract there is no point of failure, no censorship and no arbitraty gatekeeping.
+
+Immutable
+A system that cannot be changed is a system that cannot be censored.
+
+Easy to Use
+In the past setting up your own subscription service has been too difficult for normal users. But with Clocktower if you can use a decentralized app you can create or join a subscription.
+
+Inexpensive
+Traditional payment networks have had the advantage fo being able to charge high fees due to extreme costs of setting up your own network. But by building on the existing backbone of EVM compliant blockchains we believe we can eventually undercut the existing networks.
+
+No Oracles
+An oracle is a third party data source. Relying on an external source of information outsources security to that source which is too insecure for a payment platform.
+
+Minimum tokens in contract
+Hackers hack where the money is. Traditional contracts have become targets largely because they rely on the "vault" model where all value is stored within the contract. We seek to turn this model on its head by seeking to hold as little value as possible in the contract. This makes the contract less of a target and allows users to keep secure their own funds in their own wallets.
+
+No protocol token needed
+We believe a protocol should never need its own token to work. A toekn needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issued its own token it would solely be for governance purposes.
