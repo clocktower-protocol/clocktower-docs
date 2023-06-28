@@ -4,7 +4,7 @@ subtitle: An on-chain payment and subscription service
 author: Hugo Marx and George Atkinson
 date: June 2023
 geometry: margin=3cm
-citation-style: https://github.com/citation-style-language/styles/blob/master/cell.csl
+csl: cell.csl
 bibliography: whitepaper.bib
 ---
 
