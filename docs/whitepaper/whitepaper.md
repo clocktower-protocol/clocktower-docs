@@ -4,7 +4,7 @@ subtitle: An on-chain payment and subscription service
 author: Hugo Marx and George Atkinson
 date: June 2023
 geometry: margin=3cm
-citation-style: https://github.com/citation-style-language/styles/blob/master/cell.csl
+csl: cell.csl
 bibliography: whitepaper.bib
 ---
 
@@ -46,10 +46,37 @@ An oracle is a third party data source. Unfortunately, oracles have been manipul
 Hackers hack where the money is kept. Traditional contracts have become targets largely because they rely on the "vault" model where all value is stored within the contract. We seek to turn this model on its head by seeking to hold as little value as possible in the contract. This makes the contract less of a target and allows users to keep secure their own funds in their own wallets.
 
 *No protocol token*   
-We believe a protocol should never need its own token to work. A token needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issues its own token it will be used soley for governance purposes.
+We believe a protocol should never need its own token to work. A token needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issues its own token, it will be used soley for governance purposes.  
+
+
 ## 3. Timing System
 
-Clocktower
+
+## 4. The Three Participants
+
+### 1. The Subscriber
+### 2. The Provider
+### 3. The Caller
+
+## 5. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 There are many ways to measure time in a scheduling system, the most common being Unix Epoch time which has been incrementing seconds since Thursday January 1st 1970 0:00. Unfortunately, polling a smart contract every second on a public blockchain would be too expensive and inefficent in the context of subscriptions and payments. Furthermore, the EVM currently creates blocks ever 12 seconds, so measuring times less than block size are not really possible. 
 

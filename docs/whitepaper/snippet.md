@@ -46,25 +46,20 @@ An oracle is a third party data source. Unfortunately, oracles have been manipul
 Hackers hack where the money is kept. Traditional contracts have become targets largely because they rely on the "vault" model where all value is stored within the contract. We seek to turn this model on its head by seeking to hold as little value as possible in the contract. This makes the contract less of a target and allows users to keep secure their own funds in their own wallets.
 
 *No protocol token*   
-We believe a protocol should never need its own token to work. A token needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issues its own token it will be used soley for governance purposes.
+We believe a protocol should never need its own token to work. A token needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issues its own token, it will be used soley for governance purposes.  
+
 
 ## 3. Timing System
 
-Clocktower
 
-There are many ways to measure time in a scheduling system, the most common being Unix Epoch time which has been incrementing seconds since Thursday January 1st 1970 0:00. Unfortunately, polling a smart contract every second on a public blockchain would be too expensive and inefficent in the context of subscriptions and payments. Furthermore, the EVM currently creates blocks ever 12 seconds, so measuring times less than block size are not really possible. 
+## 4. The Three Participants
 
-What about using Ethereum blocks themselves as our time increment? In addition to only being slightly more efficient than the one second interval, there is no guarantee that a block will be set at twelve seconds in the future. One of the goals of Clocktower is to allow transactions to be scheduled years into the future, and a change in the block production interval could cause significant problems around future transaction timing. In order to keep the system as resilient as possible
+### 1. The Subscriber
+### 2. The Provider
+### 3. The Caller
 
-The situation is further complicated when considering that timed transactions need to be set at standard increments. But these increments, or time triggers as we call them, have differing scopes. For instance, a weekly subscription needs to be scheduled for a day of the week while a monthly subscription needs a day of the month. And not every month has the same number of days. 
+## 5. 
 
-With this in mind we have chosen the following standard time trigger ranges that can represent the most common schedules:
-
-- Future Transactions -- Unixtime / 3600 (Unix Hours)
-- Weekly Subscriptions -- 1 - 7 (Weekdays)
-- Monthly Subscriptions -- 1 - 28 (Day of Month)
-- Quarterly Subscriptions -- 1 - 90 (Day of Quarter)
-- Yearly Subscription -- 1 - 365 (Day of Year  (not indcluding leap days))
 
 
 ## References   
