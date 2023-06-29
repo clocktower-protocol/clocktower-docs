@@ -1,7 +1,7 @@
 ---
 title: Clocktower V1
 subtitle: An on-chain payment and subscription service
-author: Hugo Marx and George Atkinson
+author: V. Hugo Marx and George P. Atkinson
 date: June 2023
 geometry: margin=3cm
 csl: cell.csl
@@ -14,7 +14,7 @@ bibliography: whitepaper.bib
 Clocktower is a decentralized protocol for subscriptions and payments. Providers and subscribers collaborate off-chain for the initial set-up and third-party agents are financially incentivized to call the protocol contract regularly. This system allows for regular payments to be processed into the future with this V1 allowing up to daily granularity. This whitepaper will explore the economic mechanisms and code behind the protocol.
 
 
-## 1. Introduction
+## Introduction
 
 As web-based services proliferate, subscription payment systems have become an important source of recurring revenue for digital content providers. Centralized payment services have reduced the friction of payments on the web, and have made traditional forms of payment (credit/debit/bank transfer) common and simple. However, this convenience comes at a price--online content and providers frequently pay more than 3% for this functionality [@visarates] and these costs are passed to the consumer. Furthermore, payment platforms have become a critical beachhead for censorship of people and ideas on the web, inspiring some to leave popular crowdfunding platorms in favor of their own platforms [@bizinsider]. While the major payment networks have generally remained neutral politically, they remain a potential choke-point for free speech and an open internet.
 
@@ -24,7 +24,7 @@ The problem is actually two-fold. The first part relates to the network fee, whi
 
 The Clocktower protocol solves these issues by creating EVM-compliant smart contracts that are polled at regularly timed intervals by other economically incentivized actors. Users will be able to schedule transactions at a future time of their choosing. By incorporating such features as subscriptions, future payments, batch transactions, reversible transactions and ERC20 compatibility, we hope to unlock the potential of fintech and defi projects seeking recurrent payments while staying true to the principle of decentralization. 
 
-## 2. Goals
+## Goals
 To further elaborate on the purposes and constraints of the protocol, we have developed the following goals:
 
 *Decentralization*   
@@ -49,10 +49,26 @@ Hackers hack where the money is kept. Traditional contracts have become targets 
 We believe a protocol should never need its own token to work. A token needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issues its own token, it will be used soley for governance purposes.  
 
 
-## 3. Timing System
 
 
-## 4. The Three Participants
+-------------------------------------------------------------
+ Centered   Default           Right Left
+  Header    Aligned         Aligned Aligned
+----------- ------- --------------- -------------------------
+   First    row                12.0 Example of a row that
+                                    spans multiple lines.
+
+  Second    row                 5.0 Here's another one. Note
+                                    the blank line between
+                                    rows.
+-------------------------------------------------------------
+
+
+
+## Timing System
+
+
+## The Three Participants
 
 ### 1. The Subscriber
 ### 2. The Provider
