@@ -145,7 +145,8 @@ enum SubEvent {
     FAILED,
     SUBSCRIBED, 
     UNSUBSCRIBED,
-    FEEFILL
+    FEEFILL, 
+    REFUND
 }
 ```
 | Value | Description|
@@ -155,6 +156,7 @@ enum SubEvent {
 | `2` | SUBSCRIBED |
 | `3` | UNSUBSCRIBED |
 | `4` | FEEFILL |
+| `5` | REFUND |
 
 ##### ProvEvent
 ```
@@ -162,7 +164,8 @@ enum ProvEvent {
     CREATE,
     CANCEL,
     PAID,
-    FAILED
+    FAILED,
+    REFUND
 }
 ```
 | Value | Description|
@@ -171,6 +174,7 @@ enum ProvEvent {
 | `1` | CANCEL |
 | `2` | PAID |
 | `3` | FAILED |
+| `4` | REFUND |
 
 
 ## Global Variables
