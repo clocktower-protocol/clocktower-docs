@@ -45,7 +45,7 @@ Depending on the reason for the refund the is sent to different locations based 
 |---|---|---|---|
 | Subscriber | Fail due to Approval | Partial Caller / Partial Provider | Caller / Provider |
 | Subscriber | Fail due to low funds | Partial Caller / Partial Provider | Caller / Provider |
-| Subscriber | Unsubscribes | All remaining | Subscriber | 
+| Subscriber | Unsubscribes | All remaining | Provider | 
 | Provider | Provider unsubscribers subscriber | All remaining | Subscriber |
 | Provider | Cancels overall subscription | All remaining on all subscribers | Contract? or Caller? |
 
