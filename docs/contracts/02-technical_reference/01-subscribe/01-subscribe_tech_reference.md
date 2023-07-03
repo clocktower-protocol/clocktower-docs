@@ -237,8 +237,7 @@ event ProviderLog(
     bytes32 indexed id,
     address indexed provider,
     uint40 timestamp,
-    bool success,
-    uint8 errorCode,
+    uint amount,
     ProvEvent indexed provEvent
 )
 ```
@@ -250,8 +249,7 @@ Log emitted during Provider events
 | `id` | bytes32 | :heavy_check_mark: | Unique subscription id |
 | `provider` | address | :heavy_check_mark: | Provider address |
 | `timestamp` | uint40 | | Unix epoch timestamp |
-| `success` | bool | | Shows if event was successful |
-| `errorCode` | uint8 | | Errorcode if there was a problem |
+| `amount` | uint | | 0 unless refund |
 | `provEvent` | ProvEvent | :heavy_check_mark: | [ProvEvent](#provevent) |
 
 
