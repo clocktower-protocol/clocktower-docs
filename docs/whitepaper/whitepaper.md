@@ -52,7 +52,11 @@ We believe a protocol should never need its own token to work. A token needed fo
 ## 3. Timing System
 
 
-## 4. The Three Participants
+## 4. Mechanism: The Three Participants   
+At it's core, Clocktower is a series of functions that allow two parties (a subscriber and a provider) to exchange cryptocurrency for a service or good. The arrangement in regards to price and the good or service to be exchanged is determined off-chain through any standard path--typically this would involve a website but could also be arranged at an in-person meeting, etc. After agreeing on this exchange, payment information is written to a smart contract, including an interval (daily, weekly, monthly, quarterly, annually) and a an amount of value to be collected from the subscriber. Once established, subscriber and provider roles are complete, unless one of the party wishes to make a change the in the exchange agreement. 
+
+It is at this point that the third part of the system becomes important: the Caller. The job of the Caller is very simple: check to see if any of the subscriber payments are due to their respective providers, and if so, move the appropriate value (remittance) to the provider. Making these smart contract calls costs gas, and so the Callers are incentivized with fees designed to compensate the Caller for cost of gas in addition to profit. This incentive to call the contract is at the heart of Clocktower.
+
 
 ### 1. The Subscriber
 ### 2. The Provider
@@ -207,25 +211,4 @@ The Clocktower project seeks to solve this problem by acting as a public service
 The Ethereum blockchain is a decentralized clock creating a block every twelve seconds. For each node, seconds matter, as they go through the task of creating blocks and gossiping them to the network. Its therefore ironic that even with this elaborate timing mechanism smart contracts are unable to know what time it is unless asked, like a person with an expensive watch who can't look down at it unless told to do so.
 
 
-## 2. Goals
 
-Decentralized
-While centralized payment facilitators are the norm they bring with them a myriad of problems from high fees to censorship. But with a decentralized blockchain contract there is no point of failure, no censorship and no arbitraty gatekeeping.
-
-Immutable
-A system that cannot be changed is a system that cannot be censored.
-
-Easy to Use
-In the past setting up your own subscription service has been too difficult for normal users. But with Clocktower if you can use a decentralized app you can create or join a subscription.
-
-Inexpensive
-Traditional payment networks have had the advantage fo being able to charge high fees due to extreme costs of setting up your own network. But by building on the existing backbone of EVM compliant blockchains we believe we can eventually undercut the existing networks.
-
-No Oracles
-An oracle is a third party data source. Relying on an external source of information outsources security to that source which is too insecure for a payment platform.
-
-Minimum tokens in contract
-Hackers hack where the money is. Traditional contracts have become targets largely because they rely on the "vault" model where all value is stored within the contract. We seek to turn this model on its head by seeking to hold as little value as possible in the contract. This makes the contract less of a target and allows users to keep secure their own funds in their own wallets.
-
-No protocol token needed
-We believe a protocol should never need its own token to work. A toekn needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issued its own token it would solely be for governance purposes.
