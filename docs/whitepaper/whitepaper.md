@@ -2,7 +2,7 @@
 title: Clocktower V1
 subtitle: An on-chain payment and subscription service
 author: Hugo Marx and George Atkinson
-date: June 2023
+date: July 2023
 geometry: margin=3cm
 csl: cell.csl
 bibliography: whitepaper.bib
@@ -55,7 +55,12 @@ We believe a protocol should never need its own token to work. A token needed fo
 ## 4. Mechanism: The Three Participants   
 At it's core, Clocktower is a series of functions that allow two parties (a subscriber and a provider) to exchange cryptocurrency for a service or good. The arrangement in regards to price and the good or service to be exchanged is determined off-chain through any standard path--typically this would involve a website but could also be arranged at an in-person meeting, etc. After agreeing on this exchange, payment information is written to a smart contract, including an interval (daily, weekly, monthly, quarterly, annually) and a an amount of value to be collected from the subscriber. Once established, subscriber and provider roles are complete, unless one of the party wishes to make a change the in the exchange agreement. 
 
-It is at this point that the third part of the system becomes important: the Caller. The job of the Caller is very simple: check to see if any of the subscriber payments are due to their respective providers, and if so, move the appropriate value (remittance) to the provider. Making these smart contract calls costs gas, and so the Callers are incentivized with fees designed to compensate the Caller for cost of gas in addition to profit. This incentive to call the contract is at the heart of Clocktower.
+It is at this point that the third part of the system becomes important: the Caller. The job of the Caller is very simple: check to see if any of the subscriber payments are due to their respective providers, and if so, move the appropriate value (remittance) to the provider. Making these smart contract calls costs gas, and so the Caller is incentivized with fees designed to compensate for cost of gas and critically, to provide a profit. This incentive to call the contract is at the heart of Clocktower. At the most basic level, a Caller will make the decision to call using the following equation:
+
+total gas cost >= total fees --> do not call contract
+total gas cost <  total fees --> call contract
+
+This simple heuristic highlights the primary challenge that Clocktower seeks to overcome: the variability of gas prices. No
 
 
 ### 1. The Subscriber
