@@ -53,14 +53,25 @@ We believe a protocol should never need its own token to work. A token needed fo
 
 
 ## 4. Mechanism: The Three Participants   
-At it's core, Clocktower is a series of functions that allow two parties, a subscriber and a provider, to exchange payment for a service or good. The arrangement of price and the good/service to be exchanged is determined off-chain through any standard path--typically this would involve a website but could also be arranged at an in-person meeting, etc. After agreeing on the exchange details, subscription information is written to a smart contract, including an interval (daily, weekly, monthly, quarterly, annually) and an amount to be collected from the subscriber. Once established, subscriber and provider roles are complete, unless one of the party wishes to make a change the in the exchange agreement. 
+At its core, Clocktower is a series of functions that allow two parties, a subscriber and a provider, to exchange payment for a service or good. The arrangement of price and the good/service to be exchanged is determined off-chain through any standard path--typically this would involve a website but could also be arranged at an in-person meeting, etc. After agreeing on the exchange details, subscription information is written to a smart contract, including an interval (daily, weekly, monthly, quarterly, annually) and an amount to be collected from the subscriber. Once established, subscriber and provider roles are complete, unless one of the party wishes to make a change the in the exchange agreement. 
 
-It is at this point that the third part of the system becomes important: the Caller. The job of the Caller is very simple: run a method that checks to see if any of the subscriber payments are due to their respective providers, and if so, moves the appropriate value (remittance) to the provider. Making this smart contract call costs the Caller gas, and so the Caller is incentivized with fees designed to compensate for cost of gas and critically, to provide a profit. This incentive to call the contract is at the heart of Clocktower. At the most basic level, the Caller is making a decision based on the following scenarios:
+It is at this point the subscription lifecycle, we introduce the third player in the system--the Caller. The job of the Caller is very simple: run a method (called 'Remit')that checks to see if any of the subscriber payments are due to their respective providers, and if so, moves the appropriate value (remittance) to the provider. Making this smart contract transaction costs the Caller gas, and so the Caller is incentivized with fees designed to compensate for cost of gas and to provide a profit. This incentive to call the contract is at the heart of Clocktower. At the most basic level, the Caller is making a decision based on the following scenarios:
 
 A. total gas cost <  total fees --> call contract
 B. total gas cost >= total fees --> do not call contract
  
-In times of low gas prices, running the remit function will be profitable and thus properly incentivized; human callers (or as the ecosystem matures, bots) will call remit and funds will move appropriately. 
+In times of low gas prices (scenario A), running the remit function will be profitable and thus will be called; human callers (or as the ecosystem matures, bots) will call remit and funds will move appropriately. In times of high gas costs (scenario B), the total cost of gas will exceed the gas and potential callers will wait until those prices decrease to call Remit. 
+
+## 5. Mitigating Gas Costs
+As Clocktower relies on [total caller value received] > [total gas], the protocol as been designed with a number of mechanisms for minimizing gas. 
+
+### Code 
+The first and most obvious is optimization of the code, which is ongoing--the more efficiently the functions can be, the less the gas costs. Future versions will integrate any changes to ethereum that allow for more efficient transactions, including account abstraction. 
+
+### Layer 2
+The most significant gas mitigation strategy is the roll-out on L2. As we write this whitepaper, the L2 ecosystem is growing exponentially with a number of highly scalable, low-cost options out there such as Optimism, Arbitrum, Zksync and others. Clocktower will be released on one or more L2's, not on L1 Ethereum. This strategy assures a much lower gas cost to ensure that the protocol is scalable and reliable. 
+
+
 
 
 ### 1. The Subscriber
