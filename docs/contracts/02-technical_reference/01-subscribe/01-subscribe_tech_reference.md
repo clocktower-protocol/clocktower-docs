@@ -350,50 +350,44 @@ Parameters:
 
 
 #### View Functions
-##### getSubscribers
-```
-function getSubscribers(
-    bytes32 id
-) external view returns (address[] memory)
-```
-
-Returns an array of all subscriber addresses per subscription
-
-Parameters: 
-
-| Name | Type | Description |
-|---|---|---|
-| `id` | bytes32 | Unique subscription id |
-
-Return Values:
-
-| Name | Type | Description |
-|---|---|---|
-| `address[]` | address | Array of subscriber addresses |
-
-
 ##### getAccountSubscriptions
 ```
 function getAccountSubscriptions(
-    bool bySubscriber
+    bool bySubscriber,
+    address account
     ) returns (SubView[])
 ```
-Returns an array of objects containing subscription and status
+Returns an array of objects containing subscription and status by account. 
 
-If bySubscriber is true it gets a list of subscriptions msg.sender is subscribed to. 
-If false it gets a list of subscriptions msg.sender created as the provider. 
+If bySubscriber is true it gets a list of subscriptions account is subscribed to. 
+If false it gets a list of subscriptions account created as the provider. 
 
 Parameters: 
 
 | Name | Type | Description |
 |---|---|---|
 | `bySubscriber` | bool | See above description of bool |
+| `account` | address | Account address for subscriptions | 
 
-Return Values:
+Return Value:
 
 | Name | Type | Description |
 |---|---|---|
 | `SubView[]` | SubView | Array of [Subview](#subview) structs |
+
+##### getTotalSubscribers
+```
+function getTotalSubscribers(
+    ) returns (uint)
+```
+
+Returns total number of subscribers so user can iterate through accountLookup() array.
+
+Return Value:
+
+| Name | Type | Description |
+|---|---|---|
+| `uint` | uint | Total amount of subscribers in contract |
 
 ##### getSubscribersById
 ```
@@ -410,7 +404,7 @@ Parameters:
 |---|---|---|
 | `id` | bytes32 | Unique subscription id |
 
-Return Values:
+Return Value:
 
 | Name | Type | Description |
 |---|---|---|
@@ -435,7 +429,7 @@ Parameters:
 | `frequency` | Frequency | [Frequency](#frequency) |
 | `dueDay` | uint16 | Day in [range](#allowed-time-ranges) based on frequency when subscription is paid |
 
-Return Values:
+Return Value:
 
 | Name | Type | Description |
 |---|---|---|
@@ -450,7 +444,7 @@ function feeEstimate(
 ```
 Returns an array of objects showing the next batch of remits and possible fees
 
-Return Values:
+Return Value:
 
 | Name | Type | Description |
 |---|---|---|
@@ -682,4 +676,81 @@ Code:
 
 ```
 dayCount = unixTime/86400;
+```
+
+##### prorate
+```
+function prorate (
+    uint unixTime, 
+    uint40 dueDay, 
+    uint fee, 
+    uint8 frequency) returns (uint) 
+```
+
+Returns prorated amount of subscription based upons subscription parameters
+
+Parameters:
+
+| Name | Type | Description |
+|---|---|---|
+| `unixTime` | uint | Unix time value |
+| `dueDay` | uint40 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
+| `fee` | uint | Fee amount in wei |
+| `frequency` | uint8 | [Frequency](#frequency) |
+
+Return Value:
+
+| Name | Type | Description |
+|---|---|---|
+| `uint` | uint | Prorated amount of susbcription in wei |
+
+Code: 
+
+```
+Time memory time = unixToTime(unixTime);
+uint currentDay;
+uint max;
+uint lastDayOfMonth;
+        
+//sets maximum range day amount
+if(frequency == 0) {
+    currentDay = time.weekDay;
+    max = 7;
+//monthly
+} else if (frequency == 1){
+    //calculates maximum days in current month
+    lastDayOfMonth = getDaysInMonth(time.year, time.month);
+    currentDay = time.dayOfMonth;
+    max = lastDayOfMonth;
+//quarterly and yearly
+} else if (frequency == 2) {
+    currentDay = getdayOfQuarter(time.yearDay, time.year);
+    max = 90;
+//yearly
+} else if (frequency == 3) {
+    currentDay = time.yearDay;
+    max = 365;
+}
+
+//monthly
+if(frequency == 1) {
+    uint dailyFee = (fee * 12 / 365);
+    if(dueDay != currentDay && currentDay > dueDay){
+        //dates split months
+        fee = (dailyFee * (max - (currentDay - dueDay)));
+    } else if (dueDay != currentDay && currentDay < dueDay) {
+        //both dates are in the same month
+        fee = (dailyFee * (dueDay - currentDay));
+    }
+}
+//weekly quarterly and yearly
+else if(frequency == 0 || frequency == 2 || frequency == 3) {
+    if(dueDay != currentDay && currentDay > dueDay){
+        fee = (fee / max) * (max - (currentDay - dueDay));
+    } else if (dueDay != currentDay && currentDay < dueDay) {
+        fee = (fee / max) * (dueDay - currentDay);
+    }
+}  
+       
+return fee;
 ```
