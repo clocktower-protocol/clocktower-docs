@@ -95,6 +95,8 @@ struct Time {
     uint16 weekDay;
     uint16 quarterDay;
     uint16 yearDay;
+    uint16 year;
+    uint16 month;
 }
 ```
 | Name | Type | Description|
@@ -103,6 +105,8 @@ struct Time {
 | `weekDay` | uint16 | Day of week |
 | `quarterDay` | uint16 | Day of quarter |
 | `yearDay` | uint16 | Day of year |
+| `year` | uint16 | Year |
+| `month` | uint16 | Month |
 
 
 #### Enums
@@ -187,7 +191,7 @@ enum ProvEvent {
 | `maxGasPrice` | uint | Maximum gas value for remit function | gwei |
 | `maxRemits` | uint | Maximum number of remits per remit function (usually based on block max) | |
 | `admin` | address | Address for admin account |
-| `lastCheckedDay` | uint40 | Last time remit ws called | Unix epoch time |
+| `nextUncheckedDay` | uint40 | Last time remit ws called | Unix epoch time |
 
 ## Events
 ### Subscription Events
