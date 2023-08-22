@@ -8,18 +8,20 @@ sidebar_position: 5
 
 ### Reasons for failure
 
-In an open ended setup like subscriptions where transactions are scheduled indefinitley into the future there will occur situations where a subscriber fails. This can occur for two reasons:
+In an open ended setup like subscriptions where transactions are scheduled indefinitley there will occur situations where a subscriber fails. This can occur for two reasons:
 
 - Not enough approval
 - Not enough funds
 
-Therefore when the caller script makes its periodic check for scheduled transactions it checks whether the Subscriber has enough approval and funds. 
+Therefore when the caller function makes its periodic check for scheduled transactions it also checks whether the subscriber has enough approval and funds. 
 
 In order to avoid attacks on the contract the protocol must create expenses born by the subscriber that make failure costly enough that even a malicious user would want to avoid failing. 
 
 Lets see how this works based on different situations. 
 
 ### Problems
+
+#### Revocation
 
 If the subscriber has revoked their approval for Clocktower to move funds from their account the transaction will fail. 
 
@@ -28,31 +30,29 @@ When a subscription fails because of lack of approval two things must be done
 - The subscriber must be unsubscribed by the caller.
 - A majority of the [fee balance](./05_fee_balance.md) must be refunded to the Provider with a smaller amount going to the caller. 
 
-But why are these necessary?
+But why is this necessary?
 
 #### Unsubscribing
 
-- Even though the contract no longer has approval to remit funds the subscriber is still subscribed to the subscription. So if approval continues to remain revoked the subscription will fail every cycle creating never-ending cost to the Caller with no compensation. 
+- Even though the contract no longer has approval to remit funds the subscriber is still subscribed to the subscription. So if approval continues to remain revoked the subscription will fail every cycle creating never-ending cost to the caller with no compensation. 
 
-- Its cheaper gas-wise to revoke approval than for the subscriber to cancel the subscription meaning subscribers will choose revoking approval as a method of unsubscribing. 
+- since its cheaper gas-wise for the subscriber to revoke approval than to cancel the subscription subscribers will choose revoking approval as a method of unsubscribing. 
 
 While there are normal reasons for accidentally revoking approval the above two conditions require that the user must be unsubscribed from the subscription automatically by the caller upon failure. If the subscriber revoked approval in error then they will now need to resubscribe costing additional gas.
 
 #### Attack vectors
 
-There are situations where a malicious subscriber would intentionally fail. Below examples:
+There are situations where a malicious subscriber would intentionally fail. 
 
 #### DOS and Griefing attacks
 
-A subscriber could intentionally fail to create unremeimbursed gas costs for the caller. This money losing situation could create too many losses for the caller making them stop and therefore stopping the contract from incrementing through time. 
+A subscriber could intentionally fail to create unremeimbursed gas costs for the caller. This money losing situation could create too many losses for the caller making it uneconomical and therefore stopping the contract from incrementing through time. 
 
 But by giving enough of the forfeited fee balance to compensate for gas costs on failure these losses are mitigated. But why not give ALL the forfeited balance to the caller?
 
 #### Freeloader attack
 
-Another attack involves a malicious subscriber being both subscriber and caller while intentionally failing.  If the caller was refunded all of the forfeited [fee balance](./05_fee_balance.md) then they could get a free cycle of goods or services from the creator of the subscription since they would be paying themselves back as caller. In order to mitigate this, a majority of the fee balance must be refunded to the receiver in order to pay for goods or services rendered within the time period and a smaller portion refunded to the caller to pay for gas costs. 
-
-This can be done by keeping the fee balance in the contract to be swept out by the protocol or by giving the majority of the remaining balance to the receiver. 
+Another attack involves a malicious subscriber being both subscriber and caller while intentionally failing.  If the caller was refunded all of the forfeited [fee balance](./05_fee_balance.md) then they could get a free cycle of goods or services from the creator of the subscription since they would be paying themselves back as caller. In order to mitigate this, a majority of the fee balance must be refunded to the provider in order to pay for goods or services rendered within the time period and a smaller portion refunded to the caller to pay for gas costs. 
 
 Since the subscriber would now constantly lose funds it mitigates the above attack. 
 
