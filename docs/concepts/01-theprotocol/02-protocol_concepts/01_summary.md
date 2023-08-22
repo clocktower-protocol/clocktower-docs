@@ -12,7 +12,7 @@ Version 1 of the Clocktower Protocol is a decentralized blockchain based subscri
 
 ### Providers
 
-Providers can create subscriptions either directly to the subscribe contract or through our frontend or through their own custom frontend.  
+Providers can create subscriptions either directly to the subscribe contract, through our frontend or through their own custom frontend.  
 
 After choosing details of the subscription such as the freqency, amount and due date they will then pay the blockchain fees and be given a unique URL to dissemenate to their subscribers. 
 
@@ -20,13 +20,15 @@ After choosing details of the subscription such as the freqency, amount and due 
 
 After receiving the unique URL subscribers can then subscribe either directly through the contract, through our frontend or through the providers frontend. 
 
-Upon subsription they will be charged for the first cycle of the subscription. A portion of this amount will be stored in the contract as a [fee balance](/docs/concepts/01-theprotocol/02-protocol_concepts/06_fees.md). The rest is sent to the provider. 
+Upon subsription they will be charged a prorated amount for the first cycle of the subscription. A portion of this amount will be stored in the contract as a [fee balance](/docs/concepts/01-theprotocol/02-protocol_concepts/06_fees.md). The rest is sent to the provider. 
 
 On the due day the subscriber will be charged the subscription amount If they don't have enough tokens or have revoked approval the transaction will [fail](/docs/concepts/01-theprotocol/02-protocol_concepts/05_failed_transactions.md) and they will automatically be unsubscibed forfeiting the fee balance. 
 
 They can unsubscribe at anytime by calling the appropriate function. 
 
 ### Callers
+
+Callers are accounts that periodically call the contract function that pays the remittances and increments the time value for the contract. They are paid fees as compensation. 
 
 Initially the Caller will be restricted to the protocol operators. 
 
