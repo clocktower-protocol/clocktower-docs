@@ -205,8 +205,18 @@ The fee will be kept as low as possible while still incentivizing a population o
 
 In this paper, we have presented the Clocktower protocol and examined the structure and players. We have outlined the three participants in the system (subscriber, provider, caller) and walked through a basic example of an online subscription. 
 
-As with any system, there will be trade-offs in regards to it's use. In the the positive column, Clocktower provides a relatively easily accessible, censorship-resistant method of receiving recurrent payments through use of a variety of ERC20 tokens. 
+As with any system, there will be trade-offs in regards to it's use. Table XX outlines the primary costs and benefits. The primary benefits that, Clocktower provides a relatively easily accessible, censorship-resistant method of receiving recurrent payments through use of a variety of ERC20 tokens. 
 
+
+Table XX - Trade-offs of the Clocktower Payments Protocol
+
+| Benefits                                  | Costs                             |
+| ----------------------------------------- | --------------------------------- |
+| - censorship resistance                   | - unfamiliar to non-crypto users  |
+| - low fees (L2)                           | - initial centralization          |
+| - permissionless                          | - limited to daily interval times |
+| - system improves with more users         |                                   |
+| - at scale, will be fully self-sustaining |                                   |
 
 
 
