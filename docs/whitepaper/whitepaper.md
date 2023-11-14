@@ -84,7 +84,7 @@ What about using Ethereum blocks themselves as our time increment? In addition t
 
 The situation is further complicated when considering that timed transactions need to be set at standard increments. But these increments, or time triggers as we call them, have differing scopes. For instance, a weekly subscription needs to be scheduled for a day of the week while a monthly subscription needs a day of the month. And not every month has the same number of days. 
 
-With this in mind we have chosen the following standard time trigger ranges that can represent the most common schedules:
+With this in mind, we have chosen the following standard time trigger ranges that will be available for use on Clocktower V1:
 
 - Future Transactions -- Unixtime / 3600 (Unix Hours)
 - Weekly Subscriptions -- 1 - 7 (Weekdays)
@@ -106,7 +106,8 @@ The most significant gas mitigation strategy is the roll-out on the so-called la
 ### Data Accessibility 
 Clocktower has been built with data accessibility in mind. On-chain logs will be emit pertinent information about the number of transactions in queue, estimated gas costs of those transactions, total value of the queue'd transactions, etc, so that Callers can make informed decisions about using remit() at the most effecient time.
 
-
+### Gas Cost Estimations
+Given the importance of allowing Clocktower to scale over time, we have considered a variety of scenarios for the gas price. We expect mainnet gas prices will not be an option for this system, as demonstrated in the figure below. However, L2 options have a much greater scalability as gas prices are expected to be much more reasonable. [insert graphs and discussion of the interpretations]
 
 
 
