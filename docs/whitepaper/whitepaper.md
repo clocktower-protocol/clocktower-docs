@@ -11,7 +11,7 @@ bibliography: whitepaper.bib
  
 ## Abstract
 
-Clocktower is a decentralized protocol for subscriptions and payments. Providers and subscribers collaborate off-chain for the initial set-up and third-party agents are financially incentivized to call the protocol contract regularly. This system allows for regular payments to be processed into the future with this V1 allowing up to daily granularity. This whitepaper will explore the economic mechanisms and code behind the protocol. Test
+Clocktower is a decentralized protocol for recurrent payments. This system allows Providers and Subscribers to collaborate off-chain for the initial set-up and third-party agents (known as Callers) are financially incentivized to check the protocol contract regularly new due transactions. Clocktower allows for scheduled payments to be processed in the future in a way that is current unavailable in smart contract blockchains. This document will explore the economic mechanisms and code behind the protocol. Test
 
 
 ## 1. Introduction
