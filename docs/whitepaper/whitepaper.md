@@ -11,7 +11,7 @@ bibliography: whitepaper.bib
  
 ## Abstract
 
-Clocktower is a decentralized protocol for recurrent payments. This system allows Providers and Subscribers to collaborate off-chain for the initial set-up and third-party agents (known as Callers) are financially incentivized to check the protocol contract regularly new due transactions. Clocktower allows for scheduled payments to be processed in the future in a way that is current unavailable in smart contract blockchains. This document will explore the mechanisms of the protocol. 
+Clocktower is a decentralized protocol for recurrent payments. The system allows Providers and Subscribers to collaborate off-chain for the initial set-up and third-party agents (known as Callers) are financially incentivized to check the protocol contract regularly new due transactions. Clocktower allows for scheduled payments to be processed in the future in a way that is current unavailable in smart contract blockchains. This document will explore the mechanisms of the protocol. 
 
 
 ## 1. Introduction
@@ -55,7 +55,7 @@ We believe a protocol should never need its own token to work. A token needed fo
 ## 3. Protocol Lifecycle   
 At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good. The Clocktower lifecycle begins with a provider configuring basic parameters of a paid web service they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This could be done through direct interaction with the contract or, in most circumstances, through a web front-end. After signing the transaction, the subscription is now available to anyone who would like to become a subscriber. Off-chain, the provider advertises service to potential subscribers and can send a link for sign-up. When a potential subscriber wants to signup, they sign two transactions on the blockchain. The first gives unlimited allowance to the contract to take a preferred ERC20 token from the wallet. The second approves the subscription and pays the first payment of the schedule, in addition to filling the fee balance for the account (Figure 1). 
 
-At this point, the clocktower payment system will automate future payments with the help of a third party, the Caller. The Caller is responsible for checking the protocol for any payments due and, if any are found, sending these payments to the appropriate provider. The complexity of this process is abstracted, as all is managed through a single function called remit(). Each time the Caller calls remit(), she is required to pay all of the required gas for the on-chain transactions. In exchange, the Caller will receive fees from all of the remitted subscriber fee balances (see Figure 2). As long as [total remitted fees] > [total gas of remission call], a bot or manual caller in the ecosystem will call the remit(), sending the appropriate payments, and collecting a profit. This economic incentive ensures that all subscriptions are checked regularly. 
+At this point, the clocktower payment system will automate future payments with the help of a third party, the Caller. The Caller is responsible for checking the protocol for any payments due and, for those that are found, sending these payments to the appropriate provider. The complexity of this process is abstracted, as all is managed through a single function called remit(). Each time the Caller uses remit(), she is required to pay all of the required gas for the on-chain transactions. In exchange, the Caller will receive fees from all of the remitted subscriber fee balances (see Figure 2). As long as [total remitted fees] > [total gas of remission call], a bot or manual caller in the ecosystem will call the remit(), sending the appropriate payments, and collecting a profit. This economic incentive ensures that all subscriptions are checked regularly. 
 
 For any given agreement between a Subscriber and Provider, the above system will continue until one of four scenarios occur:
 1. the subscriber unsubscribes
@@ -66,13 +66,26 @@ For any given agreement between a Subscriber and Provider, the above system will
 This final scenario is necessary for preventing the accumulation of [ethereum gas fees](https://ethereum.org/en/developers/docs/gas/) on accounts with insufficient funds. As long as this balance has sufficient funding to cover the fees and the subscription price, a given subscriber will continue to be in good standing and current. If there is not enough to cover the subscription, but enough to cover the fee, the fee will be taken until the account can no longer cover the fee. At this point, clocktower will automatically remove this account from the list of active subscriptions. 
 
 Example:
-Bob's favorite crypto market analyst, Alice, is offering a monthly subscription to her newsletter for 50 USD/Month. Bob would like access and so he subscribes through her website, and receives a custom link for sign-up via email. The link takes him to a page where he is able to provide his details including his ethereum wallet address. After confirming the details of his subscription, the UI walks him through the two on-chain transactions with his metamask browser extension. His first payment of $50 is pulled from his wallet in the form of USDC. This entire sign-up process takes less than 5 minutes. 
+Bob's favorite crypto market analyst, Alice, is offering a monthly subscription to her newsletter for 50 USD/Month. Bob would like access and so he subscribes through her website, and receives a custom link for sign-up via email. The link takes him to a page where he is able to provide his details including his ethereum wallet address. After confirming the details of his subscription, the interface walks him through the two on-chain transactions with his browser wallet extension. His first payment of $50 is then pulled from his wallet in the form of USDC. This entire sign-up process takes less than 5 minutes. 
 
-Behind the scenes, the clocktower protocol distributes part of Bob's first payment to the Provider (see table below) and part to his fee bucket within the contract. Each time his subscription payment is remitted in the future, a 1% fee is taken from this fee bucket and passed to the Caller as a reward for calling _remit_--in this case, 0.5 USDC. When his fee bucket is exhausted, a similar split as the first transaction will occur again with the next payment.
+Behind the scenes, the clocktower protocol distributes part of Bob's first payment to the Provider (see table below) and part to his reserve balance within the contract. Each time his subscription payment is remitted in the future, a 1% fee is taken from his reserve and passed to the Caller as a reward for calling remit()--in this case, 0.5 USDC. When his reserve balance drops below the caller fee amount, a similar split as this first transaction will occur with the next payment, serving to refill the reserve. These special transactions that include a filling of the Subscriber's reserve balance are known as Key Payments and have differential splits depending on the subscription interval.  
+   
+| Frequency | Percent of Reserve Filled by Key Payment |
+| --------- | ---------------------------------------- |
+| Weekly    | 100                                      |
+| Monthly   | 100                                      |
+| Quarterly | 33                                       |
+| Yearly    | 8.3                                      |
+Table: The amount of Reserve filling during a key payment depends on the subscription interval
 
 From Bob's standpoint, all of this is opaque--all he knows is that he is being charged $50 for access to Alice's newsletter. As long as he wishes to continue the subscription and keeps his wallet topped off with enough USDC to cover the charge, there is nothing more for him to do except to enjoy the content. Alice gets her payments automatically and pays zero percent in fees except in the case of the "key payments" and over time she saves about 2.5% on clocktower-based subscribers vs those subscribers who still use Stripe.
 
-| Subscription Interval | 
+
+| Subscription Interval | Number of Payments | %Fee | Total |
+| --------------------- | ------------------ | ---- | ----- |
+| Weekly                | 52                 | 1    | 12    |
+| Monthly               | 12                 | 1    | 12    |
+|                       |                    |      |       |
 Monthly - 12 payments x 1% = 12$
 Weekly - 
 
@@ -143,10 +156,7 @@ Those familiar with use of Ethereum mainnet since the advent of NFT releases hav
 In this paper, we have presented the Clocktower protocol and examined the structure and players. We have outlined the three participants in the system (Subscriber, Provider, Caller) and walked through a basic example of an online subscription. 
 
 As with any system, there will be trade-offs in regards to it's use. Table 2 outlines the primary costs and benefits. The primary benefits that, Clocktower provides a relatively easily accessible, censorship-resistant method of receiving recurrent payments through use of a variety of ERC20 tokens. 
-
-
-Table 2 - Trade-offs of the Clocktower Payments Protocol
-
+    
 | Benefits                                  | Costs                             |
 | ----------------------------------------- | --------------------------------- |
 | - censorship resistance                   | - unfamiliar to non-crypto users  |
@@ -154,17 +164,7 @@ Table 2 - Trade-offs of the Clocktower Payments Protocol
 | - permissionless                          | - limited to daily interval times |
 | - system improves with more users         |                                   |
 | - at scale, will be fully self-sustaining |                                   |
-
-
-
-###################################################
-
-References
-
-1. https://www.helcim.com/visa-usa-interchange-rates/
-2. https://www.businessinsider.com/sam-harris-deletes-patreon-account-after-platform-boots-conservatives-2018-12
-3. https://bitcoin.org/en/bitcoin-paper
-4. 
+Table: Trade-offs of the Clocktower Payments Protocol
 
 
 
