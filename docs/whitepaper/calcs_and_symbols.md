@@ -55,3 +55,13 @@ profit = ~0.07 Eth
 major variables are the gas price and the avg sub tx value (or the sum value in dollars of all subscription payments to be remitted by this call)
 
 The fee will be kept as low as possible while still incentivizing a population of Callers to call the remit function on the clocktower contract. 
+
+
+
+| Subscription Interval | Number of Payments | %Fee | Total |
+| --------------------- | ------------------ | ---- | ----- |
+| Weekly                | 52                 | 1    | 12    |
+| Monthly               | 12                 | 1    | 12    |
+| Quarterly             | 4                  | 1    |       |
+Monthly - 12 payments x 1% = 12$
+Weekly - 

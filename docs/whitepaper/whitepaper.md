@@ -70,8 +70,8 @@ Bob's favorite crypto market analyst, Alice, is offering a monthly subscription 
 
 Behind the scenes, the clocktower protocol distributes part of Bob's first payment to the Provider (see table below) and part to his reserve balance within the contract. Each time his subscription payment is remitted in the future, a 1% fee is taken from his reserve and passed to the Caller as a reward for calling remit()--in this case, 0.5 USDC. When his reserve balance drops below the caller fee amount, a similar split as this first transaction will occur with the next payment, serving to refill the reserve. These special transactions that include a filling of the Subscriber's reserve balance are known as Key Payments and have differential splits depending on the subscription interval.  
    
-| Frequency | Percent of Reserve Filled by Key Payment |
-| --------- | ---------------------------------------- |
+| Frequency | % Reserve Filled by Key Payment |
+| --------- |:----------------------------------------:|
 | Weekly    | 100                                      |
 | Monthly   | 100                                      |
 | Quarterly | 33                                       |
