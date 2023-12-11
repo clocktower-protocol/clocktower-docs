@@ -16,13 +16,13 @@ Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol fo
 
 ## 1. Introduction
 
-As web-based services proliferate, recurrent payment systems have become an important source of revenue for digital content providers. Centralized payment services have reduced the friction of payments on the web, and have made traditional forms of payment (credit/debit/bank transfer) common and simple. However, this convenience comes at a price--online content and providers frequently pay more than 3% for this functionality [@visarates] and these costs are inevitably passed to the consumer. Furthermore, payment platforms have become a critical beachhead for censorship of people and ideas on the web, inspiring some to leave popular crowdfunding platorms in favor of their own platforms [@bizinsider]. While the major payment networks have generally remained neutral politically, they remain a potential choke-point for free speech and an open internet. 
+As web-based services proliferate, recurrent payment systems have become an important source of revenue for digital content providers. Centralized payment services have reduced the friction of payments on the web, and have made traditional forms of payment (credit/debit/bank transfer) common and simple. However, this convenience comes at a price--online content and providers frequently pay more than 3% for this functionality [@visarates] and these costs are inevitably passed to the consumer. Furthermore, payment platforms have become a critical beachhead for censorship of people and ideas on the web, inspiring some to leave popular crowdfunding sites in favor of their own platforms [@bizinsider]. While the major payment networks have generally remained politically neutral, they remain a potential choke-point for free speech and an open internet. 
 
 At the same time, we have witnessed a new type of currency layer evolve over the past decades: the cryptocurrency [@btcwhitepaper]. These systems exist outside of national borders and live on distributed networks called blockchains. While many groups have experimented with payment systems on these networks, the problem of recurrent future payments and subscriptions has not yet been adequately addressed.
 
-The challenge of executing recurrent payments on blockchains is actually two-fold. The first part relates to the network fee, which on the Ethereum network is referred to as 'gas' and is paid in the native token. The gas price is always in flux, increasing and decreasing with the demand for blockspace on the network. Thus the most immediate issue is how to account for an unknown future gas price on a future transaction. The closely-related second issue is that a decentralized smart contract cannot act on its own at a given timepoint--it must triggered to take action. In a sense, it is unaware of time. This limitation makes it impossible to schedule actions in the future, as with a cron job in normal computing. Without the ability to schedule transactions in the future, common financial services like payroll, subscriptions, regular payments, and many others are impossible in these decentralized systems.
+The challenge of executing recurrent payments on blockchains is actually two-fold. The first part relates to the network fee, which on the Ethereum network is referred to as 'gas' and is paid in the native token. The gas price is variable, increasing and decreasing with the demand for blockspace on the network. Thus the most immediate issue is how to account for an unknown future gas price on a theoretical future transaction. The second issue is that a decentralized smart contract cannot act on its own at a given timepoint--it must triggered to take action. In a sense, it is unaware of time unless forced to check it. This limitation makes standard computer scheduling, such as with a cron jobs, infeasible. Without the ability to schedule transactions in the future, common financial services like payroll and subscriptions are impossible in these decentralized systems.
 
-The Clocktower protocol solves these issues by creating a specialized smart contract that is polled regularly by economically incentivized actors. This allows users to schedule transactions at a future time of their choosing. By incorporating such features as subscriptions, future payments, batch transactions, reversible transactions and ERC20 compatibility, Clocktower will unlock the potential of fintech and defi projects seeking recurrent payments while staying true to the principle of decentralization. 
+The Clocktower protocol solves these issues by creating a specialized smart contract that is polled regularly by economically incentivized actors. This allows users to schedule transactions at a future time of their choosing. By incorporating such features as subscriptions, future payments, batch transactions, reversible transactions and ERC20 compatibility, Clocktower unlocks the potential of fintech and defi projects seeking recurrent payments while staying true to the principle of decentralization. 
 
 
 ## 2. Goals
@@ -50,11 +50,11 @@ Hackers hack where the money is kept. Traditional contracts have become targets 
 We believe a protocol should never need its own token to work. A token needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issues its own token, it will be used soley for governance purposes.  
 
 *Your Privacy is Your Business*
-As a simple protocol operating on fully transparent blockchains, Clocktower does not attempt to create privacy and instead leaves this responsibility to the parties involved in the recurrent transactions.
+As a simple protocol operating on fully transparent blockchains, Clocktower does not attempt to create privacy and instead leaves this responsibility to the parties involved in the transactions.
 
 
 ## 3. Protocol Lifecycle   
-At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good. This can be modeled as a three phase process. In the initiation phase (Figure 1) a Provider configures a good or service they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This could be done through direct interaction with the contract or, in most cases, through a website. After creating the offerring, the good or service is now available to anyone who would like to subscribe. Off-chain, the Provider advertises service to potential Subscribers and can send a link for sign-up. When a potential Subscriber wants to signup, they sign two transactions on the blockchain. The first gives unlimited allowance to the contract to take a preferred ERC20 token from the wallet. The second approves the subscription and pays the first payment of the schedule, in addition to filling the fee balance for the account.
+At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good. This can be modeled as a three phase process. In the initiation phase (Figure 1) a Provider configures a good or service they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This could be done through direct interaction with the contract or, in most cases, through a website. After creating the offerring, the good or service is now available to anyone who would like to subscribe. Off-chain, the Provider advertises the service to potential Subscribers and can send a link for sign-up. When a potential Subscriber wants to signup, they sign two transactions on the blockchain. The first gives unlimited allowance to the contract to take a preferred ERC20 token from the wallet. The second approves the subscription and pays the first payment of the schedule, in addition to filling the fee balance for the account.
 
 ![**Phase I – Initiation.** 1. Provider (P1) and Subscriber (S1) initiate details of the recurrent payment out-of-band. Once the subscriber has provided all required details, the subscriber will initiate two wallet transactions with the clocktower contract (2.). The first (a) gives the contract permission to make withdrawals from account to fulfill his side of the subscription agreement. The second transaction sends the first payment and divides this amount between the provider and filling the fee balance (fb1) for the subscriber as described in Table XX.](img/Phase1_crop_nocaption.tif)
 
@@ -122,36 +122,9 @@ Given the importance of allowing Clocktower to scale over time, we have consider
 
 
 
-
-## Protocol Lifecycle
-
-
-
-## The Caller
-
-Clocktower is decentralized--parameters are fixed in an immutable contract with permissionless access available to any provider or subscriber that would like to use it. The other critical decentralized feature of clocktower is a role called the Caller. 
-
-Those familiar with use of Ethereum mainnet since the advent of NFT releases have no doubt observed that short periods of very heavy network congestion do occur, though typically not longer than a few hours at a time. In this and other high gas price situations, the clocktower economic incentive will transiently break, as [total remitted fees] < [total gas of remission call]. During these times, the pool of Callers would not be expected to call the remit function, since they would owe more in gas fees than they would receive in reward. To account for these high-gas scenarios, clocktower V1 has a minimum period of weekly. Future versions may decrease subscription intervals as we expect L2 scaling solutions to provide a more consistent gas price environment. We also expect that with enough adoption of the clocktower protocol, a professional class of Callers will come into being, similar to the evolution of the MEV market. These professional entities will make a science of calculating potential remit rewards and monitoring gas prices for opportunities to turn a profit.  Professional Callers will further increase the efficiency of the protocol to the benefit of subcribers and providers.
-
-
-
-## 5. 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Discussion and Use Cases
 
-In this paper, we have presented the Clocktower protocol and examined the structure and players. We have outlined the three participants in the system (Subscriber, Provider, Caller) and walked through a basic example of an online subscription. 
+In this paper, we have presented the Clocktower protocol, examining the structure and main rationale. We have outlined the three participants in the system (Subscriber, Provider, Caller) and walked through a basic example of an online subscription. 
 
 As with any system, there will be trade-offs in regards to it's use. Table 2 outlines the primary costs and benefits. The primary benefits that, Clocktower provides a relatively easily accessible, censorship-resistant method of receiving recurrent payments through use of a variety of ERC20 tokens. 
     
@@ -165,7 +138,7 @@ As with any system, there will be trade-offs in regards to it's use. Table 2 out
 Table: Trade-offs of the Clocktower Payments Protocol
    
 
-A few words about the choice of blockchain. Clocktower V1 is being released on the Optimism L2 chain. As previously discussed, Ethereum's mainnet is not a viable home for Clocktower since the high fees would limit the scalability of the protocol. Optimism and other L2's provide a much better starting point and so the protocol will begin there. We are agnostic as to the best EVM-based chain to use and recognize that better options may arise in the future. There would be nothing stopping us or anyone else from forking the protocol and introducing it on a different chain, though parameters may of course need adjustment. Furthermore, the EVM is not strictly required for this concept to function, and so blockchains with different archetectures could also be used in the future (although this would require a rewrite of the contract code into that chain's native language).
+A few words about the choice of blockchain. Clocktower V1 is being released on the Optimism L2 chain. As previously discussed, Ethereum's mainnet is not a viable home for Clocktower since the high fees would limit the scalability of the protocol. Optimism and other L2's provide a much better starting point and so the protocol will begin there. See figure XXXX for a graph illustrating the feeWe are agnostic as to the best EVM-based chain to use and recognize that better options may arise in the future. There would be nothing stopping us or anyone else from forking the protocol and introducing it on a different chain, though parameters may of course need adjustment. Furthermore, the EVM is not strictly required for this concept to function, and so blockchains with different archetectures could also be used in the future (although this would require a rewrite of the contract code into that chain's native language).
 
 
 
