@@ -164,7 +164,7 @@ III. Protocol Lifecycle
 
    creation - done by provider
    initiation - subscriber subscribes, funds the subscription, can unsubscribe and cancel
-   caller - perpetuates the subscription, resets the 
+   perpetuating - caller perpetuates the subscription, resets the 
 
    All of these players are contributing to the overall lifecycle of a SUBSCRIPTION
 
@@ -176,7 +176,7 @@ For V1 whitepaper, maybe we don't worry about the gas dynamics
 
 
 
-
+Feb 29th - leap year date
 
 
 
