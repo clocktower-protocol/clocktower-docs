@@ -145,6 +145,32 @@ A few words about the choice of blockchain. Clocktower V1 is being released on t
 
 
 
+Notes from Hugo, Feb 15 2024
+
+- Should start with the major problems and what we are proposing to solve it
+
+OUTLINE:
+
+I. **3 major technical problems**
+
+1) Humans do time in Gregorian (months, days, hours) while computers do time incrementally (Unix Epoch Time). So you have to convert. But you need an algorithm to do this without using an external oracle. 
+2) The chain is "time unaware" in that it can only check the time when externally told to
+3) Providers, Subscribers and Callers can all be the same person which leads to attack vectors (Solution: contract becomes the arbitor of refund dynamics
+    Consider copy/paste from docusaurus, per Hugo
+
+II. Thematics / goals of the protocol
+
+III. Protocol Lifecycle
+
+   creation - done by provider
+   initiation - subscriber subscribes, funds the subscription, can unsubscribe and cancel
+   caller - perpetuates the subscription, resets the 
+
+   All of these players are contributing to the overall lifecycle of a SUBSCRIPTION
+
+
+
+For V1 whitepaper, maybe we don't worry about the gas dynamics
 
 
 
