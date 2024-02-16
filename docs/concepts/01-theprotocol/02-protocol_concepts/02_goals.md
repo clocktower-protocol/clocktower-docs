@@ -24,7 +24,7 @@ Traditional payment networks justify charging high fees due to the high costs of
 
 ### No Oracles
 
-An oracle is a third party data source. Relying on an external source of information outsources security to that source. This is too much of a risk for a payment platform. 
+An oracle is a third party data source. External sources of information can be incorrect or manipulated. This is too much of a risk for a payment platform. 
 
 ### Minimum tokens in contract
 
@@ -32,4 +32,4 @@ Hackers hack where the money is. Traditional contracts have become targets large
 
 ### No protocol token needed
 
-We believe a protocol should never need its own token to work. A toekn needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issued its own token it would solely be for governance purposes. 
+We believe a protocol should never need its own token to work. A token needed for functionality creates friction for the user when they have to convert it and can lead to inflationary tokenomics. If Clocktower ever issued its own token it would solely be for governance purposes. 
