@@ -6,17 +6,17 @@ sidebar_position: 7
 
 ## Time
 
-The computational and human understanding of time is critical for the Clocktower Protocol. In order for the contract to schedule transactions in the future it must know what time it is. We accomplish this by incentivizing the caller to poll the contract on a regular basis. 
+The computational and human understanding of time is critical for the Clocktower Protocol. In order for the contract to schedule transactions in the future, it must know what time it is. We accomplish this by incentivizing the caller to poll the contract on a regular basis. 
 
-But in order to actually schedule the transactions we must translate different human beings understanding of time into something the contract can recognize and save. 
+In order to actually schedule the transactions, we must translate different human beings understanding of time into something the contract can recognize and save. 
 
 But first a digression into the basics of time. 
 
 ### Two Time Systems
 
-Our systmes of time are ways for humans to capture regular natural occurances. Years represent how long it takes for the earth to move around the sun, days how long it takes the earth to spin around fully. Seconds roughly translate to the rythym of a heartbeat and months to the cycle of the moon. 
+Our systems of time are ways for humans to capture regular natural occurances. Years represent how long it takes for the earth to move around the sun, days how long it takes the earth to spin around fully. Seconds roughly translate to the rhythm of a heartbeat and months to the cycle of the moon. 
 
-While humans (and computers) prefer to think of abstractions in discrete terms. Nature usually is not so cut and dry. For example, years don't perfectly line up with 365 days and the rotation of the earth slows down slightly over time. These variances have led to the evolution of two distinct time systems. 
+While humans (and computers) prefer to think of abstractions in discrete terms, nature usually is not so cut and dry. For example, years don't perfectly line up with 365 days and the rotation of the earth slows down slightly over time. These variances have led to the evolution of two distinct time systems. 
 
 #### Unix Time
 
@@ -34,7 +34,7 @@ In order to deal with the days of the year problem most of the world uses the [G
 
 ## Time Ranges
 
-Subscriptions are an open ended time series. You can't easily save an open ended series with an incrementing number. For instance theres no sane way to save the date "every 5th day of the month" using just unix time. You could theoretically save a long series of calculated dates in seconds after midnight Jan. 1st 1970. But this is inefficient and what happens if the subscription goes longer than the initial series of numbers. Now you have to recalculate somehow and add more. A MUCH simpler solution is to use a Gregorian calendar point. 
+Subscriptions are an open ended time series. You can't easily save an open ended series with an incrementing number. For instance theres no sane way to save the date "every 5th day of the month" using just unix time. You could theoretically save a long series of calculated dates in seconds after midnight Jan. 1st 1970. But this is inefficient and what happens if the subscription goes longer than the initial series of numbers. Now you have to recalculate somehow and add more. A *much* simpler solution is to use a Gregorian calendar point. 
 
 So for each type of frequency of subscription we simply create a range of numbers:
 
