@@ -20,9 +20,115 @@ As web-based services proliferate, recurrent payment systems have become an impo
 
 The advent of cryptocurrency networks provides an opportunity to counter these centralizing trends [@btcwhitepaper, @ethwhitepaper]. These systems exist outside of national borders and feature a variety of native tokens and stablecoins. While many groups have experimented with payment systems on these networks, the problem of recurrent future payments and subscriptions has not yet been adequately addressed.
 
-The challenge of executing recurrent payments on blockchains is involves three major problems. The first is that humans and computers conceive of time differently. Humans use what is known as "Gregorian Time," which consists of units such as hours, days, and months. Computers, on the other hand, use Linux Epoch time, incrementing forward every second starting from Jan 1, 1970. When dealing with computer-programmed future timing schemes, conversions must be made between the two time systems. The second issue is that a decentralized smart contract cannot actually be time aware, per se. It cannot know the time, unless instructed to check the time by an outside force. This limitation makes standard computer scheduling, such as with a cron jobs, infeasible. Without the ability to schedule transactions in the future, common financial services like payroll and subscriptions are not possible in current decentralized systems. Finally, the third challenge of recurrent payments in decentralized systems relates to the unique attack vectors which can be created, particularly when an actor in the system can play multiple roles.
+The challenge of executing recurrent payments on blockchains is involves three major problems. The first is that humans and computers conceive of time differently. Humans use what is known as "Gregorian Time," which consists of units such as hours, days, and months. Computers, on the other hand, use Linux Epoch time, incrementing forward with every second starting from Jan 1, 1970. When dealing with computer-programmed future timing schemes, conversions must be made between the two time systems. The second issue is that a decentralized smart contract cannot actually be time aware, per se. It cannot know the time, unless instructed to check it. This limitation makes standard computer scheduling, such as with a cron jobs, infeasible. Without the ability to schedule transactions in the future, common financial services like payroll and subscriptions are not possible in current decentralized systems. 
 
-The Clocktower protocol solves these issues by creating a specialized smart contract that is polled regularly by economically incentivized actors. This allows users to schedule transactions at a future time of their choosing. By incorporating such features as subscriptions, future payments, batch transactions, reversible transactions and ERC20 compatibility, Clocktower unlocks the potential of fintech and defi projects seeking recurrent payments while staying true to the principle of decentralization. 
+The third challenge of creating recurrent payments in decentralized systems relates to the unique attack vectors that can be created, particularly when an actor in the system can play multiple roles. In order to further elucidate these challenges and how Clocktower solves these problems, we must further explore the various users and incentives in the protocol.
+
+## 2. Multi-user Evolution  
+
+One of the many ways to categorize the evolution of smart contract design is by counting how many primary users exist for the basic functionality of the protocol to work. These users can be humans or bots and we expect that over time, bots will come to dominate certain roles.
+
+In many contracts there is a single user who interacts with the contract and the contract alone. Some examples of these types of protocols:
+
+    Contract Wallets
+    "Vaults" where users stake or deposit tokens
+    Transactions where users transfer assets between addresses controlled by the same user.
+    Accounts at central exchanges
+
+In each of these examples their is a single user who only interacts with the contract. The existence of any other users is parallel to their experience and not involved in their interaction.
+
+A more complex example is where two users use contracts as an intermediary to interact with the each other. Sometimes this interaction is understood, sometimes the contract blinds each of the user to the existence of the other. Examples are:
+
+    Transfers of tokens between users
+    AMM Dexes where users swap or pool
+    Lending protocols where users deposit and borrow
+
+Up until now most protocols have added third user functionality to do behind the scenes utility functions for the protocol such as:
+
+    Lending protocol liquidations
+    Farming protocols to sweep earnings
+    Privacy protocols to increment governance rewards
+
+While all of these functions are useful and sometimes critical for the overall protocol to function, most do not use them primarily for focusing on polling for time. The Clocktower protocol attempts to harness a three user setup to gain better control of the temporal element. In order to understand the way the  protocol works, its best to think about these three users. For simplicity lets name them after their basic function:
+
+    Sender: The user whose primary motivation is sending tokens. This can be done as a subscriber to a subscription or just a transfer.
+
+    Receiver: This user wishes to receive tokens at some point in the future. For subscriptions we call this a Provider, who provides some sort of service in exchange for receiving tokens on a regular basis.
+
+    Caller: This user calls a specific function of the contract at a regular interval and is rewarded for his effort and gas costs by receiving compensation.
+
+Since we are focusing on subscriptions for the first version of the protocol we will hereafter refer to the Sender Receiver and Caller as Subscriber, Provider and Caller which are more specific to subscriptions.
+
+
+## 3. Users and Incentives
+
+
+
+
+Differing relationships
+One to One
+
+    Transactions
+    Escrow Payments
+
+One to Many
+
+    Payroll
+    Bulk Payments
+    Estate Planning
+
+Many to One
+
+Subscriptions
+The importance of the Caller
+
+While sending and receiving is one of the simplest functions of blockchains as seen in simple transfer it is the inclusion of the Caller who polls the contract at regular intervals that gives the ClockTower protocol its time awareness.
+
+While it might seem simple to just add an additional user that polls the contract. We will see in the next section how incentives and structure all work together to make each user stay in their lanes.
+
+
+Paying the Caller
+
+As shown in the previous section the caller must be incentivized to poll the contract at regular intervals. So how is this done?
+Time Incrementation
+
+In order to add time awareness to the contract a time value must be incremented by an external account.
+
+One can think of process like a virtual button which anyone is allowed to press. And while it costs money to press the button there is a bounty rewarded to the first person to press the button each day.
+
+A more real world example is how lending protocols crowd source liquidation in a decentralized manner.
+
+Lending protocols allow any user to liquidate any account by simply calling the contract function themselves and collecting a portion of the seized collateral.
+Considerations
+Why not pay the caller in ETH?
+
+One might think that paying the caller in ETH would be appropriate since the caller must pay for the gas of polling the contract. But there are a few reasons this won't work.
+Ethereum and Approval
+
+As explained here, the ability for the protocol to have approved access to user accounts is critical to seamlessly transfer tokens at a future date.
+
+While all standard ERC-20 tokens have a built-in process to facilitate approval, ETH does not. We could require a user to keep wrapped ETH in their account but this is not ideal from a UX perspective nor is it common for the average user to hold wrapped ethereum in their wallet.
+No Oracles
+
+Another problem is that if we required one of the parties to pay their fees in ETH but the future transfer was an ERC-20 token we would need some sort of oracle to calculate the price of the ERC-20 vs ETH to have a proportional fee. But since having no oracles is a goal of the protocol this conversion won't work.
+In kind fees
+
+As shown above paying the caller in ETH is not ideal. So the solution is to simply pay the fee in the same ERC-20 token as the subscription. In order to avoid oracles it will need to be a percentage of the overall transaction. But who pays this fee? The subscriber or the provider?
+Problem with the Provider paying the Caller
+
+One might initially think that the provider should pay a portion of their earnings each period to the caller. This seems simpler since there is only one provider and they are the one's receiving all the funds.
+
+But there is an attack vector if we go this route. Since we have no way of knowing the ownership of an ethereum address it is possible that combinations of the subscriber, provider and caller can be the same entity.
+
+If the subscriber and caller are the same while the provider pays the fee to the caller there is a situation where the subscriber could sign up for a subscription and but not fund their account. When the transaction fails the fee would still be extracted from the provider and paid to the caller (who is also the subscriber.) If the fee is higher than the gas costs of signing up for the subscription then the malicious subscriber now has a method of extracting tokens from the provider.
+Problems with the sender paying
+
+If the Provider can't be the one paying the caller it must the subscriber. But this choice presents additional issues that must be considered.
+
+The biggest issues revolve around the problem of failed transactions which we will go into in the next sections, failed transactions.
+
+The solutions is having a fee balance where fees can be reserved and paid depending on the situation.
+
 
 
 ## 2. Goals

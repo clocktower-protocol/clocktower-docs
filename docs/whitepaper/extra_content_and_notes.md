@@ -31,7 +31,11 @@ Feb 29th - leap year date
 
 
 
+==========================================================================
 
+The Clocktower protocol solves these issues by creating a specialized smart contract that is polled regularly by economically incentivized actors. This allows users to schedule transactions at a future time of their choosing. By incorporating such features as subscriptions, future payments, batch transactions, reversible transactions and ERC20 compatibility, Clocktower unlocks the potential of fintech and defi projects seeking recurrent payments while staying true to the principle of decentralization. 
+
+==========================================================================
 
 
 
