@@ -17,7 +17,7 @@ III. Protocol Lifecycle
 
    creation - done by provider
    initiation - subscriber subscribes, funds the subscription, can unsubscribe and cancel
-   perpetuating - caller perpetuates the subscription, resets the 
+   perpetuating/extension - caller perpetuates the subscription, resets the 
 
    All of these players are contributing to the overall lifecycle of a SUBSCRIPTION
 

@@ -22,7 +22,7 @@ The advent of cryptocurrency networks provides an opportunity to counter these c
 
 The problem of executing recurrent payments on blockchains involves three major challenges. The first is that humans and computers conceive of time differently. Humans use what is known as "Gregorian Time," which consists of units such as hours, days, and months. Computers, on the other hand, use Linux Epoch time, incrementing forward with every second starting from Jan 1, 1970. Conversions between these two systems are crucial for scheduling via blockchain. The second challenge is that a decentralized smart contract cannot actually be time aware, per se. It cannot know the time, unless instructed to check it. This limitation makes standard computer scheduling, such as with a cron jobs, infeasible. Without the ability to schedule transactions in the future, common financial services like payroll and subscriptions are not possible in current decentralized systems. 
 
-The third challenge of blockchain-based recurrent payments is unique to multi-user permissionless systems--the threat of an actor playing multiple roles and exploiting unique attack vectors related to the system incentives. These exploits may not immediately obvious but their mitigation is critical to the system functioning as intended for the long-term. Single-user smart contracts (eg, contract wallets, vaults), and two-user smart contracts (AMM Dex protocols, lend/borrow protocols) are more simplistic and less prone to these incentive edge cases. The unique challenges of executing future transactions necessitate that Clocktower be a three-user system. Before detailing the protocol, let's review the goals of the project to better understand the purposes and constraints.
+The third challenge is unique to multi-user permissionless systems--the threat of an actor playing multiple roles and exploiting unique attack vectors related to the system incentives. These exploits may not immediately obvious but their mitigation is critical to the system functioning as intended for the long-term. Single-user smart contracts (eg, contract wallets, vaults), and two-user smart contracts (AMM Dex protocols, lend/borrow protocols) are more simplistic and less prone to these incentive edge cases. The unique challenges of executing future transactions necessitate that Clocktower be a three-user system. Before detailing the protocol, let's review the goals of the project to better understand the purposes and constraints.
 
 
 ## 2. Goals
@@ -225,40 +225,5 @@ Table: Trade-offs of the Clocktower Payments Protocol
    
 
 A few words about the choice of blockchain. Clocktower V1 is being released on the Optimism L2 chain. As previously discussed, Ethereum's mainnet is not a viable home for Clocktower since the high fees would limit the scalability of the protocol. Optimism and other L2's provide a much better starting point and so the protocol will begin there. See figure XXXX for a graph illustrating the feeWe are agnostic as to the best EVM-based chain to use and recognize that better options may arise in the future. There would be nothing stopping us or anyone else from forking the protocol and introducing it on a different chain, though parameters may of course need adjustment. Furthermore, the EVM is not strictly required for this concept to function, and so blockchains with different archetectures could also be used in the future (although this would require a rewrite of the contract code into that chain's native language).
-
-
-
-
-Notes from Hugo, Feb 15 2024
-
-- Should start with the major problems and what we are proposing to solve it
-
-OUTLINE:
-
-I. **3 major technical problems**
-
-1) Humans do time in Gregorian (months, days, hours) while computers do time incrementally (Unix Epoch Time). So you have to convert. But you need an algorithm to do this without using an external oracle. 
-2) The chain is "time unaware" in that it can only check the time when externally told to
-3) Providers, Subscribers and Callers can all be the same person which leads to attack vectors (Solution: contract becomes the arbitor of refund dynamics
-    Consider copy/paste from docusaurus, per Hugo
-
-II. Thematics / goals of the protocol
-
-III. Protocol Lifecycle
-
-   creation - done by provider
-   initiation - subscriber subscribes, funds the subscription, can unsubscribe and cancel
-   perpetuating - caller perpetuates the subscription, resets the 
-
-   All of these players are contributing to the overall lifecycle of a SUBSCRIPTION
-
-
-
-For V1 whitepaper, maybe we don't worry about the gas dynamics
-
-
-
-Feb 29th - leap year date
-
 
 
