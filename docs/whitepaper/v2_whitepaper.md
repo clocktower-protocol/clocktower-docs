@@ -40,7 +40,7 @@ So for each type of frequency of subscription we simply create a range of number
 | Yearly | 1 - 365 |
 
 
-These ranges then need to be converted to unix time. The best way to translate the block timestamp incremeting unix number to Gregorian ranges is to use an intermediary incrementing day standard called Julian Days. Using the following code the contract can do this translation without Oracles or any other external sources.
+These ranges then need to be converted to unix time. The best way to translate the block timestamp incremeting unix number to Gregorian ranges is to use an intermediary incrementing day standard called Julian Days. Using the following code the contract can do this translation without Oracles or any other external sources [@bokkypoobah],[@navy].
 
 ```
 function unixToTime(uint unix) internal pure returns (Time memory time) {
@@ -70,6 +70,9 @@ function unixToTime(uint unix) internal pure returns (Time memory time) {
 ```
 
 3) Fees and Refunds
+
+In order to keep fees and refunds fair, the Clocktower uses a system of proration. The first payment in a series is held back such that the fee balance can be filled for future payments. 
+
 
 	A) Proration. Show calcs
 
