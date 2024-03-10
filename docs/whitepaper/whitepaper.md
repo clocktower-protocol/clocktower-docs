@@ -1,6 +1,6 @@
 ---
 title: Clocktower V1
-subtitle: A Protocol for Recurrent Payments
+subtitle: An EVM-compliant Protocol for Reccurring, Timely Payments
 author: Hugo Marx
 date: November 2023
 geometry: margin=3cm
@@ -11,7 +11,7 @@ bibliography: whitepaper.bib
  
 ## Abstract
 
-Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol for recurrent payments. Parties who wish to exchange goods and/or services provide payment details off-chain for an initial set-up and third-party agents are financially incentivized to execute payments from master list of transactions. In this way, Clocktower allows for scheduled payments to be reliably processed in the future **without a central processor**--a feature currently unavailable to smart contract blockchains. This whitepaper will detail the mechanisms and use-cases of the protocol. 
+Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol for recurrent payments. Parties who wish to exchange goods and/or services provide payment details off-chain for an initial set-up and third-party agents are financially incentivized to execute payments from master list of transactions. In this way, Clocktower allows for scheduled payments to be reliably processed in the future **without a central processor**. This whitepaper will detail the mechanisms and use-cases of the protocol. 
 
 
 ## 1. Introduction
