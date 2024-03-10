@@ -127,7 +127,7 @@ In the past setting up your own subscription service has been too difficult for 
 Traditional payment networks have had the advantage of being able to charge high fees due to sizable fixed costs of network build-out. By building on the existing backbone of EVM compliant blockchains, we believe we can eventually undercut the existing networks.
 
 *No Oracles*   
-An oracle is a third party data source. Unfortunately, oracles have been manipulated to steal funds [@oracle1] [@oracle2]. This protocol will not use these data sources as they subject users to unnecessary risk.
+An oracle is a third party data source. Unfortunately, oracles have been manipulated to steal funds. This protocol will not use these data sources as they subject users to unnecessary risk.
 
 *Minimum tokens in contract*   
 Hackers hack where the money is kept. Traditional contracts have become targets largely because they rely on the "vault" model where all value is stored within the contract. We seek to turn this model on its head by seeking to hold as little value as possible in the contract. This makes the contract less of a target and allows users to keep their own funds secure in their own wallets.
