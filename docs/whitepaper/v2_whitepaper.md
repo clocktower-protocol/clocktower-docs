@@ -67,11 +67,15 @@ function unixToTime(uint unix) internal pure returns (Time memory time) {
     uint uintday = uint(_day);
 
     day = uint16(uintday);       
+    ...
 ```
+3) The Three Users
+
+This section explores the main actors and lifecycle of the protocol. Of note, the three user categories are named for their functions in a subscription service, although the protocol has use-cases outside of this model. At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, a polling agent or Caller. This can be modeled as a three phase process. In the creation phase (Figure 1) a Provider configures a good or service they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This can be done through direct interaction with the contract or, in most cases, through a website providing a simple user interface. After creating the offerring, the good or service is now available to anyone who would like to subscribe. Off-chain, the Provider advertises the service to potential Subscribers and can send a link for sign-up. When a potential Subscriber wants to signup, they sign two transactions on the blockchain. The first gives unlimited allowance to the contract to take a preferred ERC20 token from the wallet. The second approves the subscription and pays the first payment of the schedule, in addition to filling the fee balance for the account.
 
 3) Fees and Refunds
 
-In order to keep fees and refunds fair, the Clocktower uses a system of proration. The first payment in a series is held back such that the fee balance can be filled for future payments. 
+In order to keep fees and refunds fair, the Clocktower uses a system of proration. The first payment in a subscription fills the fee balance which can then be used to pay fees through future payments. 
 
 
 	A) Proration. Show calcs
