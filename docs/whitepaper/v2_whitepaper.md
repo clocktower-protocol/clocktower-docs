@@ -71,7 +71,7 @@ function unixToTime(uint unix) internal pure returns (Time memory time) {
 ```
 3) The Three Users
 
-This section explores the main actors and lifecycle of the protocol. Of note, the three user categories are named for their functions in a subscription service, although the protocol has use-cases outside of this model. At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, an incentivized polling agent referred to as the Caller. This can be modeled as a three phase process. 
+This section explores the main actors and lifecycle of the protocol. Of note, the three user categories are named for their functions in a subscription service, although the protocol has many potential use-cases outside of this model. At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, an incentivized polling agent referred to as the Caller. This can be modeled as a three phase process. 
 
 A) Creation
 In the creation phase (Figure 1) a Provider configures a good or service they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This can be done through direct interaction with the contract or, in most cases, through a website providing a simple user interface. Regardless, this involves a Provider making a function call to the Clocktower contract, specifying parameters of the subscription includiong the amount of the payment, ERC20 token(s) accepted, description/details of the subscription to be saved in call data, the payment interval, and the due date of the payment.
@@ -80,16 +80,39 @@ In the creation phase (Figure 1) a Provider configures a good or service they wo
 function createSubscription(uint amount, address token, Details calldata details, Frequency frequency, uint16 dueDay) external payable {
     ...
 ```
-This function also sets a number of validation and anti-griefing parameters before moving forward with subscription creation. The subscription is then given an ID and added to the subscription index of the contract. A subscription can also be edited or destroyed through other contract functions called by the same provider.
+This function also sets a number of validation and anti-griefing parameters before moving forward with subscription creation. A subscription ID is then generated and added to the subscription index of the contract. A subscription can also be edited or destroyed through related contract functions called by the same Provider.
 
 
 [INSERT FIGURE 1 CONTRACT CREATION DIAGRAM]
 
 B) Initiation
-After the Provider creates the subscription, the good or service is now available to anyone who would like to set-up recurrent payments. Off-chain, the Provider advertises the service to potential Subscribers who can sign-up via a link. Again, either through direct interaction with the contract via scripts or more likely, a web portal, a potential Subscriber will first call the _approve_ function which allows the contract to make "unlimited" future draws of the token from the specified EOA, signing it with their web wallet. The next transaction will call _subscribe_, which takes the Subscription struct parameters and initiates the *payable* constructor. The contract then makes a number of validation checks, most importantly that there is enough allowance and  
+After the Provider creates the subscription, the good or service is now available to anyone who would like to set-up recurrent payments. Off-chain, the Provider advertises the service to potential Subscribers who can sign-up via link. Again, either through direct interaction with the contract via scripts or more likely, a web portal, a potential Subscriber will make two transactions. The first calls the _approve_ function which allows the contract to make future draws of the token from the specified EOA. The next transaction will call _subscribe_, which takes the Subscription struct parameters. The contract then makes a number of validation checks, most importantly that there is proper allowance and that there is enough of the token to cover the subscription amount. If valid, the subscription is added to the contract index for the EOA and the first payment is made to fill the fee balance. A proration calculation ensures that the Subscriber does not overpay based on the day of the cycle that he signs up:
+
+```
+//prorates fee amount
+        
+if(subscription.frequency == Frequency.MONTHLY || subscription.frequency == Frequency.WEEKLY){
+    fee = prorate(block.timestamp, subscription.dueDay, fee, uint8(subscription.frequency));
+        } 
+else if(subscription.frequency == Frequency.QUARTERLY) {
+    fee = prorate(block.timestamp, subscription.dueDay, fee, uint8(subscription.frequency));
+    fee /= 3;
+    multiple = 2;
+}
+else if(subscriptions.frequency == Frequency.YEARLY) {
+    fee = prorate(block.timestamp, subscription.dueDay, fee, uint8(subscription.frequency));
+    fee /= 12;
+    multiple = 11;
+} 
+```
+
+[INSERT FIGURE 2 SUBSCRIBER INITIATION DIAGRAM]
 
 
-This function will sign two transactions on the blockchain. The first gives unlimited allowance to the contract to take a preferred ERC20 token from the wallet. The second approves the subscription and pays the first payment of the schedule, in addition to filling the fee balance for the account.
+C) Extension
+After the _subscribe_ transactions have occurred, there are no further requirements on the Subscriber, other than keeping his EOA balance sufficient to cover the costs of the recurrent payments. As mentioned previously, an incentivized polling agent known as a Caller, is key to the extension of recurrent payments into the future. The Caller role is simple: call a single function, _remit_ , on the Clocktower contract. This is the mechanism through which the contract becomes 'time aware.' _remit_ calculates the current day (the most atomic unit of a recurrent payment in Clocktower_V1) and confirms that the contract subscriptions have not yet been checked on this day. If it has already been checked on a given day, the function terminates and an error code is returned. If the index has not yet been checked on the day _remit_ is called, the contract loops through all subscriptions and checks to see if any payment is due. Those payments that are due and have sufficient fee balances, are remitted to the appropriate Provider. 
+
+A few important failure modes exist within the _remit_ function. In cases where a payment is due but the fee balance does not cover the fee, 
 
 3) Fees and Refunds
 
