@@ -112,7 +112,11 @@ else if(subscriptions.frequency == Frequency.YEARLY) {
 C) Extension
 After the _subscribe_ transactions have occurred, there are no further requirements on the Subscriber, other than keeping his EOA balance sufficient to cover the costs of the recurrent payments. As mentioned previously, an incentivized polling agent known as a Caller, is key to the extension of recurrent payments into the future. The Caller role is simple: call a single function, _remit_ , on the Clocktower contract. This is the mechanism through which the contract becomes 'time aware.' _remit_ calculates the current day (the most atomic unit of a recurrent payment in Clocktower_V1) and confirms that the contract subscriptions have not yet been checked on this day. If it has already been checked on a given day, the function terminates and an error code is returned. If the index has not yet been checked on the day _remit_ is called, the contract loops through all subscriptions and checks to see if any payment is due. Those payments that are due and have sufficient fee balances, are remitted to the appropriate Provider. 
 
-A few important failure modes exist within the _remit_ function. In cases where a payment is due but the fee balance does not cover the fee, 
+There are a few other important parts of the _remit_ function. First, in cases where a subscriber does not have sufficient fee balance to cover the full fee for the recurrent payment, the contract performs a special transaction where it refills the fee balance, much as it did when the Subscriber first signed up for the service, in the Initiation phase above. This feefill will need to occur regularly during the life of the recurrent payment, depending on the frequency  of the subscription. Importantly, in the event that a Subscriber's balance has fallen below the level of the recurrent payment amount but can still cover the fee and/or feebalance, the contract will continue to perform these actions--this ensures that the Caller is not penalized for Subscribers with low balances. 
+
+If a Subscriber's balance then falls below the level of the subscription fee, _remit_ goes into failure mode. The Subscriber is automatically removed from the subscription list and the remainder of the fee is sent to the Provider of the subscription. 
+
+
 
 3) Fees and Refunds
 
