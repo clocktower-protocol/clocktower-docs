@@ -98,6 +98,38 @@ struct SubscriberView {
 | `subscriber` | address | Subscriber address |
 | `feeBalance` | uint | Fee balance of subscriber in wei |
 
+##### Details
+```
+struct Details {
+    string description;
+    string url;
+}
+```
+| Name | Type | Description|
+|---|---|---|
+| `description` | string | Description of Subscription |
+| `url` | string | URL of Subscription |
+
+##### ProviderDetails
+```
+struct ProviderDetails {
+    string description;
+    string company;
+    string url;
+    string domain;
+    string email;
+    string misc;
+}
+```
+| Name | Type | Description|
+|---|---|---|
+| `description` | string | Description of Provider |
+| `company` | string | Provider company |
+| `url` | string | URL of Provider |
+| `domain` | string | Domain of provider |
+| `email` | string | Email of provider | 
+| `misc` | string | Misc field |
+
 #### Enums
 (Enum values are represented by numbers starting at zero)
 
@@ -266,7 +298,7 @@ Log emitted to publish Provider details
 
 ## Functions
 ### Subscription Functions
-#### Input Functions
+#### External Functions
 ##### createSubscription
 ```
 function createSubscription(
@@ -350,6 +382,44 @@ Parameters:
 | Name | Type | Description |
 |---|---|---|
 | `subscription` | Subscription | [Subscription](https://github.com/vhmarx/clocktower#subscription) |
+
+##### editDetails
+```
+function editDetails(
+    Details details,
+    bytes32 id
+) external
+```
+Updates subscription details log
+
+Parameters:
+| Name | Type | Description |
+|---|---|---|
+| `details` | Details |[Details](https://github.com/vhmarx/clocktower#details)|
+| `id` | bytes32 | Unique subscription id |
+
+##### editProvDetails
+```
+function editProvDetails(
+    ProviderDetails details
+) external
+```
+
+Updates provider details log
+
+Parameters:
+| Name | Type | Description |
+|---|---|---|
+| `details` | ProviderDetails |[Details](https://github.com/vhmarx/clocktower#providerdetails)|
+
+##### remit
+```
+function remit(
+
+)external
+```
+
+Increments time value and transfers tokens for current subscriptions
 
 
 #### View Functions
