@@ -27,9 +27,6 @@ With this in mind we have chosen the following increments that can represent the
 - Quarterly Subscriptions -- 1 - 90 (Day of Quarter)
 - Yearly Subscription -- 1 - 365 (Day of Year  (not indcluding leap days))
 
-### Future Transaction Range
-- Future Transactions -- Unixtime / 3600 (Unix Hours)
-
 ## Data Structures
 The following are the data structs required by external functions:
 
@@ -49,7 +46,6 @@ The following are the data structs required by external functions:
     bool cancelled;
     Frequency frequency;
     uint16 dueDay;
-    string description;
 }
 ```
 | Name | Type | Description|
@@ -62,7 +58,6 @@ The following are the data structs required by external functions:
 | `cancelled` | bool | True if subscription is cancelled |
 | `frequency` | Frequency | [Frequency](https://github.com/vhmarx/clocktower#frequency) |
 | `dueDay` | uint16 | Day in frequency [range](https://github.com/vhmarx/clocktower#allowed-time-ranges) when subscription is paid |
-| `description` | string | Description of subscription |
 
 
 ##### SubView
@@ -136,39 +131,33 @@ enum Status {
 | `1` | CANCELLED |
 | `2` | UNSUBSCRIBED |
 
-##### SubEvent
+##### SubscriptEvent 
 ```
-enum SubEvent {
-    PAID,
-    FAILED,
-    SUBSCRIBED, 
-    UNSUBSCRIBED,
-    FEEFILL
-}
-```
-| Value | Description|
-|---|---|
-| `0` | PAID |
-| `1` | FAILED |
-| `2` | SUBSCRIBED |
-| `3` | UNSUBSCRIBED |
-| `4` | FEEFILL |
-
-##### ProvEvent
-```
-enum ProvEvent {
+enum SubscriptEvent {
     CREATE,
     CANCEL,
-    PAID,
-    FAILED
+    PROVPAID,
+    FAILED, 
+    PROVREFUND,
+    SUBPAID,
+    SUBSCRIBED, 
+    UNSUBSCRIBED,
+    FEEFILL, 
+    SUBREFUND
 }
 ```
 | Value | Description|
 |---|---|
 | `0` | CREATE |
 | `1` | CANCEL |
-| `2` | PAID |
+| `2` | PROVPAID |
 | `3` | FAILED |
+| `4` | PROVREFUND |
+| `5` | SUBPAID |
+| `6` | SUBSCRIBED |
+| `7` | UNSUBSCRIBED |
+| `8` | FEEFILL |
+| `9` | SUBREFUND |
 
 
 ## Global Variables
@@ -181,30 +170,34 @@ enum ProvEvent {
 | `maxGasPrice` | uint | Maximum gas value for remit function | gwei |
 | `maxRemits` | uint | Maximum number of remits per remit function (usually based on block max) | |
 | `admin` | address | Address for admin account |
-| `lastCheckedDay` | uint40 | Last time remit ws called | Unix epoch time |
+| `lastCheckedDay` | uint40 | Last time remit ws called | Unix epoch time / 86400 |
 
 ## Events
 ### Subscription Events
 ##### SubscriberLog
 ```
-event SubscriberLog(
+event SubLog(
     bytes32 indexed id,
+    address index provider,
     address indexed subscriber,
     uint40 timestamp,
     uint amount,
+    address token,
     SubEvent indexed subEvent
 )
 ```
 
-Log emitted during subscriber events
+Log emitted during subscription events
 
 | Name | Type | Indexed | Description |
 |---|---|:---:|---|
 | `id` | bytes32 | :heavy_check_mark: | Unique Subscription id |
+| `provider` | address | :heavy_check_mark: | Address of provider |
 | `subscriber` | address | :heavy_check_mark: | Address of subscriber |
 | `timestamp` | uint40 | | Unix Epoch timestamp |
 | `amount` | uint | | ERC20 subscription amount in wei |
-| `subEvent` | SubEvent | :heavy_check_mark: | [SubEvent](https://github.com/vhmarx/clocktower#subevent)
+| `token ` | address | | Address of token |
+| `subEvent` | SubEvent | | [SubEvent](https://github.com/vhmarx/clocktower#subevent)
 
 ##### CallerLog
 ```
@@ -225,29 +218,51 @@ Log emitted during Caller events
 | `caller` | address | :heavy_check_mark: | Address of caller |
 | `isFinished` | bool | | Shows if Caller is done |
 
-##### ProviderLog
+##### DetailsLog
 ```
-event ProviderLog(
+event DetailsLog(
     bytes32 indexed id,
-    address indexed provider,
-    uint40 timestamp,
-    bool success,
-    uint8 errorCode,
-    ProvEvent indexed provEvent
+    address indexed provider, 
+    uint40 indexed timestamp,
+    string url, 
+    string description
 )
 ```
-
-Log emitted during Provider events
+Log emitted to publish subscription details
 
 | Name | Type | Indexed | Description |
-|---|---|:---:|---|
-| `id` | bytes32 | :heavy_check_mark: | Unique subscription id |
+|---|---|---|
+| `id` | bytes32 | :heavy_check_mark: | Unique Subscription id |
 | `provider` | address | :heavy_check_mark: | Provider address |
-| `timestamp` | uint40 | | Unix epoch timestamp |
-| `success` | bool | | Shows if event was successful |
-| `errorCode` | uint8 | | Errorcode if there was a problem |
-| `provEvent` | ProvEvent | :heavy_check_mark: | [ProvEvent](https://github.com/vhmarx/clocktower#provevent) |
+| `timestamp` | uint40 | :heavy_check_mark: | Unix Epoch timestamp |
+| `url` | string | | Url of Subscription |
+| `description` | string | Description of Subscription |
 
+##### ProvDetailsLog
+```
+event ProvDetailsLog(
+    address indexed provider,
+    uint40 indexed timestamp,
+    string description,
+    string company, 
+    string url, 
+    string domain,
+    string email, 
+    string misc
+)
+```
+Log emitted to publish Provider details
+
+| Name | Type | Indexed | Description |
+|---|---|---|
+| `provider` | address | :heavy_check_mark: | Provider address |
+| `timestamp` | uint40 | :heavy_check_mark: | Unix Epoch timestamp |
+| `description` | string | | Description of Provider |
+| `company` | string | | Provider Company |
+| `url` | string | | Url of Provider |
+| `domain` | string | | Domain of Provider |
+| `email` | string | | Email of Provider |
+| `misc` | string | | Misc Field |
 
 ## Functions
 ### Subscription Functions
@@ -437,7 +452,7 @@ Return Values:
 
 ## Error Codes
 ### Subscription Error Codes
-    0 = No error
+    0 = Subscriber cannot be provider
     1 = ERC20 token already added
     2 = ERC20 token not added yet
     3 = No zero address call
@@ -467,94 +482,5 @@ Return Values:
     27 = Must be between 1 and 28
     28 = Must be between 1 and 90
     29 = Must be between 1 and 365
+    30 = Amount below token minimum
 
-## Future Payments Contract
-
-### Future Payment Data
-
-struct Permit {
-    address owner;
-    address spender;
-    uint value;
-    uint deadline;
-    uint8 v;
-    bytes32 r;
-    bytes32 s;
-}
-
-struct Batch {
-    address payable receiver;
-    uint40 unixTime;
-    uint payload;
-    address token;
-}
-
-struct Transaction {
-    bytes32 id;
-    address sender;
-    address payable receiver;
-    address token;
-    uint40 timeTrigger;
-    Status status;
-    uint payload;
-}
-
-enum Status {
-    PENDING,
-    SENT,
-    FAILED,
-    CANCELLED
-}
-
-- PENDING = 0
-- SENT = 1
-- FAILED = 2
-- CANCELLED = 3
-
-### Future Payment Functions
-#### Input Functions
-##### Add Payment
-```
-addPayment(address receiver, uint40 unixTime, uint payload, address token)
-```
-Allows user to add future payment. 
-
-Requires 
-- Allowance to be set.
-##### Add Permit Payment
-```
-addPermitTransaction(address receiver, uint40 unixTime, uint payload, address token, Permit permit)
-```
-Allows user to add future payment in one transaction using passed permit object. 
-##### Add Batch Payment
-```
-addBatchPayments(Batch[] batch)
-```
-Allows user to add a batch future payment using batch object. 
-
-Requires:
-- Allowance to be set
-- Batch amount must be less than 100 payments
-##### Cancel Payment
-```
-cancelPayment(bytes32 id, uint40 unixTrigger, address token)
-```
-Allows user to cancel a pending payment
-
-Requires:
-- Payment must have been created by user
-#### View Functions
-##### Get Account Payments
-```
-getAccountPayments() returns (Transaction[])
-```
-Returns an array of transaction objects
-
-Requires:
-- Only for user's account
-
-```shell
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
