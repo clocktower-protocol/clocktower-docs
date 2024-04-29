@@ -101,8 +101,7 @@ function createSubscription(uint amount, address token, Details calldata details
 ```
 This function also sets a number of validation and anti-griefing parameters before moving forward with subscription creation. A subscription ID is then generated and added to the subscription index of the contract. A subscription can also be edited or destroyed through related contract functions called by the same Provider.
 
-
-[INSERT FIGURE 1 CONTRACT CREATION DIAGRAM]
+![Initiation](img/fig2.jpg){ width=65% }
 
 II) Initiation
 After the Provider creates the subscription, the good or service is now available to anyone who would like to set-up recurrent payments. Off-chain, the Provider advertises the service to potential Subscribers who can sign-up via link (A). Again, either through direct interaction with the contract via scripts or more likely, a web portal, a potential Subscriber will make two transactions (B). The first calls the _approve_ function to the appropriate ERC-20 contract, which allows the contract to make future draws of the token from the specified EOA. The next transaction will call _subscribe_, which takes the Subscription struct parameters. The contract then makes a number of validation checks, most importantly that there is proper allowance and that there is enough of the token to cover the subscription amount. If valid, the Subscriber is added to the contract index (C)for the EOA and the first payment is made to fill the fee balance. A proration calculation ensures that the Subscriber does not overpay based on the day of the cycle that he signs up:
@@ -125,7 +124,7 @@ else if(subscriptions.frequency == Frequency.YEARLY) {
 } 
 ```
 
-[INSERT FIGURE 2 SUBSCRIBER INITIATION DIAGRAM]
+![Incrementation](img/fig3.jpg){ width=65% }
 
 
 III) Incrementation
