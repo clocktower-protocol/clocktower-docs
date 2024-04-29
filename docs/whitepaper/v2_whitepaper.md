@@ -11,7 +11,7 @@ bibliography: whitepaper.bib
  
 ## Abstract
 
-Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol for recurrent payments. Parties who wish to exchange goods and/or services provide payment details off-chain for an initial set-up and third-party agents are financially incentivized to execute payments from master list of transactions. In this way, Clocktower allows for scheduled payments to be reliably processed in the future **without a central processor**. Use-cases would include a variety of financial and commercial possibilities such as mortgage, rent, and bond payments, estate planning, subscriptions for goods and services and many others. This whitepaper will detail the problems solved by Clocktower and the technical details of the protocol.
+Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol for recurrent payments. Parties who wish to exchange goods and/or services provide payment details off-chain for an initial set-up and third-party agents are financially incentivized to execute payments from master list of transactions. In this way, Clocktower allows for scheduled payments to be reliably processed in the future **without a central processor**. Use-cases would include a variety of financial and commercial possibilities such as mortgage, rent, and bond payments, estate planning, subscriptions for goods and services and many others. This whitepaper will detail the problems solved by Clocktower and a technical overview of the protocol.
 
 ## The Three Problems
 
@@ -19,7 +19,7 @@ Clocktower solves three problems:
 
 1) Incentivized Polling
 
-Smart contracts have some important limitations. One of the more important for recurrent payments is that smart contracts cannot actually be aware of time unless acted upon by an externally owned account (EOA). The contract is like a person who is wearing a watch but can only look at it when instructed to do so. This limitation makes standard computer scheduling, such as with a cron jobs, infeasible. Without the ability to schedule transactions in the future, common financial services like payroll and subscriptions are not possible in current decentralized systems. 
+Smart contracts have inherent limitations. One of the more important for recurrent payments is that smart contracts cannot actually be aware of time unless acted upon by an externally owned account (EOA). The contract is like a person who is wearing a watch but can only look at it when instructed to do so. This limitation makes standard computer scheduling, such as with a cron jobs, infeasible. Without the ability to schedule transactions in the future, common financial services like payroll and subscriptions are not possible in current decentralized systems. 
 
 Clocktower employs a novel incentivized polling mechanism in order to ensure proper execution of future transactions. Each recurrent payment or subscription contributes a small amount to a fee balance for the account. This fee becomes the ongoing reward to those who instruct the contract to check the time (ie, Callers), which occurs through the contract _remit_ function. The fee is set at 1% of the payment amount for Clocktower V1. The Caller recieves payment in proportion to the number of payments made as compensation for the effort and the gas costs for the transactions.
 
@@ -28,9 +28,9 @@ The protocol is built for efficiency and to avoid stalling, mainly through minim
 
 2) Time Conversion
 
-Humans and computers use different systems of time. Computers mostly use a more simple system called Unix Time, in which a number increments every second past midnight from January 1st, 1970. The natural world does not increment as cleanly though--a full revolution of the Earth around the sun is actually the equivalent of 365.24 days and so every 4 years, an extra day (ie, leap day) is added to the modern Gregorian calendar on February 29. 
+Humans and computers use different systems of time. Computers mostly use a more simple system called Unix Time, in which a number increments every second past midnight from January 1st, 1970. Unfortunately, the natural world does not increment as cleanly--a full revolution of the Earth around the sun is actually the equivalent of 365.24 days and so every 4 years, an extra day (ie, leap day) is added to the modern Gregorian calendar on February 29. 
 
-Moreover, subscriptions are an open-ended time series. You can't easily save an open-ended series with an incrementing number. For instance there's no sane way to save the date "every 5th day of the month" using just unix time. You could theoretically save a long series of calculated dates in seconds after midnight Jan. 1st 1970. But this is inefficient and creates an edge case if the subscription goes longer than the initial series of numbers. A much simpler solution is to use a Gregorian calendar point.
+Moreover, scheduled recurrent payments are an open-ended time series and one can't easily save an open-ended series with an incrementing number. For instance there's no sane way to save the date "every 5th day of the month" using just unix time. One could theoretically save a long series of calculated dates in seconds after midnight January 1st 1970. But this is inefficient and creates an edge case if the subscription goes longer than the initial series of numbers. A much simpler solution is to use a Gregorian calendar point.
 
 So for each type of frequency of subscription we simply create a range of numbers:
 
@@ -42,7 +42,7 @@ So for each type of frequency of subscription we simply create a range of number
 | Yearly | 1 - 365 |
 
 
-These ranges then need to be converted to unix time. The best way to translate the block timestamp incremeting unix number to Gregorian ranges is to use an intermediary incrementing day standard called Julian Days. Using the following code the contract can do this translation without Oracles or any other external sources [@bokkypoobah],[@navy].
+These ranges then need to be converted to unix time. The best way to translate the block timestamp incremeting unix number to Gregorian ranges is to use an intermediary incrementing day standard called Julian Days. Using the following code, the Clocktower contract can perform this translation without Oracles or any other external sources [@bokkypoobah],[@navy].
 
 ```
 function unixToTime(uint unix) internal pure returns (Time memory time) {
@@ -73,7 +73,7 @@ function unixToTime(uint unix) internal pure returns (Time memory time) {
 ```
 3) Tri-party edge cases
 
-As previously explained, a Clocktower requires a three-party incentivised polling system for it's decentralized recurrent payments. Although not immediately apparent, the permissionless nature of Clocktower creates gameable edge-cases when a user could play two roles at the same time, and potentially extract value from the third party. 
+As previously mentioned, the Clocktower system requires a three-party incentivised polling system for it's decentralized recurrent payments. The three user categories are named for their functions in a subscription service, although the protocol has many potential use-cases outside of this model. At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, an incentivized polling agent referred to as the Caller. While not immediately apparent, the permissionless nature of Clocktower creates gameable edge-cases when a user could play two roles at the same time, and potentially extract value from the third party. 
 
 The most immediate question of the system operation is: who pays the fees for the Caller? One might initially think that the provider should pay a portion of their earnings for this purpose. This seems simpler since there is only one provider and they are the one's receiving all the funds for a given subscription. However, there is an attack vector if we use this structure. Since we have no way of knowing the ownership of an ethereum address it is possible that combinations of the subscriber, provider and caller can be the same entity.
 
@@ -88,7 +88,7 @@ Refunding after a cancellation has also been carefully considered. A given subsc
 
 The Three Users
 
-This section explores the main actors and lifecycle of the protocol. Of note, the three user categories are named for their functions in a subscription service, although the protocol has many potential use-cases outside of this model. At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, an incentivized polling agent referred to as the Caller. This can be modeled as a three phase process. 
+This section explores the main actors and lifecycle of the protocol, which can be modeled as a three phase process. 
 
 A) Creation
 In the creation phase (Figure 1) a Provider configures a good or service they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This can be done through direct interaction with the contract or, in most cases, through a website providing a simple user interface. Regardless, this involves a Provider making a function call to the Clocktower contract, specifying parameters of the subscription includiong the amount of the payment, ERC20 token(s) accepted, description/details of the subscription to be saved in call data, the payment interval, and the due date of the payment.
