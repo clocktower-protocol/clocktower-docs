@@ -17,6 +17,7 @@ Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol fo
 
 Clocktower solves three problems:
 
+
 1) Incentivized Polling
 
 Smart contracts have inherent limitations. One of the more important for recurrent payments is that smart contracts cannot actually be aware of time unless acted upon by an externally owned account (EOA). The contract is like a person who is wearing a watch but can only look at it when instructed to do so. This limitation makes standard computer scheduling, such as with a cron jobs, infeasible. Without the ability to schedule transactions in the future, common financial services like payroll and subscriptions are not possible in current decentralized systems. 
