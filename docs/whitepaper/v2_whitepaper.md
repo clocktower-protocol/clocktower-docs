@@ -1,6 +1,6 @@
 ---
 title: Clocktower V1
-subtitle: An EVM-compliant Protocol for Reccurring, Timely Payments
+subtitle: A Protocol for Reccurrent Payments
 author: Hugo Marx
 date: November 2023
 geometry: margin=3cm
@@ -184,3 +184,7 @@ We believe a protocol should never need its own token to work. A token needed fo
 
 *Your Privacy is Your Business*
 As a simple protocol operating on fully transparent blockchains, Clocktower does not attempt to create privacy and instead leaves this responsibility to the parties involved in the transactions.
+
+
+
+pandoc v2_whitepaper.md  --from=markdown+multiline_tables --to=pdf --filter=pandoc-citeproc --bibliography=v2_whitepaper.bib  --output=v2_whitepaper.pdf
