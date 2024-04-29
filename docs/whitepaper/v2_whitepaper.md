@@ -90,8 +90,8 @@ The Three Users
 
 This section explores the main actors and lifecycle of the protocol, which can be modeled as a three phase process. 
 
-A) Creation
-In the creation phase (Figure 1) a Provider configures a good or service they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This can be done through direct interaction with the contract or, in most cases, through a website providing a simple user interface. Regardless, this involves a Provider making a function call to the Clocktower contract, specifying parameters of the subscription includiong the amount of the payment, ERC20 token(s) accepted, description/details of the subscription to be saved in call data, the payment interval, and the due date of the payment.
+I) Creation
+In the creation phase (see Figure 1) a Provider configures a good or service they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This can be done through direct interaction with the contract or, in most cases, through a website providing a simple user interface. Regardless, this process involves a Provider making a function call to the Clocktower contract, specifying parameters of the subscription includiong the amount of the payment, ERC20 token(s) accepted, description/details of the subscription to be saved in call data, the payment interval, and the due date of the payment.
 
 ```
 function createSubscription(uint amount, address token, Details calldata details, Frequency frequency, uint16 dueDay) external payable {
@@ -102,8 +102,8 @@ This function also sets a number of validation and anti-griefing parameters befo
 
 [INSERT FIGURE 1 CONTRACT CREATION DIAGRAM]
 
-B) Initiation
-After the Provider creates the subscription, the good or service is now available to anyone who would like to set-up recurrent payments. Off-chain, the Provider advertises the service to potential Subscribers who can sign-up via link. Again, either through direct interaction with the contract via scripts or more likely, a web portal, a potential Subscriber will make two transactions. The first calls the _approve_ function which allows the contract to make future draws of the token from the specified EOA. The next transaction will call _subscribe_, which takes the Subscription struct parameters. The contract then makes a number of validation checks, most importantly that there is proper allowance and that there is enough of the token to cover the subscription amount. If valid, the subscription is added to the contract index for the EOA and the first payment is made to fill the fee balance. A proration calculation ensures that the Subscriber does not overpay based on the day of the cycle that he signs up:
+II) Initiation
+After the Provider creates the subscription, the good or service is now available to anyone who would like to set-up recurrent payments. Off-chain, the Provider advertises the service to potential Subscribers who can sign-up via link (A). Again, either through direct interaction with the contract via scripts or more likely, a web portal, a potential Subscriber will make two transactions (B). The first calls the _approve_ function to the appropriate ERC-20 contract, which allows the contract to make future draws of the token from the specified EOA. The next transaction will call _subscribe_, which takes the Subscription struct parameters. The contract then makes a number of validation checks, most importantly that there is proper allowance and that there is enough of the token to cover the subscription amount. If valid, the Subscriber is added to the contract index (C)for the EOA and the first payment is made to fill the fee balance. A proration calculation ensures that the Subscriber does not overpay based on the day of the cycle that he signs up:
 
 ```
 //prorates fee amount
@@ -126,10 +126,10 @@ else if(subscriptions.frequency == Frequency.YEARLY) {
 [INSERT FIGURE 2 SUBSCRIBER INITIATION DIAGRAM]
 
 
-C) Extension
-After the _subscribe_ transactions have occurred, there are no further requirements on the Subscriber, other than keeping his EOA balance sufficient to cover the costs of the recurrent payments. As mentioned previously, an incentivized polling agent known as a Caller, is key to the extension of recurrent payments into the future. The Caller role is simple: call a single function, _remit_ , on the Clocktower contract. This is the mechanism through which the contract becomes 'time aware.' _remit_ calculates the current day (the most atomic unit of a recurrent payment in Clocktower_V1) and confirms that the contract subscriptions have not yet been checked on this day. If it has already been checked on a given day, the function terminates and an error code is returned. If the index has not yet been checked on the day _remit_ is called, the contract loops through all subscriptions and checks to see if any payment is due. Those payments that are due and have sufficient fee balances, are remitted to the appropriate Provider. 
+III) Incrementation
+After the initial transactions have occurred, there are no further requirements on the Subscriber, other than keeping his EOA balance sufficient to cover the costs of the recurrent payments. An incentivized polling agent known as a Caller, is key to the extension of recurrent payments into the future. The Caller role is simple: call a single function, _remit_ , on the Clocktower contract (A). This is the mechanism through which the contract becomes 'time aware.' _remit_ calculates the current day (the most atomic unit of a recurrent payment in Clocktower_V1) and confirms that the contract subscription index has not yet been checked on this day. If it has already been checked, the function terminates and an error code is returned. If the index has not yet been checked, the contract loops through all subscriptions to see if any payment is due. Those payments that are due and have sufficient fee balances, are remitted to the appropriate Provider (C) and the fee is paid to the Caller (B).
 
-There are a few other important parts of the _remit_ function. First, in cases where a subscriber does not have sufficient fee balance to cover the full fee for the recurrent payment, the contract performs a special transaction where it refills the fee balance, much as it did when the Subscriber first signed up for the service, in the Initiation phase above. This feefill will need to occur regularly during the life of the recurrent payment, depending on the frequency  of the subscription. Importantly, in the event that a Subscriber's balance has fallen below the level of the recurrent payment amount but can still cover the fee and/or feebalance, the contract will continue to perform these actions--this ensures that the Caller is not penalized for Subscribers with low balances. 
+There are a few other important parts of the _remit_ function. First, in cases where a subscriber does not have sufficient fee balance to cover the full fee for the recurrent payment, the contract performs a special transaction where it refills the fee balance, much as it did when the Subscriber first signed-up for the service, in the Initiation phase. This feefill will need to occur regularly during the life of the recurrent payment, depending on the frequency  of the subscription. Importantly, in the event that a Subscriber's balance has fallen below the level of the recurrent payment amount but can still cover the fee and/or feebalance, the contract will continue to perform these actions--this ensures that the Caller is not penalized for Subscribers with low balances. 
 
 If a Subscriber's balance then falls below the level of the subscription fee, _remit_ goes into failure mode. The Subscriber is automatically removed from the subscription list and the remainder of the fee is sent to the Provider of the subscription. 
 
@@ -137,7 +137,7 @@ If a Subscriber's balance then falls below the level of the subscription fee, _r
 
 3) Fees and Refunds
 
-In order to keep fees and refunds fair, the Clocktower uses a system of proration. The first payment in a subscription fills the fee balance which can then be used to pay fees through future payments. 
+To keep fees and refunds fair, the Clocktower uses a system of proration. The first payment in a subscription fills the fee balance which can then be used to pay fees through future payments. 
 
 
 	A) Proration. Show calcs
@@ -154,30 +154,6 @@ In order to keep fees and refunds fair, the Clocktower uses a system of proratio
 Lifecycle
 
 --- note about use of subscription terms but can be applicable to any sort of regular payment. Use of Provider, Subscriber, Caller. But in a different context could be Payer, Receiver.
-
-1) Creating a subscription
-
-	--- Provider makes function call. Parameters
-	--- Describe function to destroy subscription. 
-	--- Graph
-2) Signing up to pay
-
-	--- Approval transaction
-	--- Calling the subscribe function. Parameters.
-	--- Unsubscribe. Parameters
-	--- Graph
-
-3) Polling the contract
-
-	--- Remit function. No parameters
-	--- Only called once a day
-	--- Fees immediately sent from contract fee balance
-	--- Graph
-
-4) Fails
-
-	--- Allowance and balance
-
 
 
 
