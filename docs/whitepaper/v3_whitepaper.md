@@ -9,19 +9,21 @@ bibliography: whitepaper.bib
 ---
 
  
-## Abstract
+# Abstract
 
 Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol for recurrent payments of ERC-20 tokens. Clocktower allows for scheduled payments to be reliably processed in the future *without a central processor*. Use-cases include a variety of financial and commercial possibilities such as mortgage, rent, bond payments, estate planning, subscriptions for goods and services and many others. This whitepaper will detail the problems solved by Clocktower and a technical overview of the protocol.
-
-## The Three Problems
+   
+   
+   
+# The Three Problems
 
 Clocktower solves three problems:
 
-### Problem: EVM Contracts are not time-aware
+#### Problem: EVM Contracts are not time-aware
 
 Smart contracts have inherent limitations. One of the more important for recurrent payments is that smart contracts are not actually aware of time unless acted upon by an externally owned account (EOA). The contract is like a person who is wearing a watch but can only look at it when instructed to do so. This limitation makes automatic scheduling infeasible. Without the ability to schedule transactions in the future, common financial services are not possible in current decentralized systems. 
 
-### Solution: Incentivized Polling
+#### Solution: Incentivized Polling
 
 Clocktower employs a novel incentivized polling mechanism in order to ensure proper execution of future transactions. An initial payment contributes to a fee balance stored in the contract for the account and this fee becomes the ongoing reward to those who instruct the contract to check the time (ie, Callers), which occurs through the contract's _remit_ function. The fee is set at a fixed percentage and the Caller recieves payment in proportion to the number of payments made as compensation for the effort and the gas costs for the transactions.
 
@@ -189,4 +191,4 @@ As a simple protocol operating on fully transparent blockchains, Clocktower does
 
 
 
-pandoc v2_whitepaper.md  --from=markdown+multiline_tables --to=pdf --filter=pandoc-citeproc --bibliography=v2_whitepaper.bib  --output=v2_whitepaper.pdf
+pandoc v3_whitepaper.md  --from=markdown+multiline_tables --to=pdf --filter=pandoc-citeproc --bibliography=v2_whitepaper.bib  --output=v3_whitepaper.pdf
