@@ -68,9 +68,9 @@ function unixToTime(uint unix) internal pure returns (Time memory time) {
     ...
 ```
 
-#### Problem: Malicious Collusion Between the Three Parties
+#### Problem: Collusion in Multi-Party Systems
 
-As previously mentioned, the Clocktower system requires a three-party incentivised polling system for it's decentralized recurrent payments. The three user categories are named for their functions in a subscription service, although the protocol has many potential use-cases outside of this model. At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, an incentivized polling agent referred to as the Caller. While not immediately apparent, the permissionless nature of Clocktower creates gameable edge-cases when a user could play two roles at the same time, and potentially extract value from the third party. 
+An important distinction between two and multi-party systems is the potential for collusion in the latter case. As previously mentioned, the Clocktower system requires a three-party incentivised polling system for it's decentralized recurrent payments. The three user categories are named for their functions in a subscription service, although the protocol has many potential use-cases outside of this model. At its core, Clocktower is a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, an incentivized polling agent referred to as the Caller. While not immediately apparent, the permissionless nature of Clocktower creates gameable edge-cases when a user could play two roles at the same time, and potentially extract value from the third party. 
 
 The most immediate question of the system operation is: who pays the fees for the Caller? One might initially think that the provider should pay a portion of their earnings for this purpose. This seems simpler since there is only one provider and they are the one's receiving all the funds for a given subscription. However, there is an attack vector if we use this structure. Since we have no way of knowing the ownership of an ethereum address it is possible that combinations of the subscriber, provider and caller can be the same entity.
 
@@ -78,7 +78,8 @@ If the Subscriber and Caller are the same while the Provider pays the fee, the s
 
 #### Solution: Dynamic Refunding
 
-By dynamicly refunding mechanism coded in the contract, one can avoid many of the attack vectors by refunding to the party that would not benefit from the action taken. 
+Through encoding a dynamic refunding mechanism in the contract, one can avoid many of the potential attack vectors--specifically, this is done by refunding the party that would not benefit from the action taken. 
+\
 
 | Initiator | Action | Amount | Refunds Sent to |
 |---|---|---|---|
@@ -91,10 +92,12 @@ By dynamicly refunding mechanism coded in the contract, one can avoid many of th
 | Provider | Provider unsubscribers subscriber | All remaining | Subscriber |
 |     |     |      |      |
 | Provider | Cancels overall subscription | All remaining on all subscribers | Subscribers |
+\begin{center}Table 1\end{center}
+\
 
-Refunding after a cancellation has also been carefully considered. A given subscription can be terminated unilaterally either by the Subscriber or the Provider. The general rule here is to refund any extra funds to the party *not* doing the cancelling. This eliminates the potential for one party to benefit monetarily from cancelling the service. 
+For example, a given subscription can be terminated unilaterally either by the Subscriber or the Provider. The general rule here is to refund any extra funds to the party *not* doing the cancelling. This eliminates the potential for one party to benefit monetarily from cancelling the service. 
 
-Proration is also important considerations. Without proration, Providers would be given more than deserved for most initial payments from Subscribers (ie, anyone who doesn't sign up on the exact day of a new cycle). As such, the contract makes a proration calculation with each new signup:
+Proration is also an important consideration. Without proration, Providers would be given more than deserved for most initial payments from Subscribers (ie, anyone who doesn't sign up on the exact day of a new cycle). As such, the contract makes a proration calculation with each new signup:
 
 ```
 prorate(block.timestamp, subscription.dueDay, fee, uint8(subscription.frequency))
