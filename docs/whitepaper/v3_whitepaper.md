@@ -81,7 +81,7 @@ The most immediate question of the system's operation is: who pays the fees for 
 
 #### Solution: Dynamic Refunding
 
-Through encoding a dynamic refunding mechanism in the contract, we can avoid many of the potential attack vectors--specifically, this is done by refunding the party that would *not* benefit from the action taken. 
+Through encoding a dynamic refunding mechanism in the contract, we can avoid many of the potential attack vectors--specifically, this is done by refunding the party that would *not* benefit from the action taken (see Table 1). 
 \
 
 | Initiator | Action | Amount | Refunds Sent to |
@@ -95,12 +95,13 @@ Through encoding a dynamic refunding mechanism in the contract, we can avoid man
 | Provider | Provider unsubscribers subscriber | All remaining | Subscriber |
 |     |     |      |      |
 | Provider | Cancels overall subscription | All remaining on all subscribers | Subscribers |
-\begin{center}Table 1\end{center}
+\begin{center}Table 1 - Refund Rules\end{center}
 \
 
 For example, a given subscription can be terminated unilaterally either by the Subscriber or the Provider. The general rule here is to refund any extra funds to the party not cancelling. This eliminates the potential for one party to benefit monetarily from cancelling the service. 
 
 Proration is also an important consideration. Without proration, Providers would be given more than deserved for most initial payments from Subscribers (ie, anyone who doesn't sign up on the exact day of a new cycle). As such, the contract makes a proration calculation with each new signup:
+\
 
 ```
 prorate(block.timestamp, subscription.dueDay, fee, uint8(subscription.frequency))
