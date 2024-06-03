@@ -27,7 +27,7 @@ Smart contracts have inherent limitations. One of the more important for recurre
 
 Clocktower employs a novel incentivized polling mechanism in order to ensure proper execution of future transactions. An initial payment contributes to a fee balance stored in the contract for the account and this fee becomes the ongoing reward to those who instruct the contract to check the time (ie, Callers), which occurs through the contract's _remit_ function. The fee is set at a fixed percentage and the Caller recieves payment in proportion to the number of payments made as compensation for the effort and the gas costs for the transactions.
 
-All payments are made in-kind to avoid the need for oracles, which is an overall goal of the protocol [^2]. A token minimum is also set by the contract such that the caller can be compensated for gas costs. 
+All payments are made in-kind to avoid the need for oracles, which is an overall goal of the protocol [^2]. A token minimum is also set by the contract such that the Caller can be compensated for gas costs. 
 
 [^2]: Marx, H. (2024). Clocktower protocol goals. https://clocktower.finance/docs/goals.
 
@@ -77,7 +77,7 @@ function unixToTime(uint unix) internal pure returns (Time memory time) {
 
 An important distinction between two and multi-party systems is the potential for collusion in the latter case. As previously mentioned, the Clocktower system requires a three-party incentivised polling system for its decentralized recurrent payments. While not immediately apparent, the permissionless nature of Clocktower creates gameable edge-cases when a user could play two roles at the same time, and potentially extract value from the third party.
 
-The most immediate question of the system's operation is: who pays the fees for the Caller? One might initially think that the provider should pay a portion of their earnings for this purpose. This seems simpler since there is only one provider and they are the one's receiving all the funds for a given subscription. However, if the Subscriber and Caller are the same entity while the Provider pays the fee, the Subscriber could sign up for a subscription and but not fund their account. When the transaction fails the fee would still be extracted from the Provider and paid to the Caller (who is the Subscriber in this case.) If the fee is higher than the gas costs of signing up for the subscription, then the malicious Subscriber now has a method of extracting tokens from the provider. 
+The most immediate question of the system's operation is: who pays the fees for the Caller? One might initially think that the Provider should pay a portion of their earnings for this purpose. This seems simpler since there is only one Provider and they are the one's receiving all the funds for a given subscription. However, if the Subscriber and Caller are the same entity while the Provider pays the fee, the Subscriber could sign up for a subscription and but not fund their account. When the transaction fails the fee would still be extracted from the Provider and paid to the Caller (who is the Subscriber in this case.) If the fee is higher than the gas costs of signing up for the subscription, then the malicious Subscriber now has a method of extracting tokens from the Provider. 
 
 #### Solution: Dynamic Refunding
 
@@ -130,7 +130,7 @@ else if(subscriptions.frequency == Frequency.YEARLY) {
 
 This section explores the main actors and lifecycle of the protocol, which can be modeled as a three phase process: creation, initiation, and incrementation.
 
-![Creation](img/fig1.jpg){ width=70% }
+![Creation](img/fig1.jpg){ width=75% }
 
 #### Creation
 In the creation phase (see Figure 1) a Provider configures a good or service they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This can be done through direct interaction with the contract or, in most cases, through a website providing a simple user interface. Regardless, this process involves a Provider making a function call to the Clocktower contract, specifying parameters of the subscription including the amount of the payment, ERC20 token(s) accepted, description/details of the subscription to be saved in call data, the payment interval, and the due date of the payment.
@@ -144,25 +144,25 @@ A subscription ID is then generated and added to the subscription index of the c
 \ 
 
 
-![Initiation](img/fig2.jpg){ width=70% }
+![Initiation](img/fig2.jpg){ width=75% }
 
 #### Initiation
 After the Provider creates the subscription, the good or service is now available to anyone who would like to set-up recurrent payments (see Figure 2). Off-chain, the Provider advertises the service to potential Subscribers who can sign-up via link (A). Again, either through direct interaction with the contract via scripts or more likely, a web portal, a potential Subscriber will make two transactions (B). The first calls the _approve_ function to the appropriate ERC-20 contract, which allows the contract to make future draws of the token from the specified EOA. The next transaction will call _subscribe_, which takes the Subscription struct parameters. The contract then makes a number of validation checks, most importantly that there is proper allowance and that there is enough of the token to cover the subscription amount. If valid, the Subscriber is added to the contract index (C)for the EOA and the first payment is made to fill the fee balance. A proration calculation ensures that the Subscriber does not overpay based on the day of the cycle that he begins his subscription.
 \
 
-![Incrementation](img/fig3.jpg){ width=70% }
+![Incrementation](img/fig3.jpg){ width=75% }
 
 
 #### Incrementation
 After the initial transactions have occurred, there are no further requirements on the Subscriber, other than keeping his EOA balance sufficient to cover the costs of the recurrent payments. An incentivized polling agent known as a Caller, is key to the extension of recurrent payments into the future. The Caller role is simple: call a single function, _remit_ , on the Clocktower contract (A). This is the mechanism through which the contract becomes 'time aware.' _remit_ calculates the current day (the most atomic unit of a recurrent payment in Clocktower_V1) and confirms that the contract subscription index has not yet been checked on this day. If it has already been checked, the function terminates and an error code is returned. If the index has not yet been checked, the contract loops through all subscriptions to see if any payment is due. Those payments that are due and have sufficient fee balances, are remitted to the appropriate Provider (C) and the fee is paid to the Caller (B).
 
-There are a few other important parts of the _remit_ function. First, in cases where a subscriber does not have sufficient fee balance to cover the full fee for the recurrent payment, the contract performs a special transaction where it refills the fee balance, much as it did when the Subscriber first signed-up for the service, in the Initiation phase. This feefill will need to occur regularly during the life of the recurrent payment, depending on the frequency  of the subscription. Importantly, in the event that a Subscriber's balance has fallen below the level of the recurrent payment amount but can still cover the fee and/or feebalance, the contract will continue to perform these actions--this ensures that the Caller is not penalized for Subscribers with low balances. 
+There are a few other important parts of the _remit_ function. First, in cases where a Subscriber does not have sufficient fee balance to cover the full fee for the recurrent payment, the contract performs a special transaction where it refills the fee balance, much as it did when the Subscriber first signed-up for the service, in the Initiation phase. This feefill will need to occur regularly during the life of the recurrent payment, depending on the frequency  of the subscription. Importantly, in the event that a Subscriber's balance has fallen below the level of the recurrent payment amount but can still cover the fee and/or feebalance, the contract will continue to perform these actions--this ensures that the Caller is not penalized for Subscribers with low balances. 
 
 If a Subscriber's balance then falls below the level of the subscription fee, _remit_ goes into failure mode. The Subscriber is automatically removed from the subscription list and the remainder of the fee is sent to the Provider of the subscription. 
 
 
 ## Conclusion
-In the past few years, decentralized finance has devloped rapidly. Lending protocols and decentralized exchanges have become essential primatives, but a system of scheduling future payments has been absent. **Clocktower is this missing piece of DeFi**, allowing for payroll, subscriptions, and other recurrent payments to be automated through on EVM networks. 
+In the past few years, decentralized finance has devloped rapidly. Lending protocols and decentralized exchanges have become essential primatives, but a system of scheduling future payments has been absent. Clocktower is this missing piece of DeFi, allowing for payroll, subscriptions, and other recurrent payments to be automated through on EVM networks. 
 \
 
 
