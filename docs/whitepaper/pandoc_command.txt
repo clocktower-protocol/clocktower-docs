@@ -2,3 +2,5 @@ pandoc v3_whitepaper.md  --from=markdown+multiline_tables --to=pdf --citeproc --
 
 
 pandoc v3_whitepaper.md  --from=markdown+multiline_tables --to=pdf  --output=v3_whitepaper.pdf
+
+pandoc --lua-filter=small_code_block.lua v4_whitepaper.md  --from=markdown+multiline_tables --to=pdf  --output=v4_whitepaper.pdf

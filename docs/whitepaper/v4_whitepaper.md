@@ -12,6 +12,7 @@ bibliography: whitepaper.bib
 # Abstract
 
 Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol for recurrent payments of ERC-20 tokens. Clocktower allows for scheduled payments to be reliably processed in the future *without a central processor*. The system employs a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, an incentivized polling agent referred to as the Caller [^1]. Use-cases include a variety of financial and commercial possibilities such as mortgage, rent, bond payments, estate planning, subscriptions and many others. This whitepaper will detail the problems solved by Clocktower and a technical overview of the protocol.
+\
    
 [^1]: The three user categories are named for their functions in a subscription service, although the protocol has many potential use-cases outside of this model.
 
@@ -41,6 +42,7 @@ Moreover, scheduled recurrent payments are an open-ended time series and one can
 #### Solution: Real-Time Conversion
 
 A much simpler solution is to use a Gregorian calendar point converted in real-time to unix epoch time in the contract. The best way to translate the unix epoch block timestamp to Gregorian ranges is to use an intermediary incrementing day standard called Julian Days. Using the following code, the Clocktower contract can perform this translation without Oracles or any other external sources [^3]  [^4]. As an example:
+\
 
 [^3]: Bokkypoobah (2019). BokkyPooBahsDateTimeLibrary. https://github.com/bokkypoobah/BokkyPooBahsDateTimeLibrary.
 [^4]: Navy, U.S. Converting between julian dates and gregorian calendar dates. https://aa.usno.navy.mil/faq/JD_formula.
@@ -75,11 +77,7 @@ function unixToTime(uint unix) internal pure returns (Time memory time) {
 
 #### Problem 3: Fee Methodology
 
-~~An important distinction between two and multi-party systems is the potential for collusion in the latter case. As previously mentioned, the Clocktower system requires a three-party incentivised polling system for its decentralized recurrent payments. While not immediately apparent, the permissionless nature of Clocktower creates gameable edge-cases when a user could play two roles at the same time, and potentially extract value from the third party.~~
-
 The most immediate question of the system's operation is: who pays the fees for the Caller? One might initially think that the Provider should pay a portion of their earnings for this purpose. This seems simpler since there is only one Provider and they are the one receiving all the funds for a given subscription. However, this would require the contract having access to the Provider account and also creates attack vectors where the three parties could collude or could be the same entity.
-
-~~However, if the Subscriber and Caller are the same entity while the Provider pays the fee, the Subscriber could sign up for a subscription and but not fund their account. When the transaction fails the fee would still be extracted from the Provider and paid to the Caller (who is the Subscriber in this case.) If the fee is higher than the gas costs of signing up for the subscription, then the malicious Subscriber now has a method of extracting tokens from the Provider.~~
 
 #### Solution: Prepayment of Fees and Dynamic Refunding
 
@@ -105,7 +103,7 @@ For example, a given subscription can be terminated unilaterally either by the S
 Proration is also an important consideration. Without proration, Providers would be given more than deserved for most initial payments from Subscribers (ie, anyone who doesn't sign up on the exact day of a new cycle). As such, the contract makes a proration calculation with each new signup:
 \
 
-```
+~~~
 function prorate(uint unixTime, uint40 dueDay, uint fee, uint8 frequency) internal pure returns (uint)  {
     Time memory time = unixToTime(unixTime);
     uint currentDay;
@@ -154,8 +152,8 @@ function prorate(uint unixTime, uint40 dueDay, uint fee, uint8 frequency) intern
     
     return fee;
 }
+~~~
 
-```
 
 
 
@@ -171,10 +169,11 @@ This section explores the main actors and lifecycle of the protocol, which can b
 In the creation phase (see Figure 1) a Provider configures a subscription they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This can be done through direct interaction with the contract or, in most cases, through a website providing a simple user interface. Regardless, this process involves a Provider making a function call to the Clocktower contract, specifying parameters of the subscription including the amount of the payment, ERC20 token(s) accepted, description/details of the subscription to be emitted in logs, the payment interval, and the due date of the payment.
 \
 ```
-function createSubscription(uint amount, address token, Details calldata details, 
-    Frequency frequency, uint16 dueDay) external payable {
+function createSubscription(uint amount, address token, Details calldata details, Frequency frequency, uint16 dueDay) 
+    external payable {
     ...
 ```
+\
 A subscription ID is then generated and added to the subscription index of the contract. A subscription can also be destroyed through related contract functions called by the same Provider.
 \ 
 
