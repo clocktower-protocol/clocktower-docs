@@ -74,6 +74,7 @@ function unixToTime(uint unix) internal pure returns (Time memory time) {
     day = uint16(uintday);       
     ...
 ```
+\
 
 #### Problem 3: Fee Methodology
 
@@ -111,6 +112,7 @@ function prorate(uint unixTime, uint40 dueDay, uint fee, uint8 frequency) intern
     uint lastDayOfMonth;
     
     //sets maximum range day amount
+
     ...
     //monthly
     } else if (frequency == 1){
@@ -118,6 +120,7 @@ function prorate(uint unixTime, uint40 dueDay, uint fee, uint8 frequency) intern
         lastDayOfMonth = getDaysInMonth(time.year, time.month);
         currentDay = time.dayOfMonth;
         max = lastDayOfMonth;
+
     ...
     //monthly
     if(frequency == 1) {
@@ -130,6 +133,7 @@ function prorate(uint unixTime, uint40 dueDay, uint fee, uint8 frequency) intern
                 fee = (dailyFee * (dueDay - currentDay));
         }
     }
+
     ...
     return fee;
 }
@@ -164,6 +168,7 @@ A subscription ID is then generated and added to the subscription index of the c
 
 
 ![Initiation](img/fig2.jpg){ width=75% }
+
 
 #### Initiation
 After the Provider creates the subscription, it is now available to anyone who would like to set-up recurrent payments (see Figure 2). Off-chain, the Provider advertises the service to potential Subscribers who can sign-up via link (A). Again, either through direct interaction with the contract via scripts or more likely, a web portal, a potential Subscriber will make two transactions (B). The first calls the _approve_ function to the appropriate ERC-20 contract, which allows the contract to make future draws of the token from the specified EOA. The next transaction will call _subscribe_, which takes the Subscription struct parameters. The contract then makes a number of validation checks, most importantly that there is proper allowance and that there is enough of the token to cover the subscription amount. If valid, the Subscriber is added to the contract index (C)for the EOA and the first payment is made to fill the fee balance. A proration calculation ensures that the Subscriber does not overpay based on the day of the cycle that he begins his subscription.
