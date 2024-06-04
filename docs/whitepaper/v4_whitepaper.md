@@ -11,7 +11,7 @@ bibliography: whitepaper.bib
  
 # Abstract
 
-Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol for recurrent payments of ERC-20 tokens. Clocktower allows for scheduled payments to be reliably processed in the future *without a central processor*. The system employs a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, an incentivized polling agent referred to as the Caller [^1]. Use-cases include a variety of financial and commercial possibilities such as mortgage, rent, bond payments, estate planning, subscriptions and many others. This whitepaper will detail the problems solved by Clocktower and a technical overview of the protocol.
+Clocktower is an Ethereum Virtual Machine (EVM)-based, decentralized protocol for recurrent payments of ERC-20 tokens. Clocktower allows for scheduled payments to be reliably processed in the future *without a central processor*. The system employs a series of functions that allow two parties, a Subscriber and a Provider, to orchestrate recurrent payments for a service or good with the help of a third party, an incentivized polling agent referred to as the Caller[^1]. Use-cases include a variety of financial and commercial possibilities such as mortgage, rent, bond payments, estate planning, subscriptions and many others. This whitepaper will detail the problems solved by Clocktower and a technical overview of the protocol.
 \
    
 [^1]: The three user categories are named for their functions in a subscription service, although the protocol has many potential use-cases outside of this model.
@@ -26,7 +26,7 @@ Smart contracts have inherent limitations. One of the more important for recurre
 
 #### Solution: Incentivized Polling
 
-Clocktower employs a novel incentivized polling mechanism in order to ensure proper execution of future transactions. An initial payment contributes to a fee balance stored in the contract for the account and this fee becomes the ongoing reward to those who instruct the contract to check the time (ie, Callers), which occurs through the contract's _remit_ function. The fee is set at a fixed percentage and the Caller recieves payment in proportion to the number of payments made as compensation for the effort and the gas costs for the transactions.
+Clocktower employs a novel incentivized polling mechanism in order to ensure proper execution of future transactions. An initial payment contributes to a fee balance stored in the contract for the account and this fee becomes the ongoing reward to those who instruct the contract to check the time (ie, Callers), triggered through the contract's _remit_ function. The fee is set at a fixed percentage and the Caller recieves payment in proportion to the number of payments made as compensation for the effort and the gas costs for the transactions.
 
 All payments are made in-kind to avoid the need for oracles, which is an overall goal of the protocol [^2]. A token minimum is also set by the contract such that the Caller can be compensated for gas costs. 
 
@@ -193,7 +193,7 @@ After the initial transactions have occurred, there are no further requirements 
 There are a few other important parts of the _remit_ function. First, in cases where a Subscriber does not have sufficient fee balance to cover the full fee for the recurrent payment, the contract performs a special transaction where it refills the fee balance, much as it did when the Subscriber first signed-up for the service, in the Initiation phase. This feefill will need to occur regularly during the life of the recurrent payment, depending on the frequency  of the subscription. Importantly, in the event that a Subscriber's balance has fallen below the level of the recurrent payment amount but can still cover the fee and/or feebalance, the contract will continue to perform these actions--this ensures that the Caller is not penalized for Subscribers with low balances. 
 
 If a Subscriber's balance then falls below the level of the subscription fee, _remit_ goes into failure mode. The Subscriber is automatically removed from the subscription list and the remainder of the fee is sent to the Provider of the subscription. 
-
+\
 
 ## Conclusion
 In the past few years, decentralized finance has devloped rapidly. Lending protocols and decentralized exchanges have become essential primatives, but a system of scheduling future payments has been absent. Clocktower is this missing piece of DeFi, allowing for payroll, subscriptions, and other recurrent payments to be automated on EVM networks. 
