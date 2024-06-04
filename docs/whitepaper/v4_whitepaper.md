@@ -111,25 +111,14 @@ function prorate(uint unixTime, uint40 dueDay, uint fee, uint8 frequency) intern
     uint lastDayOfMonth;
     
     //sets maximum range day amount
-    if(frequency == 0) {
-        currentDay = time.weekDay;
-        max = 7;
+    ...
     //monthly
     } else if (frequency == 1){
         //calculates maximum days in current month
         lastDayOfMonth = getDaysInMonth(time.year, time.month);
         currentDay = time.dayOfMonth;
         max = lastDayOfMonth;
-    //quarterly and yearly
-    } else if (frequency == 2) {
-        currentDay = getdayOfQuarter(time.yearDay, time.year);
-        max = 90;
-    //yearly
-    } else if (frequency == 3) {
-        currentDay = time.yearDay;
-        max = 365;
-    }
-
+    ...
     //monthly
     if(frequency == 1) {
         uint dailyFee = (fee * 12 / 365);
@@ -141,21 +130,17 @@ function prorate(uint unixTime, uint40 dueDay, uint fee, uint8 frequency) intern
                 fee = (dailyFee * (dueDay - currentDay));
         }
     }
-    //weekly quarterly and yearly
-    else if(frequency == 0 || frequency == 2 || frequency == 3) {
-        if(dueDay != currentDay && currentDay > dueDay){
-                fee = (fee / max) * (max - (currentDay - dueDay));
-        } else if (dueDay != currentDay && currentDay < dueDay) {
-                fee = (fee / max) * (dueDay - currentDay);
-        }
-    }  
-    
+    ...
     return fee;
 }
+
+    ...
+
+    if(subscription.frequency == Frequency.MONTHLY || subscription.frequency == Frequency.WEEKLY){
+            fee = prorate(block.timestamp, subscription.dueDay, fee, uint8(subscription.frequency));
+        } 
+    ...
 ~~~
-
-
-
 
 
 
