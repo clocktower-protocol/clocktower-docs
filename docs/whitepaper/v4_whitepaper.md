@@ -186,7 +186,7 @@ If a Subscriber's balance then falls below the level of the subscription fee, _r
 \
 
 ## Conclusion
-In the past few years, decentralized finance has devloped rapidly. Lending protocols and decentralized exchanges have become essential primatives, but a system of scheduling future payments has been absent. Clocktower is this missing piece of DeFi, allowing for payroll, subscriptions, and other recurrent payments to be automated on EVM networks. 
+In the past few years, decentralized finance has developed rapidly. Lending protocols and decentralized exchanges have become essential primatives, but a system of scheduling future payments has been absent. Clocktower is this missing piece of DeFi, allowing for payroll, subscriptions, and other recurrent payments to be automated on EVM networks. 
 \
 
 
