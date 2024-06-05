@@ -84,6 +84,12 @@ const config = {
           },
           {
             type: 'docSidebar',
+            sidebarId: "howtoSidebar",
+            position: "left",
+            label: 'Howto'
+          },
+          {
+            type: 'docSidebar',
             sidebarId: 'whitepaperSidebar',
             position: 'right',
             label: 'Whitepaper',
@@ -108,6 +114,10 @@ const config = {
               {
                 label: 'Contracts',
                 to: '/docs/clocktower_protocol',
+              },
+              {
+                label: 'HowTo',
+                to: '/docs/howto',
               },
               {
                 label: 'Whitepaper',

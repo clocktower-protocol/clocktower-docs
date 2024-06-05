@@ -16,7 +16,7 @@ Currently the caller fee is different based upon the average gas levels of the c
 
 | Chain | Fee Percentage |
 |---|---|
-| Ethereum | 2% |
+| Ethereum | 1% |
 
 
 ### The Reserve

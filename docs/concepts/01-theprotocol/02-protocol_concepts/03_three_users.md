@@ -10,7 +10,7 @@ One of the many ways to categorize the evolution of smart contract design is by 
 
 ## What is a User?
 
-While we have called these entities "users" up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being multiple roles at the same time although in our protocol we seek to avoid this. 
+While we have called these entities "users" up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being multiple roles at the same time. 
 
 ## One User
 
