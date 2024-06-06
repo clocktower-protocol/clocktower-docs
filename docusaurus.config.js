@@ -80,7 +80,7 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'contractsSidebar',
             position: 'left',
-            label: 'Contracts',
+            label: 'Contract',
           },
           {
             type: 'docSidebar',
