@@ -37,7 +37,11 @@ All subscriptions require the following information to be entered:
 
 ![Create Form](../../../assets/create_4.png)
 
-4. The new subscription will display below either in table of card formatting
+4. Complete the transaction in your wallet
+
+![Create Transaction](../../../assets/create_transaction.png)
+
+5. The new subscription will display below either in table of card formatting
 
 ![Create Card](../../../assets/create_5.png)
 

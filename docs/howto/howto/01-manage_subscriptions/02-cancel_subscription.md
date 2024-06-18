@@ -20,3 +20,7 @@ Cancelling a subscription will unsubscribe and subscribers. All remaining fee ba
 ![Cancel 2](../../../assets/cancel_2.png)
 
 ![Cancel 3](../../../assets/cancel_3.png)
+
+3. Complete the transaction in your wallet
+
+![Cancel transaction](../../../assets/cancel_transaction.png)

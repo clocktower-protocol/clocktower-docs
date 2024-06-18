@@ -16,6 +16,8 @@ const config = {
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
+  staticDirectories: ['static'],
+
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'Clocktower', // Usually your GitHub org/user name.
@@ -89,8 +91,9 @@ const config = {
             label: 'Howto'
           },
           {
-            type: 'docSidebar',
-            sidebarId: 'whitepaperSidebar',
+            //type: 'docSidebar',
+            //sidebarId: 'whitepaperSidebar',
+            to: 'pathname:///wp/v5_whitepaper.pdf',
             position: 'right',
             label: 'Whitepaper',
           },
