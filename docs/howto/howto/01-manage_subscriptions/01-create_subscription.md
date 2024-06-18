@@ -3,9 +3,7 @@ id: create_subscription
 title: Create a Subscription
 ---
 
-# Create a Subscription
-
-The following section will describe how to create a subscription. 
+# Create a subscription
 
 ### Required Parameters
 

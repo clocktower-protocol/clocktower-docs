@@ -3,7 +3,7 @@ id: subscribe_tech_reference
 title: ClockTowerV1Subscribe
 ---
 
-# ClockTowerV1Subscribe
+# ClockTower_Subscribe
 
 ### Allowed Time Ranges
 
