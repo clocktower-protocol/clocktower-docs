@@ -27,11 +27,20 @@ All subscriptions require the following information to be entered:
 
 ### Steps to create a subscription
 
-1. Click on the Subscriptions button in the top menu
+1. Click on the Subscriptions button in the top menu 
+
+![Menu Button Example](../../../assets/create_2.png)
 
 2. Click on the Create Subscription button
 
+![Create Button Example](../../../assets/create_3.png)
+
 3. Fill out the form making sure to complete the required fields
+
+![Create Form](../../../assets/create_4.png)
 
 4. The new subscription will display below either in table of card formatting
 
+![Create Card](../../../assets/create_5.png)
+
+![Create Table](../../../assets/create_6.png)
