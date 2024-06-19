@@ -51,9 +51,9 @@ But now we've run into a problem. How do we translate this range number back and
 
 The best way to translate the block timestamp incremeting unix number to Gregorian [ranges](#time-ranges) is to use an intermediary incrementing day standard called [Julian Days](https://en.wikipedia.org/wiki/Julian_day). 
 
-Using the following code the contract can do this translation [without Oracles or any other external sources](/docs/concepts/01-theprotocol/02-protocol_concepts/01_goals.md)
+Using the following code the contract can do this translation [without Oracles or any other external sources](goals#no-oracles)
 
-More details about these translation functions can be found in the [technical documention](/docs/contracts/02-technical_reference/01-subscribe/01-subscribe_tech_reference.md)
+More details about these translation functions can be found in the [technical documention](../../../contracts/technical_reference/subscribe/subscribe_tech_reference)
 
 ### Leap Problems
 

@@ -26,13 +26,13 @@ One might think that paying the caller in ETH would be appropriate since the cal
 
 #### Ethereum and Approval
 
-As explained [here](./04_approval.md), the ability for the protocol to have approved access to user accounts is critical to seamlessly transfer tokens at a future date. 
+The ability for the protocol to have approved access to user accounts is critical to seamlessly transfer tokens at a future date. 
 
 While all standard ERC-20 tokens have a built-in process to facilitate approval, ETH does not. We could require a user to keep wrapped ETH in their account but this is not ideal from a UX perspective nor is it common for the average user to hold wrapped ethereum in their wallet. 
 
 #### No Oracles
 
-Another problem is that if we required one of the parties to pay their fees in ETH but the future transfer was an ERC-20 token we would need some sort of oracle to calculate the price of the ERC-20 vs ETH to have a proportional fee. But since having [no oracles](./01_goals.md) is a goal of the protocol this conversion won't work. 
+Another problem is that if we required one of the parties to pay their fees in ETH but the future transfer was an ERC-20 token we would need some sort of oracle to calculate the price of the ERC-20 vs ETH to have a proportional fee. But since having [no oracles](goals#no-oracles) is a goal of the protocol this conversion won't work. 
 
 #### In kind fees
 
@@ -50,7 +50,7 @@ If the subscriber and caller are the same while the provider pays the fee to the
 
 If the Provider can't be the one paying the caller it must the subscriber. But this choice presents additional issues that must be considered. 
 
-The biggest issues revolve around the problem of failed transactions which we will go into in the next sections, [failed transactions](./04_failed_transactions). 
+The biggest issues revolve around the problem of failed transactions which we will go into in the next sections, [failed transactions](failed_transactions). 
 
 The solutions is having a [fee balance](05_fee_balance.md) where fees can be reserved and paid depending on the situation. 
 

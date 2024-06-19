@@ -28,7 +28,7 @@ If the subscriber has revoked their approval for Clocktower to move funds from t
 When a subscription fails because of lack of approval two things must be done
 
 - The subscriber must be unsubscribed by the caller.
-- A majority of the [fee balance](./05_fee_balance.md) must be refunded to the Provider with a smaller amount going to the caller. 
+- A majority of the [fee balance](fees#caller-fee-reserve) must be refunded to the Provider with a smaller amount going to the caller. 
 
 But why is this necessary?
 
@@ -52,7 +52,7 @@ But by giving enough of the forfeited fee balance to compensate for gas costs on
 
 #### Freeloader attack
 
-Another attack involves a malicious subscriber being both subscriber and caller while intentionally failing.  If the caller was refunded all of the forfeited [fee balance](./05_fee_balance.md) then they could get a free cycle of goods or services from the creator of the subscription since they would be paying themselves back as caller. In order to mitigate this, a majority of the fee balance must be refunded to the provider in order to pay for goods or services rendered within the time period and a smaller portion refunded to the caller to pay for gas costs. 
+Another attack involves a malicious subscriber being both subscriber and caller while intentionally failing.  If the caller was refunded all of the forfeited [fee balance](fees#caller-fee-reserve) then they could get a free cycle of goods or services from the creator of the subscription since they would be paying themselves back as caller. In order to mitigate this, a majority of the fee balance must be refunded to the provider in order to pay for goods or services rendered within the time period and a smaller portion refunded to the caller to pay for gas costs. 
 
 Since the subscriber would now constantly lose funds it mitigates the above attack. 
 

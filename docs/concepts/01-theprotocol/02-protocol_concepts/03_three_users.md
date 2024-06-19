@@ -49,7 +49,7 @@ In order to understand the way the Clocktower protocol works its best to think a
 
 - Receiver: This user wishes to receive tokens at some point in the future. For subscriptions we call this a Provider, who provides some sort of service in exchange for receiving tokens on a regular basis. 
 
-- Caller: This user calls the contract at a regular interval and is rewarded for their effort and gas costs by receiving [compensation](./02_incentives.md). 
+- Caller: This user calls the contract at a regular interval and is rewarded for their effort and gas costs by receiving [compensation](incentives). 
 
 ## Subscriber Provider Caller
 

@@ -91,8 +91,6 @@ const config = {
             label: 'Howto'
           },
           {
-            //type: 'docSidebar',
-            //sidebarId: 'whitepaperSidebar',
             to: 'pathname:///wp/v5_whitepaper.pdf',
             position: 'right',
             label: 'Whitepaper',

@@ -8,7 +8,7 @@ sidebar_position: 6
 
 A further issue presents itself when using subscriptions. Since subscriptions are an open ended obligation of the subsciber with no end date unless cancelled, there must be a method of extracting fees from either the subscriber or the provider on an ongoing basis. But how is this done? 
 
-As described in [failed transactions](./04_failed_transactions) the best way to pay fees to the caller is by having a reserve of ERC-20 tokens per subscriber per subscription. This reserve serves the dual purpose of both paying the caller fees for the periodic remitance of transactions and disincentivizing actions contrary to the protocol. 
+As described in [failed transactions](failed_transactions) the best way to pay fees to the caller is by having a reserve of ERC-20 tokens per subscriber per subscription. This reserve serves the dual purpose of both paying the caller fees for the periodic remitance of transactions and disincentivizing actions contrary to the protocol. 
 
 ### What is the amount of the caller fee?
 
@@ -19,7 +19,7 @@ Currently the caller fee is different based upon the average gas levels of the c
 | Ethereum | 1% |
 
 
-### The Reserve
+### Caller Fee Reserve
 
 #### When is it filled?
 
