@@ -5,6 +5,13 @@ title: Edit Subscription Details
 
 # Edit subscription details
 
+### Optional Parameters
+
+| Parameter | Description | |
+|---|---|---|
+| Description | Brief title of Subscription | RECOMMENDED |
+| URL | URL link to more info on subscription | |
+
 ### Steps to editing subscription details
 
 1. Make sure the "Created" tab is selected

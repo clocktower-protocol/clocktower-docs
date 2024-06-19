@@ -11,6 +11,18 @@ All information saved to the account will be stored publically on the blockchain
 
 This will help subscribers verify your information but your account will no longer be anonymous.
 
+### Optional Parameters
+
+| Parameter | Description |
+|---|---|
+| Description | Description of provider |
+| Company | Name of provider Company |
+| Email | Email address of provider | 
+| Misc | Miscellaneous field |
+| URL | URL of provider |
+| Domain | Domain of provider |
+
+
 ### Steps to add provider details
 
 1. Click on "Account" button in menu
