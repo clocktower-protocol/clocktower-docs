@@ -97,7 +97,7 @@ const config = {
           },
           {
             label: 'Github',
-            href: 'https://zerohedge.com',
+            href: 'https://google.com',
             position: 'right'
           }
         ],
