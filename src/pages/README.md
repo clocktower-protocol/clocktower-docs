@@ -547,7 +547,7 @@ Return Values:
     22 = Problem sending fees
     23 = Only provider can cancel subscription
     24 = Gas price too high
-    25 = String must be <= 32 bytes
+    25 = String must be {'<='} 32 bytes
     26 = Must be between 1 and 7
     27 = Must be between 1 and 28
     28 = Must be between 1 and 90
