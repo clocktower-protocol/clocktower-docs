@@ -125,7 +125,7 @@ const config = {
               },
               {
                 label: 'Whitepaper',
-                to: '/docs/whitepaper',
+                to: 'pathname:///wp/v5_whitepaper.pdf',
               },
             ],
           },
