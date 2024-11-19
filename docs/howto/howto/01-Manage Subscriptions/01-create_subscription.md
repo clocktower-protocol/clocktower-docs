@@ -14,7 +14,7 @@ All subscriptions require the following information to be entered:
 | Token | ERC20 token you wish to paid in. From pre-defined list |
 | Amount | Amount of tokens you wish to be paid per period |
 | Frequency | Frequency of payment. Currently either weekly, daily, quarterly or yearly |
-| DueDay | Payday in [range](../../../contracts/02-technical_reference/01-subscribe/01-subscribe_tech_reference.md#allowed-time-ranges) determined by frequency | 
+| DueDay | Payday in [range](../../../contracts/01-Subscribe/01-subscribe_tech_reference.md#allowed-time-ranges) determined by frequency | 
 
 ### Optional Parameters
 

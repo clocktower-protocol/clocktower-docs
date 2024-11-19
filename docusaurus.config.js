@@ -12,7 +12,7 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://docs.clocktower.finance',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -113,15 +113,15 @@ const config = {
             items: [
               {
                 label: 'Concepts',
-                to: '/docs/concepts',
+                to: '/docs/concepts/Clocktower Protocol/whatis',
               },
               {
-                label: 'Contracts',
-                to: '/docs/clocktower_protocol',
+                label: 'Contract',
+                to: '/docs/contracts/Subscribe/subscribe_tech_reference',
               },
               {
                 label: 'HowTo',
-                to: '/docs/howto',
+                to: '/docs/howto/howto/',
               },
               {
                 label: 'Whitepaper',

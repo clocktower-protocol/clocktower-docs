@@ -52,7 +52,7 @@ If the Provider can't be the one paying the caller it must the subscriber. But t
 
 The biggest issues revolve around the problem of failed transactions which we will go into in the next sections, [failed transactions](failed_transactions). 
 
-The solutions is having a [fee balance](05_fee_balance.md) where fees can be reserved and paid depending on the situation. 
+The solutions is having a [fee balance](06_fees.md) where fees can be reserved and paid depending on the situation. 
 
 
 
