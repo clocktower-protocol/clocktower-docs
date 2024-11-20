@@ -67,7 +67,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'Clocktower',
+        title: 'Clocktower Docs',
         /*
         logo: {
           alt: 'My Site Logo',

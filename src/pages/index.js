@@ -4,17 +4,29 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import backgroundImage from '@site/static/img/interior.jpg'
+import stairsImage from '@site/static/img/stairs.jpg'
 
 import styles from './index.module.css';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
+    <div className={styles.imageContainer}>
+      <img src="/img/interior_rotated2.jpg" alt="description"></img>
+       {
+      /*}
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        {/*
+
+
+
+      {/*}
+      <div className="container" >
+          <h1 className="hero__title">{siteConfig.title}</h1>
+          <img src={interiorImage} alt="interior" />
+      
+          <p className="hero__subtitle">{siteConfig.tagline}</p>
+        
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
@@ -22,9 +34,10 @@ function HomepageHeader() {
             Docusaurus Tutorial - 5min ⏱️
           </Link>
         </div>
-        */}
       </div>
     </header>
+     */}
+    </div>
   );
 }
 
