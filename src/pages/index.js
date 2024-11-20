@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import backgroundImage from '@site/static/img/interior.jpg'
-import stairsImage from '@site/static/img/stairs.jpg'
+//import HomepageFeatures from '@site/src/components/HomepageFeatures';
+//import backgroundImage from '@site/static/img/interior.jpg'
+//import stairsImage from '@site/static/img/stairs.jpg'
 
 import styles from './index.module.css';
 
