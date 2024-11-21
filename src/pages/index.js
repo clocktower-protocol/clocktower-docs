@@ -10,7 +10,7 @@ import Layout from '@theme/Layout';
 import styles from './index.module.css';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  //const {siteConfig} = useDocusaurusContext();
   return (
     <div className={styles.imageContainer}>
       <img src="/img/interior_rotated2.jpg" alt="description"></img>

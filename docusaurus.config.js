@@ -1,7 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-
+//import { useLocation } from '@docusaurus/router';
 //import lightCodeTheme from 'prism-react-renderer/themes/github';
 //import darkCodeTheme from 'prism-react-renderer/themes/dracula';
 
@@ -67,14 +67,57 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'Clocktower Docs',
+        
+        title: 'Clocktower',
+        
         /*
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
         },
         */
+       
         items: [
+          
+          {
+            type: 'dropdown',
+            items: [
+              {
+                type: 'docSidebar',
+                sidebarId: 'conceptsSidebar', // The ID of your sidebar
+                label: 'Concepts',
+              },
+              {
+                type: 'docSidebar',
+                sidebarId: 'contractsSidebar',
+                label: 'Contract',
+              },
+              {
+                type: 'docSidebar',
+                sidebarId: "howtoSidebar",
+                label: 'Howto'
+              },
+              {
+                to: 'pathname:///wp/v5_whitepaper.pdf',
+                label: 'Whitepaper',
+              },
+              {
+                label: 'Github',
+                href: 'https://google.com',
+              },
+              
+            ],
+            position: 'right',
+            label: 'Documentation'
+          },
+          {
+            to: 'https://google.com', // The path you want to link to
+            label: 'App', // The text on the button
+            position: 'right', // Positioning on the navbar
+            className: 'button button--secondary button--lg', // CSS classes for styling
+          },
+          
+         /*
           {
             type: 'docSidebar',
             sidebarId: 'conceptsSidebar',
@@ -93,17 +136,21 @@ const config = {
             position: "left",
             label: 'Howto'
           },
+          
           {
             to: 'pathname:///wp/v5_whitepaper.pdf',
             position: 'right',
             label: 'Whitepaper',
           },
+          
           {
             label: 'Github',
             href: 'https://google.com',
             position: 'right'
-          }
+          },
+          */
         ],
+        
       },
       footer: {
         style: 'dark',
@@ -156,7 +203,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Clocktower LLC. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Clocktower LLC.`,
       },
       /*
       prism: {
