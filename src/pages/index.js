@@ -7,6 +7,7 @@ import MainImage from '@site/static/img/interior_rotated2.jpg';
 import Translate, {translate} from '@docusaurus/Translate';
 import TowerImage from '@site/static/img/towerside.jpeg';
 import WiresImage from '@site/static/img/wires.jpeg'
+import ChurchImage from '@site/static/img/church.jpg'
 
 
 import styles from './index.module.css';
@@ -31,7 +32,7 @@ function HomepageHeader() {
           <h1 className={styles.banner2}>Decentralized <p></p>Reoccuring <p></p> Crypto Payments</h1>
         </div>
         <div className={styles.doubleBoxImage}>
-          <img className={styles.imageFitter} src={TowerImage} alt="towerimage"></img>
+          <img className={styles.imageFitter} src={ChurchImage} alt="towerimage"></img>
         </div>
       </div>
       <div className={styles.doubleBoxGridContainer}>
@@ -39,7 +40,7 @@ function HomepageHeader() {
             <img className={styles.imageFitter} src={WiresImage} alt="wiresimage"></img>
         </div>
         <div className={styles.doubleBoxText}>
-            <h1 className={styles.banner3}>The Missing Piece of Defi </h1> <p></p> <h1 className={styles.banner3}> Its Time </h1>
+            <h1 className={styles.banner3}>Its Time</h1>
         </div>
       </div>
     </div>
