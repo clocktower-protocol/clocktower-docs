@@ -31,7 +31,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'es'],
   },
 
   presets: [
@@ -110,6 +110,12 @@ const config = {
             position: 'right',
             label: 'Documentation'
           },
+          /*
+          {
+            type: 'localeDropdown',
+            position: 'right',
+          },
+          */
           {
             to: 'https://google.com', // The path you want to link to
             label: 'App', // The text on the button

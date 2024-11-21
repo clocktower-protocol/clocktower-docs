@@ -1,11 +1,11 @@
 import React from 'react';
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
+//import clsx from 'clsx';
+//import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-//import HomepageFeatures from '@site/src/components/HomepageFeatures';
-//import backgroundImage from '@site/static/img/interior.jpg'
-//import stairsImage from '@site/static/img/stairs.jpg'
+import MainImage from '@site/static/img/interior_rotated2.jpg';
+import Translate, {translate} from '@docusaurus/Translate';
+
 
 import styles from './index.module.css';
 
@@ -13,30 +13,12 @@ function HomepageHeader() {
   //const {siteConfig} = useDocusaurusContext();
   return (
     <div className={styles.imageContainer}>
-      <img src="/img/interior_rotated2.jpg" alt="description"></img>
-       {
-      /*}
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-
-
-
-      {/*}
-      <div className="container" >
-          <h1 className="hero__title">{siteConfig.title}</h1>
-          <img src={interiorImage} alt="interior" />
-      
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
-        
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
-          </Link>
-        </div>
-      </div>
-    </header>
-     */}
+      <img src={MainImage} alt={
+            translate({
+              message: 'Main Image',
+              description: 'The homepage main image alt message',
+            })
+      }></img>
     </div>
   );
 }
@@ -46,7 +28,12 @@ export default function Home() {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="Decentralized Subscriptions">
+      description={
+        translate({
+          message: 'Decentralized Subscriptions',
+          description: 'Layout Description',
+        })
+  }>
       <HomepageHeader />
       <main>
        

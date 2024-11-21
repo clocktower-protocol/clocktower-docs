@@ -1,0 +1,30 @@
+{
+  "title": {
+    "message": "Clocktower",
+    "description": "The title in the navbar"
+  },
+  "item.label.Documentation": {
+    "message": "Documentation",
+    "description": "Navbar item with label Documentation"
+  },
+  "item.label.App": {
+    "message": "App",
+    "description": "Navbar item with label App"
+  },
+  "item.label.Concepts": {
+    "message": "Concepts",
+    "description": "Navbar item with label Concepts"
+  },
+  "item.label.Contract": {
+    "message": "Contract",
+    "description": "Navbar item with label Contract"
+  },
+  "item.label.How to": {
+    "message": "How to",
+    "description": "Navbar item with label How to"
+  },
+  "item.label.Whitepaper": {
+    "message": "Whitepaper",
+    "description": "Navbar item with label Whitepaper"
+  }
+}

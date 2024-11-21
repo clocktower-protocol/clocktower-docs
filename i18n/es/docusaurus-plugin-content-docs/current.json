@@ -1,0 +1,30 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.contractsSidebar.category.Subscribe": {
+    "message": "Subscribe",
+    "description": "The label for category Subscribe in sidebar contractsSidebar"
+  },
+  "sidebar.conceptsSidebar.category.Clocktower Protocol": {
+    "message": "Clocktower Protocol",
+    "description": "The label for category Clocktower Protocol in sidebar conceptsSidebar"
+  },
+  "sidebar.conceptsSidebar.category.Protocol Concepts": {
+    "message": "Protocol Concepts",
+    "description": "The label for category Protocol Concepts in sidebar conceptsSidebar"
+  },
+  "sidebar.howtoSidebar.category.HowTo": {
+    "message": "HowTo",
+    "description": "The label for category HowTo in sidebar howtoSidebar"
+  },
+  "sidebar.howtoSidebar.category.Manage Subscriptions": {
+    "message": "Manage Subscriptions",
+    "description": "The label for category Manage Subscriptions in sidebar howtoSidebar"
+  },
+  "sidebar.howtoSidebar.category.Manage Account": {
+    "message": "Manage Account",
+    "description": "The label for category Manage Account in sidebar howtoSidebar"
+  }
+}
