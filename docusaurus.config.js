@@ -2,8 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 //import { useLocation } from '@docusaurus/router';
-//import lightCodeTheme from 'prism-react-renderer/themes/github';
-//import darkCodeTheme from 'prism-react-renderer/themes/dracula';
+import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -65,11 +64,11 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      //image: 'img/docusaurus-social-card.jpg',
       navbar: {
         
         title: 'Clocktower',
-        
+
         /*
         logo: {
           alt: 'My Site Logo',
@@ -78,7 +77,6 @@ const config = {
         */
        
         items: [
-          
           {
             type: 'dropdown',
             items: [
@@ -95,16 +93,18 @@ const config = {
               {
                 type: 'docSidebar',
                 sidebarId: "howtoSidebar",
-                label: 'Howto'
+                label: 'How to'
               },
               {
                 to: 'pathname:///wp/v5_whitepaper.pdf',
                 label: 'Whitepaper',
               },
+              /*
               {
                 label: 'Github',
-                href: 'https://google.com',
+                to: 'https://google.com',
               },
+              */
               
             ],
             position: 'right',
@@ -205,12 +205,10 @@ const config = {
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Clocktower LLC.`,
       },
-      /*
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
       },
-      */
     }),
 };
 
