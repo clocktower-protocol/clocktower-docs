@@ -12,13 +12,18 @@ import styles from './index.module.css';
 function HomepageHeader() {
   //const {siteConfig} = useDocusaurusContext();
   return (
-    <div className={styles.imageContainer}>
-      <img src={MainImage} alt={
-            translate({
-              message: 'Main Image',
-              description: 'The homepage main image alt message',
-            })
-      }></img>
+    <div>
+      <div style={{paddingTop: "10px"}}>
+        <h1 className={styles.heroBanner}>Subscriptions for Everyone</h1>
+      </div>
+      <div className={styles.imageContainer}>
+        <img src={MainImage} alt={
+              translate({
+                message: 'Main Image',
+                description: 'The homepage main image alt message',
+              })
+        }></img>
+      </div>
     </div>
   );
 }
