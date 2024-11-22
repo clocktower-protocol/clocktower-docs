@@ -78,22 +78,24 @@ const config = {
        
         items: [
           {
+            type: 'docSidebar',
+            sidebarId: 'conceptsSidebar', // The ID of your sidebar
+            label: 'Concepts',
+            position: 'right'
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: "howtoSidebar",
+            label: 'How to',
+            position: 'right'
+          },
+          {
             type: 'dropdown',
             items: [
               {
                 type: 'docSidebar',
-                sidebarId: 'conceptsSidebar', // The ID of your sidebar
-                label: 'Concepts',
-              },
-              {
-                type: 'docSidebar',
                 sidebarId: 'contractsSidebar',
                 label: 'Contract',
-              },
-              {
-                type: 'docSidebar',
-                sidebarId: "howtoSidebar",
-                label: 'How to'
               },
               {
                 to: 'pathname:///wp/v5_whitepaper.pdf',

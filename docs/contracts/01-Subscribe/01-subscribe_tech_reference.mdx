@@ -5,24 +5,19 @@ title: Technical Reference
 
 # ClockTower Subscribe
 
-### Allowed Time Ranges
+### Time Ranges
 
 - Weekly Subscriptions -- 1 - 7 (Weekdays)
 - Monthly Subscriptions -- 1 - 28 (Day of Month)
 - Quarterly Subscriptions -- 1 - 90 (Day of Quarter)
 - Yearly Subscription -- 1 - 365 (Day of Year  (not including leap days))
 
-### Future Transaction Range
-- Future Transactions -- Unixtime / 3600 (Unix Hours)
-
 ## Data Structures
 The following are the data structs required or returned by external functions:
 
-### Subscription Data
+### Structs
 
-#### Structs
-
-##### Account
+#### Account
 ```
 struct Account {
     address accountAddress;
@@ -38,7 +33,7 @@ struct Account {
 | `subscriptions` | Array of [SubIndex](#subindex) structs | All subscriptions subscribed to by account |
 | `provSubs` | Array of [SubIndex](#subindex) structs | All subscriptions created by account |
 
-##### Subscription
+#### Subscription
 ```
  struct Subscription {
     bytes32 id;
@@ -62,7 +57,7 @@ struct Account {
 | `frequency` | Frequency | [Frequency](#frequency) |
 | `dueDay` | uint16 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
 
-##### SubIndex
+#### SubIndex
 ```
 struct SubIndex {
     bytes32 id;
@@ -78,7 +73,7 @@ struct SubIndex {
 | `frequency` | frequency | [Frequency](#frequency) |
 | `status` | Status | Status | [Status](#status) |
 
-##### SubView
+#### SubView
 ```
  struct SubView {
     Subscription subscription;
@@ -92,7 +87,7 @@ struct SubIndex {
 | `status` | Status | [Status](#status) |
 | `totalsubscribers` | uint | Total number of subscribers |
 
-##### FeeEstimate
+#### FeeEstimate
 ```
 struct FeeEstimate {
     uint fee;
@@ -104,7 +99,7 @@ struct FeeEstimate {
 | `fee` | uint | Fee amount in wei |
 | `token` | address | ERC20 address of token |
 
-##### SubscriberView
+#### SubscriberView
 ```
 struct SubscriberView {
     address subscriber;
@@ -116,7 +111,19 @@ struct SubscriberView {
 | `subscriber` | address | Subscriber address |
 | `feeBalance` | uint | Fee balance of subscriber in wei |
 
-##### Time
+#### Details
+```
+struct Details {
+    string url;
+    string description;
+}
+```
+| Name | Type | Description|
+|---|---|---|
+| url | string | URL of Subscription |
+| description | string | Description of Subscription |
+
+#### Time
 ```
 struct Time {
     uint16 day;
@@ -137,10 +144,10 @@ struct Time {
 | `month` | uint16 | Month |
 
 
-#### Enums
+### Enums
 (Enum values are represented by numbers starting at zero)
 
-##### Frequency
+#### Frequency
 ```
 enum Frequency {
     WEEKLY,
@@ -156,7 +163,7 @@ enum Frequency {
 | `2` | QUARTERLY |
 | `3` | YEARLY |
 
-##### Status
+#### Status
 ```
 enum Status {
     ACTIVE,
@@ -170,81 +177,71 @@ enum Status {
 | `1` | CANCELLED |
 | `2` | UNSUBSCRIBED |
 
-##### SubEvent
+#### SubscriptEvent
 ```
-enum SubEvent {
-    PAID,
-    FAILED,
-    SUBSCRIBED, 
-    UNSUBSCRIBED,
-    FEEFILL, 
-    REFUND
-}
-```
-| Value | Description|
-|---|---|
-| `0` | PAID |
-| `1` | FAILED |
-| `2` | SUBSCRIBED |
-| `3` | UNSUBSCRIBED |
-| `4` | FEEFILL |
-| `5` | REFUND |
-
-##### ProvEvent
-```
-enum ProvEvent {
-    CREATE,
-    CANCEL,
-    PAID,
-    FAILED,
-    REFUND
+enum SubscriptEvent {
+        CREATE,
+        CANCEL,
+        PROVPAID,
+        FAILED, 
+        PROVREFUND,
+        SUBPAID,
+        SUBSCRIBED, 
+        UNSUBSCRIBED,
+        FEEFILL, 
+        SUBREFUND
 }
 ```
 | Value | Description|
 |---|---|
 | `0` | CREATE |
 | `1` | CANCEL |
-| `2` | PAID |
+| `2` | PROVPAID |
 | `3` | FAILED |
-| `4` | REFUND |
-
+| `4` | PROVREFUND |
+| `5` | SUBPAID |
+| `6` | SUBSCRIBED |
+| `7` | UNSUBSCRIBED |
+| `8` | FEEFILL |
+| `9` | SUBREFUND | 
 
 ## Global Variables
-### Subscription Global Variables
 
 | Name | Type | Description| Format |
 |---|---|---|---|
 | `callerFee` | uint | Percentage paid to caller on remits | 10000 = No fee, 10100 = 1%, 10001 = 0.01% |
 | `systemFee` | uint | Flat fee paid to admin account when systemFee bool is true | wei |
-| `maxGasPrice` | uint | Maximum gas value for remit function | gwei |
 | `maxRemits` | uint | Maximum number of remits per remit function (usually based on block max) | |
 | `admin` | address | Address for admin account |
-| `nextUncheckedDay` | uint40 | Last time remit ws called | Unix epoch time |
+| `nextUncheckedDay` | uint40 | Last time remit was called | Unix epoch time |
 
 ## Events
-### Subscription Events
-##### SubscriberLog
+#### SubLog
 ```
-event SubscriberLog(
+event SubLog(
     bytes32 indexed id,
+    address indexed provider,
     address indexed subscriber,
     uint40 timestamp,
     uint amount,
-    SubEvent indexed subEvent
+    address token,
+    SubScriptEvent subScriptEvent
 )
 ```
 
-Log emitted during subscriber events
+Log emitted during subscription events
 
 | Name | Type | Indexed | Description |
 |---|---|:---:|---|
 | `id` | bytes32 | :heavy_check_mark: | Unique Subscription id |
 | `subscriber` | address | :heavy_check_mark: | Address of subscriber |
+| `provider` | address | :heavy_check_mark: | Address of provider |
 | `timestamp` | uint40 | | Unix Epoch timestamp |
 | `amount` | uint | | ERC20 subscription amount in wei |
-| `subEvent` | SubEvent | :heavy_check_mark: | [SubEvent](#subevent)
+| `token` | address | | ERC20 address of token used in subscription |
+| `subScriptEvent` | SubScriptEvent | | [SubScriptEvent](#subscriptevent) |
 
-##### CallerLog
+#### CallerLog
 ```
 event CallerLog(
     uint40 timestamp,
@@ -263,36 +260,60 @@ Log emitted during Caller events
 | `caller` | address | :heavy_check_mark: | Address of caller |
 | `isFinished` | bool | | Shows if Caller is done |
 
-##### ProviderLog
+#### DetailsLog
 ```
-event ProviderLog(
+event DetailsLog(
     bytes32 indexed id,
     address indexed provider,
-    uint40 timestamp,
-    uint amount,
-    ProvEvent indexed provEvent
+    uint40 indexed timestamp,
+    string url,
+    string description
 )
 ```
-
-Log emitted during Provider events
+Log emitted when subscription details are changed
 
 | Name | Type | Indexed | Description |
 |---|---|:---:|---|
 | `id` | bytes32 | :heavy_check_mark: | Unique subscription id |
 | `provider` | address | :heavy_check_mark: | Provider address |
-| `timestamp` | uint40 | | Unix epoch timestamp |
-| `amount` | uint | | 0 unless refund |
-| `provEvent` | ProvEvent | :heavy_check_mark: | [ProvEvent](#provevent) |
+| `timestamp` | uint40 | :heavy_check_mark: | Unix epoch timestamp |
+| `url` | string | | Url of Subscription |
+| `description` | string | | Description of subscription |
 
+#### ProvDetailsLog
+```
+event ProvDetailsLog(
+    address indexed provider,
+    uint40 indexed timestamp,
+    string description,
+    string company, 
+    string url, 
+    string domain,
+    string email, 
+    string misc
+)
+```
+Log emitted when Provider details are changed
+| Name | Type | Indexed | Description |
+|---|---|:---:|---|
+| `provider` | address | :heavy_check_mark: | Provider address |
+| `timestamp` | uint40 | :heavy_check_mark: | Unix epoch timestamp |
+| `description` | string | | Description of Provider |
+| `company` | string | | Company of Provider |
+| `url` | string | | URL of Provider |
+| `domain` | string | | Domain of Provider |
+| `email` | string | | Email of Provider |
+| `misc` | string | | Misc field for Provider |
 
 ## Functions
 ### Subscription Functions
-#### Input Functions
-##### createSubscription
+
+#### createSubscription
 ```
 function createSubscription(
     uint amount,
     address token, 
+    Details details,
     string description, 
     Frequency frequency, 
     uint16 dueDay
@@ -304,13 +325,14 @@ Parameters:
 
 | Name | Type | Description |
 |---|---|---|
-| `amount` | uint | Amount of subscription in wei |
+| `amount` | uint | Amount of subscription in wei. (MUST BE IN 18 DECIMALS) |
 | `token` | address | ERC20 address of token used in subscription |
+| `details` | Details | [Details](#details) |
 | `description` | string | Description of subscription |
 | `frequency` | Frequency | [Frequency](#frequency) |
 | `dueDay` | uint16 | Day in [range](#allowed-time-ranges) based on frequency when subscription is paid |
 
-##### subscribe
+#### subscribe
 ```
 function subscribe(
     Subscription subscription
@@ -325,10 +347,10 @@ Parameters:
 | `subscription` | Subscription | [Subscription](#subscription) |
 
 
-##### unsubscribe
+#### unsubscribe
 ```
 function unsubscribe(
-    bytes32 id
+    Subscription subscription
 ) external payable
 ```
 Allows user to unsubscribe from subscription. 
@@ -339,13 +361,13 @@ Parameters:
 
 | Name | Type | Description |
 |---|---|---|
-| `id` | bytes32 | Unique subscription id |
+| `subscription` | Subscription | [Subscription](#subscription) |
 
-##### unsubscribeByProvider
+#### unsubscribeByProvider
 ```
 function unsubscribeByProvider(
-    address subscriber, 
-    bytes32 id
+    Subscription subscription,
+    address subscriber
 ) external
 ```
 Allows provider to cancel subscriber from their created subscriptions. 
@@ -356,11 +378,12 @@ Parameters:
 
 | Name | Type | Description |
 |---|---|---|
+| `subscription` | Subscription | [Subscription](#subscription) |
 | `subscriber` | address | Subscriber address |
-| `id` | bytes32 | Unique subscription id |
 
 
-##### cancelSubscription
+
+#### cancelSubscription
 ```
 function cancelSubscription(
     Subscription subscription
@@ -377,8 +400,8 @@ Parameters:
 | `subscription` | Subscription | [Subscription](#subscription) |
 
 
-#### View Functions
-##### getAccountSubscriptions
+### View Functions
+#### getAccountSubscriptions
 ```
 function getAccountSubscriptions(
     bool bySubscriber,
@@ -403,7 +426,7 @@ Return Value:
 |---|---|---|
 | `SubView[]` | SubView | Array of [Subview](#subview) structs |
 
-##### getTotalSubscribers
+#### getTotalSubscribers
 ```
 function getTotalSubscribers(
     ) returns (uint)
@@ -417,7 +440,7 @@ Return Value:
 |---|---|---|
 | `uint` | uint | Total amount of subscribers in contract |
 
-##### getSubscribersById
+#### getSubscribersById
 ```
 function getSubscribersById(
     bytes32 id
@@ -438,7 +461,7 @@ Return Value:
 |---|---|---|
 | `SubscriberView[]` | SubscriberView | Array of [SubscriberView](#subscriberview) structs |
 
-##### getSubByIndex
+#### getSubByIndex
 ```
 function getSubByIndex(
     bytes32 id, 
@@ -464,7 +487,7 @@ Return Value:
 | `subscription` | Subscription | [Subscription](#subscription) |
 
 
-##### feeEstimate
+#### feeEstimate
 ```
 function feeEstimate(
 
