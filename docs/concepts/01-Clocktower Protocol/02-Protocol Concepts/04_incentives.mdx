@@ -12,7 +12,7 @@ As shown in the previous section the caller must be incentivized to poll the con
 
 In order to add time awareness to the contract a time value must be incremented by an external account. 
 
-One can think of process like a virtual button which anyone is allowed to press. And while it costs money to press the button there is a bounty rewarded to the first person to press the button each day. 
+One can think of this process like a virtual button which anyone is allowed to press. And while it costs money to press the button there is a bounty rewarded to the first person to press the button each day. 
 
 A more real world example is how lending protocols crowd source liquidation in a decentralized manner. 
 
@@ -22,7 +22,7 @@ Lending protocols allow any user to liquidate any account by simply calling the 
 
 ### Why not pay the caller in ETH?
 
-One might think that paying the caller in ETH would be appropriate since the caller must pay for the gas of polling the contract. But there are a few reasons this won't work. 
+One might think that paying the caller in ETH would be appropriate since the caller must pay for the gas of polling the contract in ETH. But there are a few reasons this won't work. 
 
 #### Ethereum and Approval
 
@@ -48,11 +48,11 @@ If the subscriber and caller are the same while the provider pays the fee to the
 
 #### Problems with the sender paying
 
-If the Provider can't be the one paying the caller it must the subscriber. But this choice presents additional issues that must be considered. 
+If the Provider can't be the one paying the fee then it must the subscriber. But this choice presents additional issues that must be considered. 
 
-The biggest issues revolve around the problem of failed transactions which we will go into in the next sections, [failed transactions](failed_transactions). 
+The biggest issues revolve around [failed transactions](failed_transactions) which we will go into in the next section. 
 
-The solutions is having a [fee balance](06_fees.mdx) where fees can be reserved and paid depending on the situation. 
+The solution is having a [fee balance](06_fees.mdx) where fees can be reserved and paid depending on the situation. 
 
 
 

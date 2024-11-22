@@ -22,7 +22,7 @@ After receiving the unique URL subscribers can then subscribe either directly th
 
 Upon subsription they will be charged a prorated amount for the first cycle of the subscription. A portion of this amount will be stored in the contract as a [fee balance](fees#caller-fee-reserve). The rest is sent to the provider. 
 
-On the due day the subscriber will be charged the subscription amount If they don't have enough tokens or have revoked approval the transaction will [fail](failed_transactions) and they will automatically be unsubscibed forfeiting the fee balance. 
+On the due day the subscriber will be charged the subscription amount. If they don't have enough tokens or have revoked approval the transaction will [fail](failed_transactions) and they will automatically be unsubscibed forfeiting the fee balance. 
 
 They can unsubscribe at anytime by calling the appropriate function. 
 
@@ -30,9 +30,7 @@ They can unsubscribe at anytime by calling the appropriate function.
 
 Callers are accounts that periodically call the contract function that pays the remittances and increments the time value for the contract. They are paid fees as compensation. 
 
-Initially the Caller will be restricted to the protocol operators. 
-
-Eventually any user will be able to call the contract. The first to do so each day will pay for remittance of tokens but will also be [rewarded with fees](fees#what-is-the-amount-of-the-caller-fee). 
+Any user will be able to call the contract. The first to do so each day will pay for remittance of tokens but will also be [rewarded with fees](fees#what-is-the-amount-of-the-caller-fee). 
 
 
 

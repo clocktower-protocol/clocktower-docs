@@ -25,7 +25,7 @@ In each of these examples their is a single user who only interacts with the con
 
 ## Two Users
 
-A more complex example is where two users use contracts as an intermediary to interact with the each other. Sometimes this interaction is understood, sometimes the contract blinds each of the user to the existence of the other. Examples are:
+A more complex example is where two users use contracts as an intermediary to interact with the each other. Sometimes this interaction is understood, sometimes the contract blinds each of the users to the existence of the other. Examples are:
 
 - Transfers of tokens between users
 - AMM Dexes where users swap or pool
@@ -55,25 +55,9 @@ In order to understand the way the Clocktower protocol works its best to think a
 
 Since we are focusing on subscriptions for the first version of the protocol we will hereafter refer to the Sender Receiver and Caller as Subscriber, Provider and Caller which are more specific to subscriptions. 
 
-## Differing relationships
-
-### One to One
-
-- Transactions
-- Escrow Payments
-
-### One to Many
-
-- Payroll
-- Bulk Payments
-- Estate Planning
-
-### Many to One
-
-Subscriptions
 
 ## The importance of the Caller
 
 While sending and receiving is one of the simplest functions of blockchains as seen in simple transfer it is the inclusion of the Caller who polls the contract at regular intervals that gives the ClockTower protocol its time awareness. 
 
-While it might seem simple to just add an additional user that polls the contract. We will see in the next section how incentives and structure all work together to make each user stay in their lanes. 
+While it might seem simple to just add an additional user that polls the contract. We will see in the next section how incentives and structure all work together to make each user follow their role. 

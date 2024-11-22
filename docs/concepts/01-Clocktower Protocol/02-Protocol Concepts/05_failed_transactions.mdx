@@ -17,7 +17,7 @@ Therefore when the caller function makes its periodic check for scheduled transa
 
 In order to avoid attacks on the contract the protocol must create expenses born by the subscriber that make failure costly enough that even a malicious user would want to avoid failing. 
 
-Lets see how this works based on different situations. 
+Lets see how this works in different situations. 
 
 ### Problems
 
@@ -25,7 +25,7 @@ Lets see how this works based on different situations.
 
 If the subscriber has revoked their approval for Clocktower to move funds from their account the transaction will fail. 
 
-When a subscription fails because of lack of approval two things must be done
+When a subscription fails because of lack of approval two things must be done:
 
 - The subscriber must be unsubscribed by the caller.
 - A majority of the [fee balance](fees#caller-fee-reserve) must be refunded to the Provider with a smaller amount going to the caller. 
@@ -34,9 +34,9 @@ But why is this necessary?
 
 #### Unsubscribing
 
-- Even though the contract no longer has approval to remit funds the subscriber is still subscribed to the subscription. So if approval continues to remain revoked the subscription will fail every cycle creating never-ending cost to the caller with no compensation. 
+- Even though the contract no longer has approval to remit funds, the subscriber is still subscribed to the subscription. So if approval continues to remain revoked the subscription will fail every cycle creating never-ending cost to the caller with no compensation. 
 
-- since its cheaper gas-wise for the subscriber to revoke approval than to cancel the subscription subscribers will choose revoking approval as a method of unsubscribing. 
+- Since its cheaper gas-wise for the subscriber to revoke approval than to cancel the subscription subscribers will choose revoking approval as a method of unsubscribing. 
 
 While there are normal reasons for accidentally revoking approval the above two conditions require that the user must be unsubscribed from the subscription automatically by the caller upon failure. If the subscriber revoked approval in error then they will now need to resubscribe costing additional gas.
 
