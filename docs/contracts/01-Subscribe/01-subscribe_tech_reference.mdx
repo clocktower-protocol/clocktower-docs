@@ -16,14 +16,29 @@ title: Technical Reference
 - Future Transactions -- Unixtime / 3600 (Unix Hours)
 
 ## Data Structures
-The following are the data structs required by external functions:
+The following are the data structs required or returned by external functions:
 
 ### Subscription Data
 
 #### Structs
 
-##### Subscription
+##### Account
+```
+struct Account {
+    address accountAddress;
+    bool exists;
+    SubIndex[] subscriptions;
+    SubIndex[] provSubs;
+}
+```
+| Name | Type | Description|
+|---|---|---|
+| `accountAddress` | address | Unique account address |
+| `exists` | bool | True if account exists |
+| `subscriptions` | Array of [SubIndex](#subindex) structs | All subscriptions subscribed to by account |
+| `provSubs` | Array of [SubIndex](#subindex) structs | All subscriptions created by account |
 
+##### Subscription
 ```
  struct Subscription {
     bytes32 id;
@@ -34,7 +49,6 @@ The following are the data structs required by external functions:
     bool cancelled;
     Frequency frequency;
     uint16 dueDay;
-    string description;
 }
 ```
 | Name | Type | Description|
@@ -47,8 +61,22 @@ The following are the data structs required by external functions:
 | `cancelled` | bool | True if subscription is cancelled |
 | `frequency` | Frequency | [Frequency](#frequency) |
 | `dueDay` | uint16 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
-| `description` | string | Description of subscription |
 
+##### SubIndex
+```
+struct SubIndex {
+    bytes32 id;
+    uint16 dueDay;
+    Frequency frequency;
+    Status status;
+}
+```
+| Name | Type | Description|
+|---|---|---|
+| `id` | bytes32 | Unique id of subscription |
+| `dueDay` | uint16 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
+| `frequency` | frequency | [Frequency](#frequency) |
+| `status` | Status | Status | [Status](#status) |
 
 ##### SubView
 ```
