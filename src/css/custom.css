@@ -34,8 +34,8 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --letter-spacing: 3px;
-  --font-family: "Univia", sans-serif;
+  --letter-spacing: 2px;
+  --font-family: "Satoshi", sans-serif;
   /*
   --ifm-color-primary: #2e8555;
   --ifm-color-primary-dark: #29784c;
