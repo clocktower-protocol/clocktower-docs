@@ -12,6 +12,9 @@ title: Technical Reference
 - Quarterly Subscriptions -- 1 - 90 (Day of Quarter)
 - Yearly Subscription -- 1 - 365 (Day of Year  (not including leap days))
 
+### Decimals 
+All ERC20 values are stored in the contract as 18 decimals and are converted before interacting with the token contracts. 
+
 ## Data Structures
 The following are the data structs required or returned by external functions:
 
@@ -49,7 +52,7 @@ struct Account {
 | Name | Type | Description|
 |---|---|---|
 | `id` | bytes32 | Unique hash generated for each subscription |
-| `amount` | uint | Amount of subscription in wei |
+| `amount` | uint | Amount of subscription in wei (18 decimals) |
 | `provider` | address | Address of the creator of the subscription |
 | `token` | address | ERC20 address of token used in subscription |
 | `exists` | bool | True if subscription exists |
@@ -96,7 +99,7 @@ struct FeeEstimate {
 ```
 | Name | Type | Description|
 |---|---|---|
-| `fee` | uint | Fee amount in wei |
+| `fee` | uint | Fee amount in wei (18 decimals) |
 | `token` | address | ERC20 address of token |
 
 #### SubscriberView
@@ -237,7 +240,7 @@ Log emitted during subscription events
 | `subscriber` | address | :heavy_check_mark: | Address of subscriber |
 | `provider` | address | :heavy_check_mark: | Address of provider |
 | `timestamp` | uint40 | | Unix Epoch timestamp |
-| `amount` | uint | | ERC20 subscription amount in wei |
+| `amount` | uint | | ERC20 subscription amount in wei (18 decimals) |
 | `token` | address | | ERC20 address of token used in subscription |
 | `subScriptEvent` | SubScriptEvent | | [SubScriptEvent](#subscriptevent) |
 
@@ -399,8 +402,27 @@ Parameters:
 |---|---|---|
 | `subscription` | Subscription | [Subscription](#subscription) |
 
+#### remit
+```
+function remit()
+```
+Function that remits payments between the subscriber and provider and increments time
 
 ### View Functions
+#### getAccount
+```
+function getAccount(
+    address account
+    ) returns (Account)
+```
+Returns Account struct based on address
+
+Parameters:
+
+| Name | Type | Description |
+|---|---|---|
+| `account` | address | Account address
+
 #### getAccountSubscriptions
 ```
 function getAccountSubscriptions(
@@ -432,7 +454,7 @@ function getTotalSubscribers(
     ) returns (uint)
 ```
 
-Returns total number of subscribers so user can iterate through accountLookup() array.
+Returns total number of subscribers.
 
 Return Value:
 
@@ -746,14 +768,14 @@ Parameters:
 |---|---|---|
 | `unixTime` | uint | Unix time value |
 | `dueDay` | uint40 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
-| `fee` | uint | Fee amount in wei |
+| `fee` | uint | Fee amount in wei (18 decimals) |
 | `frequency` | uint8 | [Frequency](#frequency) |
 
 Return Value:
 
 | Name | Type | Description |
 |---|---|---|
-| `uint` | uint | Prorated amount of susbcription in wei |
+| `uint` | uint | Prorated amount of susbcription in wei (18 decimals) |
 
 Code: 
 
