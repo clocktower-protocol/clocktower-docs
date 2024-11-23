@@ -84,7 +84,7 @@ const config = {
       navbar: {
         
         title: 'Clocktower',
-
+        hideOnScroll: false,
         /*
         logo: {
           alt: 'My Site Logo',

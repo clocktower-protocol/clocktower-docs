@@ -5,14 +5,22 @@
  */
 
  
+ 
  @font-face {
   font-family: "Univia";
   src: url("/static/fonts/univiapro-regular-webfont.woff2") format("woff2");
 }
+  
+  @font-face {
+    font-family: "Satoshi";
+    src: url("/static/fonts/Satoshi-Medium.woff2") format("woff2");
+  }
+
 
  .navbar {
   height: 75px;
-  font-family: "Univia", sans-serif;
+  font-family: var(--font-family); 
+  letter-spacing: var(--letter-spacing);
  }
 
 .navbar__title {
@@ -20,11 +28,14 @@
 }
 
 .footer {
-  font-family: "Univia", sans-serif;
+  font-family: var(--font-family);
+  letter-spacing: var(--letter-spacing);
 }
 
 /* You can override the default Infima variables here. */
 :root {
+  --letter-spacing: 3px;
+  --font-family: "Univia", sans-serif;
   /*
   --ifm-color-primary: #2e8555;
   --ifm-color-primary-dark: #29784c;
