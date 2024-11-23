@@ -34,6 +34,17 @@ const config = {
     locales: ['en', 'es'],
   },
 
+  //fonts
+  headTags: [
+    {
+      tagName: "link",
+      attributes: {
+        rel: "stylesheet",
+        href: "/static/fonts/univiapro-regular-webfont.woff2",
+      },
+    },
+  ],
+
   presets: [
     [
       'classic',

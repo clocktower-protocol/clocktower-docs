@@ -4,9 +4,24 @@
  * work well for content-centric websites.
  */
 
+ 
+ @font-face {
+  font-family: "Univia";
+  src: url("/static/fonts/univiapro-regular-webfont.woff2") format("woff2");
+}
+
  .navbar {
   height: 75px;
+  font-family: "Univia", sans-serif;
  }
+
+.navbar__title {
+  font-size: 1.5rem; /* Adjust the size as needed */
+}
+
+.footer {
+  font-family: "Univia", sans-serif;
+}
 
 /* You can override the default Infima variables here. */
 :root {
