@@ -6,8 +6,8 @@ import Layout from '@theme/Layout';
 import MainImage from '@site/static/img/interior_rotated2.jpg';
 import Translate, {translate} from '@docusaurus/Translate';
 import TowerImage from '@site/static/img/towerside.jpeg';
-import WiresImage from '@site/static/img/wires.jpeg'
-import ChurchImage from '@site/static/img/church.jpg'
+import WiresImage from '@site/static/img/wires3.jpeg'
+import ChurchImage from '@site/static/img/church2.jpg'
 
 
 import styles from './index.module.css';

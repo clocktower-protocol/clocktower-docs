@@ -4,6 +4,10 @@
  * work well for content-centric websites.
  */
 
+ .navbar {
+  height: 75px;
+ }
+
 /* You can override the default Infima variables here. */
 :root {
   /*
