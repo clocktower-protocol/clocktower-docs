@@ -58,7 +58,7 @@ struct Account {
 | `exists` | bool | True if subscription exists |
 | `cancelled` | bool | True if subscription is cancelled |
 | `frequency` | Frequency | [Frequency](#frequency) |
-| `dueDay` | uint16 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
+| `dueDay` | uint16 | Day in frequency [range](#time-ranges) when subscription is paid |
 
 #### SubIndex
 ```
@@ -72,7 +72,7 @@ struct SubIndex {
 | Name | Type | Description|
 |---|---|---|
 | `id` | bytes32 | Unique id of subscription |
-| `dueDay` | uint16 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
+| `dueDay` | uint16 | Day in frequency [range](#time-ranges) when subscription is paid |
 | `frequency` | frequency | [Frequency](#frequency) |
 | `status` | Status | Status | [Status](#status) |
 
@@ -333,7 +333,7 @@ Parameters:
 | `details` | Details | [Details](#details) |
 | `description` | string | Description of subscription |
 | `frequency` | Frequency | [Frequency](#frequency) |
-| `dueDay` | uint16 | Day in [range](#allowed-time-ranges) based on frequency when subscription is paid |
+| `dueDay` | uint16 | Day in [range](#time-ranges) based on frequency when subscription is paid |
 
 #### subscribe
 ```
@@ -500,7 +500,7 @@ Parameters:
 |---|---|---|
 | `id` | bytes32 | Unique subscription id |
 | `frequency` | Frequency | [Frequency](#frequency) |
-| `dueDay` | uint16 | Day in [range](#allowed-time-ranges) based on frequency when subscription is paid |
+| `dueDay` | uint16 | Day in [range](#time-ranges) based on frequency when subscription is paid |
 
 Return Value:
 
@@ -767,7 +767,7 @@ Parameters:
 | Name | Type | Description |
 |---|---|---|
 | `unixTime` | uint | Unix time value |
-| `dueDay` | uint40 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
+| `dueDay` | uint40 | Day in frequency [range](#time-ranges) when subscription is paid |
 | `fee` | uint | Fee amount in wei (18 decimals) |
 | `frequency` | uint8 | [Frequency](#frequency) |
 

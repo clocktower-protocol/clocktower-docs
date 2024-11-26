@@ -5,7 +5,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import MainImage from '@site/static/img/interior_rotated2.jpg';
 import Translate, {translate} from '@docusaurus/Translate';
-import TowerImage from '@site/static/img/towerside.jpeg';
+//import TowerImage from '@site/static/img/towerside.jpeg';
 import WiresImage from '@site/static/img/wires3.jpeg'
 import ChurchImage from '@site/static/img/church2.jpg'
 
@@ -16,7 +16,7 @@ function HomepageHeader() {
   //const {siteConfig} = useDocusaurusContext();
   return (
     <div>
-      <div style={{paddingTop: "10px"}}>
+      <div style={{paddingTop: "20px"}}>
         <h1 className={styles.heroBanner}>Subscriptions for Everyone</h1>
       </div>
       <div className={styles.imageContainer}>
