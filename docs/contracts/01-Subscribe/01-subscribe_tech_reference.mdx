@@ -212,8 +212,8 @@ enum SubscriptEvent {
 
 | Name | Type | Description| Format |
 |---|---|---|---|
-| `callerFee` | uint | Percentage paid to caller on remits | 10000 = No fee, 10100 = 1%, 10001 = 0.01% |
-| `systemFee` | uint | Flat fee paid to admin account when systemFee bool is true | wei |
+| `callerFee` | uint | Percentage of subscriptions paid to caller on remits | 10000 = No fee, 10100 = 1%, 10001 = 0.01% |
+| `systemFee` | uint | Percentage of caller fee paid to system when systemFee bool is true | 10000 = No fee, 10100 = 1%, 10001 = 0.01% |
 | `maxRemits` | uint | Maximum number of remits per remit function (usually based on block max) | |
 | `admin` | address | Address for admin account |
 | `nextUncheckedDay` | uint40 | Last time remit was called | Unix epoch time |
