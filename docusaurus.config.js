@@ -117,12 +117,10 @@ const config = {
                 to: 'pathname:///wp/v5_whitepaper.pdf',
                 label: 'Whitepaper',
               },
-              /*
               {
                 label: 'Github',
-                to: 'https://google.com',
+                to: 'https://github.com/Clocktower-LLC',
               },
-              */
               
             ],
             position: 'right',
@@ -218,7 +216,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/Clocktower-LLC',
               },
             ],
           },
