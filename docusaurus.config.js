@@ -119,7 +119,7 @@ const config = {
               },
               {
                 label: 'Github',
-                to: 'https://github.com/Clocktower-LLC',
+                to: 'https://github.com/clocktower-protocol',
               },
               
             ],
