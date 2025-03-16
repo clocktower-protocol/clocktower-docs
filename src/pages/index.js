@@ -20,7 +20,7 @@ function HomepageHeader() {
         <h1 className={styles.heroBanner}>Subscriptions for Everyone</h1>
       </div>
       <div className={styles.imageContainer}>
-        <img src={MainImage} alt={
+        <img src={MainImage} className={styles.imageFitter} alt={
               translate({
                 message: 'Main Image',
                 description: 'The homepage main image alt message',
