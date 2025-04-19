@@ -1,7 +1,7 @@
 export async function onRequest(context) {
     const { request, next, env } = context;
-    const USERNAME = env.CFP_USERNAME || 'your-username'; // Fallback if env var is missing
-    const PASSWORD = env.CFP_PASSWORD || 'your-password'; // Fallback if env var is missing
+    const USERNAME = env.CFP_USERNAME; 
+    const PASSWORD = env.CFP_PASSWORD; 
     const REALM = 'Secure Docusaurus Site';
   
     const authorization = request.headers.get('authorization');
