@@ -12,7 +12,7 @@ const config = {
 
   // Set the production url of your site here
   //url: 'https://clocktowerdev.com',
-  url: 'http://localhost:8787',
+  url: 'https://clocktower-docs.pages.dev',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
