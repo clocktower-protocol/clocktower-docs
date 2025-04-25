@@ -24,7 +24,6 @@ The following are the data structs required or returned by external functions:
 ```
 struct Account {
     address accountAddress;
-    bool exists;
     SubIndex[] subscriptions;
     SubIndex[] provSubs;
 }
@@ -32,7 +31,6 @@ struct Account {
 | Name | Type | Description|
 |---|---|---|
 | `accountAddress` | address | Unique account address |
-| `exists` | bool | True if account exists |
 | `subscriptions` | Array of [SubIndex](#subindex) structs | All subscriptions subscribed to by account |
 | `provSubs` | Array of [SubIndex](#subindex) structs | All subscriptions created by account |
 
@@ -43,7 +41,6 @@ struct Account {
     uint amount;
     address provider;
     address token;
-    bool exists;
     bool cancelled;
     Frequency frequency;
     uint16 dueDay;
@@ -55,7 +52,6 @@ struct Account {
 | `amount` | uint | Amount of subscription in wei (18 decimals) |
 | `provider` | address | Address of the creator of the subscription |
 | `token` | address | ERC20 address of token used in subscription |
-| `exists` | bool | True if subscription exists |
 | `cancelled` | bool | True if subscription is cancelled |
 | `frequency` | Frequency | [Frequency](#frequency) |
 | `dueDay` | uint16 | Day in frequency [range](#time-ranges) when subscription is paid |
@@ -75,6 +71,24 @@ struct SubIndex {
 | `dueDay` | uint16 | Day in frequency [range](#time-ranges) when subscription is paid |
 | `frequency` | frequency | [Frequency](#frequency) |
 | `status` | Status | Status | [Status](#status) |
+
+#### PageStart
+```
+struct PageStart {
+    bytes32 id;
+    uint256 subscriberIndex;
+    uint256 subscriptionIndex;
+    uint256 frequency;
+    bool initialized;
+}
+```
+| Name | Type | Description|
+|---|---|---|
+|`id` | bytes32 | Unique id of subscription where pagination starts |
+|`subscriberIndex` | uint256 | Index within remit call linked to subscriber |
+|`subscriptionIndex` | uint256 | Index within remit call link edto subscription |
+|`frequency` | uint256 | Frequency index within remit call |
+|`initialized` | bool | Boolean whether pagination is occuring or not |
 
 #### SubView
 ```
@@ -102,6 +116,22 @@ struct FeeEstimate {
 | `fee` | uint | Fee amount in wei (18 decimals) |
 | `token` | address | ERC20 address of token |
 
+#### ApprovedToken 
+```
+struct ApprovedToken {
+    address tokenAddress;
+    uint8 decimals;
+    bool paused;
+    uint256 minimum;
+}
+```
+| Name | Type | Description|
+|---|---|---|
+|`tokenAddress` | address | Contract address of approved ERC20 token |
+|`decimals` | uint8 | Native decimal amount of token |
+|`paused` | bool | Is token paused |
+|`minimum` | uint256 | Minimum amount per subscription (in 10^18) |
+
 #### SubscriberView
 ```
 struct SubscriberView {
@@ -125,6 +155,26 @@ struct Details {
 |---|---|---|
 | url | string | URL of Subscription |
 | description | string | Description of Subscription |
+
+#### ProviderDetails 
+```
+struct ProviderDetails {
+    string description;
+    string company;
+    string url;
+    string domain;
+    string email;
+    string misc;
+}
+```
+| Name | Type | Description|
+|---|---|---|
+| description | string | Description of provider |
+| company | string | Provider company |
+| url | string | Provider url |
+| domain | string | Provider domain |
+| email | string | Provider email |
+| misc | string | Provider miscellaneous |
 
 #### Time
 ```
@@ -216,9 +266,26 @@ enum SubscriptEvent {
 | `systemFee` | uint | Percentage of caller fee paid to system when systemFee bool is true | 10000 = No fee, 10100 = 1%, 10001 = 0.01% |
 | `maxRemits` | uint | Maximum number of remits per remit function (usually based on block max) | |
 | `admin` | address | Address for admin account |
-| `nextUncheckedDay` | uint40 | Last time remit was called | Unix epoch time |
+| `nextUncheckedDay` | uint40 | Day index of day that has not been remitted | Day index |
 
 ## Events
+#### UList
+```
+event UList(
+    uint40 indexed timestamp, 
+    bytes32 indexed id, 
+    address indexed subscriber
+)
+```
+
+Log emitted when subscriber unsubscribes during pagination
+
+| Name | Type | Indexed | Description |
+|---|---|:---:|---|
+| `timestamp` | uint40 | :heavy_check_mark: | Unix Epoch timestamp |
+| `id` | bytes32 | :heavy_check_mark: | Unique Susbcriber id |
+| `subscriber` | address | :heavy_check_mark: | Address of subscriber |
+
 #### SubLog
 ```
 event SubLog(
@@ -258,8 +325,8 @@ Log emitted during Caller events
 
 | Name | Type | Indexed | Description |
 |---|---|:---:|---|
-| `timestamp` | uint40 | | Unix epoch timestamp |
-| `checkedDay` | uint40 | | Day in frequency range checked by Caller |
+| `timestamp` | uint40 | :heavy_check_mark: | Unix epoch timestamp |
+| `checkedDay` | uint40 | :heavy_check_mark: | Day in frequency range checked by Caller |
 | `caller` | address | :heavy_check_mark: | Address of caller |
 | `isFinished` | bool | | Shows if Caller is done |
 
@@ -301,12 +368,32 @@ Log emitted when Provider details are changed
 |---|---|:---:|---|
 | `provider` | address | :heavy_check_mark: | Provider address |
 | `timestamp` | uint40 | :heavy_check_mark: | Unix epoch timestamp |
-| `description` | string | | Description of Provider |
+| `description` | string | :heavy_check_mark: | Description of Provider |
 | `company` | string | | Company of Provider |
 | `url` | string | | URL of Provider |
 | `domain` | string | | Domain of Provider |
 | `email` | string | | Email of Provider |
 | `misc` | string | | Misc field for Provider |
+
+#### Coordinates
+```
+event Coordinates(
+    bytes32 indexed id,
+    uint256 subscriberIndex,
+    uint256 subscriptionIndex,
+    uint256 frequency,
+    uint40 indexed nextUncheckedDay
+)
+```
+Log emitted when remitting showing the pagination coordinates
+| Name | Type | Indexed | Description |
+|---|---|:---:|---|
+| `id` | bytes32 | :heavy_check_mark: | Unique subscription id |
+| `subscriberIndex` | uint256 |  | Index within remit call linked to subscriber |
+| `subscriptionIndex` | uint256 | | Index within remit call linked to subscription |
+| `frequency` | uint256 | | Frequency index within remit call |
+| `nextUncheckedDay` | uint40 |  :heavy_check_mark: | Day index of day that has not been remitted |
+
 
 ## Functions
 ### Subscription Functions
@@ -320,7 +407,7 @@ function createSubscription(
     string description, 
     Frequency frequency, 
     uint16 dueDay
-) external payable
+) external
 ```
 Allows provider to create a new subscription. 
 
@@ -339,7 +426,7 @@ Parameters:
 ```
 function subscribe(
     Subscription subscription
-) external payable
+) external
 ```
 Allows user to subscribe to subscription
 
@@ -354,7 +441,7 @@ Parameters:
 ```
 function unsubscribe(
     Subscription subscription
-) external payable
+) external
 ```
 Allows user to unsubscribe from subscription. 
 
@@ -483,47 +570,28 @@ Return Value:
 |---|---|---|
 | `SubscriberView[]` | SubscriberView | Array of [SubscriberView](#subscriberview) structs |
 
-#### getSubByIndex
+#### getUnsubscribedLength
 ```
-function getSubByIndex(
-    bytes32 id, 
-    Frequency frequency, 
-    uint16 dueDay
-    ) view public returns(Subscription subscription)
+function getUnsubscribedLength(
+    bytes32 id 
+    ) external view returns (uint256)
 ```
 
-Returns subscription object
+Returns number of users in the unsubscribed during pagition mapping
 
-Parameters: 
+Parameters:
 
 | Name | Type | Description |
 |---|---|---|
 | `id` | bytes32 | Unique subscription id |
-| `frequency` | Frequency | [Frequency](#frequency) |
-| `dueDay` | uint16 | Day in [range](#time-ranges) based on frequency when subscription is paid |
 
-Return Value:
+Return Value: 
 
 | Name | Type | Description |
 |---|---|---|
-| `subscription` | Subscription | [Subscription](#subscription) |
+| `uint256` | uint256 | Number of users in the unsubscribed during pagition mapping |
 
-
-#### feeEstimate
-```
-function feeEstimate(
-
-) returns(FeeEstimate[]) 
-```
-Returns an array of objects showing the next batch of remits and possible fees
-
-Return Value:
-
-| Name | Type | Description |
-|---|---|---|
-| `FeeEstimate[]` | FeeEstimate | Array of [FeeEstimate](#feeestimate) structs |
-
-#### Time Functions
+### Time Functions
 
 ##### unixToTime
 ```
@@ -578,7 +646,7 @@ for(uint monthCounter = 1; monthCounter <= month; monthCounter++) {
     if(monthCounter == month) {
         dayCounter += day;
     } else {
-        dayCounter += getDaysInMonth(uintyear, month);
+        dayCounter += getDaysInMonth(uintyear, monthCounter);
     }
 }
 
@@ -800,6 +868,13 @@ if(frequency == 0) {
 } else if (frequency == 2) {
     currentDay = getdayOfQuarter(time.yearDay, time.year);
     max = 90;
+    //adjusts for different sized quarters
+    if(currentDay == 92) {
+        max = 92;
+    }
+    if(currentDay == 91) {
+        max = 91;
+    }
 //yearly
 } else if (frequency == 3) {
     currentDay = time.yearDay;

@@ -2,7 +2,7 @@
 id: error_codes
 title: Error Codes
 sidebar_position: 3
---- 
+---
 
 # Error Codes
 
@@ -17,7 +17,7 @@ ClockTowerSubscribe.sol
 - `6` : Time already checked
 - `7` : Must have admin privileges
 - `8` : Must be provider of subscription
-- `9` : Subscriber not subscribed
+- `9` : Subscriber not subscribed or already subscribed
 - `10` : Either token allowance or balance insufficient
 - `11` : Problem sending refund
 - `12` : Problem sending fees
@@ -28,4 +28,10 @@ ClockTowerSubscribe.sol
 - `17` : Must be between 1 and 365
 - `18` : Amount below token minimum
 - `19` : Reentrancy attempt
+- `20` : Token paused
+- `21` : Above Cancel Subscriber Limit
+- `22` : No Subscribers
+- `23` : Subscription is cancelled
+- `24` : Cant subscribe while paginating
+- `25` : Already subscribed
 

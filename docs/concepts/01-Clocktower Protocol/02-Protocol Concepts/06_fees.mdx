@@ -14,9 +14,11 @@ As described in [failed transactions](failed_transactions) the best way to pay f
 
 Currently the caller fee is different based upon the average gas levels of the chain the contract is on. The fee can be adjusted by the protocol. The fees currently are as follows:
 
-| Chain | Fee Percentage |
-|---|---|
-| Base | 1% |
+<div style={{ textAlign: 'center' }}>
+| Chain | Caller Fee Percentage | System Fee Percentage |
+|---|---|---|
+| Base Sepolia | 0.2% | 0.04% |
+</div>
 
 ### Caller Fee Reserve
 
@@ -64,7 +66,6 @@ The protocol has the ability to require system fees in order to fund the eventua
 
 This fee is taken as a percentage of the caller fee. 
 
-Currently the fee is turned off but the protocol reserves the right to turn it on at some point in the future. 
 
 
 
