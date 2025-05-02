@@ -134,7 +134,7 @@ const config = {
           },
           */
           {
-            to: 'https://app.clocktowerdev.com', // The path you want to link to
+            to: 'https://app.clocktower.finance', // The path you want to link to
             label: 'App', // The text on the button
             position: 'right', // Positioning on the navbar
             className: 'button button--secondary button--lg', // CSS classes for styling
