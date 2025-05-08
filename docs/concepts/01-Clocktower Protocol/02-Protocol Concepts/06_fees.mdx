@@ -15,9 +15,9 @@ As described in [failed transactions](failed_transactions) the best way to pay f
 Currently the caller fee is different based upon the average gas levels of the chain the contract is on. The fee can be adjusted by the protocol. The fees currently are as follows:
 
 <div style={{ textAlign: 'center' }}>
-| Chain | Caller Fee Percentage | System Fee Percentage |
-|---|---|---|
-| Base Sepolia | 0.2% | 0.04% |
+| Chain | Caller Fee | System Fee | Total Fee
+|---|---|---|---|
+| Base Sepolia | 0.25% | 0.25% | 0.5%
 </div>
 
 ### Caller Fee Reserve
@@ -31,22 +31,29 @@ The reserve for subscribers is filled at two points in time:
 
 #### Is it the same amount for each subscription?
 
-The reserve is filled at different amounts based upon the frequency of the subscription and whether this when it is first subscribed or later:
+The reserve is filled at different amounts based upon the frequency of the subscription and whether this is the first time the user has subscribed:
 
 ##### When the user first subscribes
 
-| Frequency | Amount reserved | 
-|---|---|
-| First time | Prorated |
+<div style={{ textAlign: 'center' }}>
+| Frequency | Minimum | In Between | Maximum | Maximum Time Charged |
+|---|---|---|---|---|
+| Weekly | Caller Fee | Prorated | Prorated | Prorated |
+| Monthly | Caller Fee | Prorated | 1/4 Amount | A weeks worth |
+| Quarterly | Caller Fee | Prorated | 1/12 Amount | A weeks worth |
+| Yearly | Caller Fee | Prorated | 1/12 Amount | A months worth |
+</div>
 
 ##### Subsequent fees 
 
-| Frequency | Amount reserved | 
-|---|---|
-| Weekly | Full Amount |
-| Monthly | Full Amount |
-| Quarterly | 1/3 Amount |
-| Yearly | 1/12 Amount |
+<div style={{ textAlign: 'center' }}>
+| Frequency | Amount reserved | Maximum Time Charged |
+|---|---|---|
+| Weekly | Full Amount | A week |
+| Monthly | 1/4 Amount | A week |
+| Quarterly | 1/12 Amount | A week |
+| Yearly | 1/12 Amount | A month |
+</div>
 
 #### How are refunds processed?
 
@@ -64,7 +71,6 @@ Depending on the reason for the refund the is sent to different locations based 
 
 The protocol has the ability to require system fees in order to fund the eventual ongoing development of the protocol. 
 
-This fee is taken as a percentage of the caller fee. 
 
 
 
