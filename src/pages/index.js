@@ -29,7 +29,7 @@ function HomepageHeader() {
       </div>
       <div className={styles.doubleBoxGridContainer}>
         <div className={styles.doubleBoxText}>
-          <h1 className={styles.banner2}>Decentralized <p></p>Reoccuring <p></p> Crypto Payments</h1>
+          <h1 className={styles.banner2}>Decentralized <p></p>Recurring <p></p> Crypto Payments</h1>
         </div>
         <div className={styles.doubleBoxImage}>
           <img className={styles.imageFitter} src={ChurchImage} alt="towerimage"></img>
