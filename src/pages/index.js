@@ -40,7 +40,7 @@ function HomepageHeader() {
             <img className={styles.imageFitter} src={WiresImage} alt="wiresimage"></img>
         </div>
         <div className={styles.doubleBoxText}>
-            <h1 className={styles.banner3}>Its Time</h1>
+            <h1 className={styles.banner3}>It's Time</h1>
         </div>
       </div>
     </div>

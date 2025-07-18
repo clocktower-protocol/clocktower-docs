@@ -8,7 +8,7 @@ sidebar_position: 5
 
 ### Reasons for failure
 
-In an open ended setup like subscriptions where transactions are scheduled indefinitley there will occur situations where a subscriber fails. This can occur for two reasons:
+In an open ended setup like subscriptions where transactions are scheduled indefinitely there will occur situations where a subscriber fails. This can occur for two reasons:
 
 - Not enough approval
 - Not enough funds
@@ -46,7 +46,7 @@ There are situations where a malicious subscriber would intentionally fail.
 
 #### DOS and Griefing attacks
 
-A subscriber could intentionally fail to create unremeimbursed gas costs for the caller. This money losing situation could create too many losses for the caller making it uneconomical and therefore stopping the contract from incrementing through time. 
+A subscriber could intentionally fail to create unreimbursed gas costs for the caller. This money losing situation could create too many losses for the caller making it uneconomical and therefore stopping the contract from incrementing through time. 
 
 But by giving enough of the forfeited fee balance to compensate for gas costs on failure these losses are mitigated. But why not give ALL the forfeited balance to the caller?
 
