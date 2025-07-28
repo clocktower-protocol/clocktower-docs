@@ -1,41 +1,50 @@
-# Website
+# Clocktower Documentation
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+[![Clocktower](https://img.shields.io/badge/Clocktower-Its%20Time-blue)](https://clocktower.finance)
+[![Docusaurus](https://img.shields.io/badge/Docusaurus-3.4.1-brightgreen)](https://docusaurus.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D16.14-brightgreen)](https://nodejs.org/)
 
-### Installation
+This repository contains the documentation for the **Clocktower Protocol** - a decentralized system that enables time-aware processes on the Ethereum blockchain. Built with [Docusaurus](https://docusaurus.io/), this documentation site provides comprehensive guides, technical references, and conceptual explanations for the Clocktower ecosystem.
 
-```
-$ yarn
-```
+## 🌟 What is Clocktower?
 
-### Local Development
+Clocktower is a decentralized system that allows for time-aware processes on the Ethereum blockchain. The Clocktower Protocol consists of EVM-compliant smart contracts that facilitate useful time-dependent functions for users, particularly focusing on recurring payments of ERC20 tokens.
 
-```
-$ yarn start
-```
+### Key Features
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+- **Decentralized Subscriptions**: Automated recurring payments without centralized intermediaries
+- **Time-Aware Smart Contracts**: Leverages blockchain timing for scheduled transactions
+- **Provider-Subscriber Model**: Enables content creators and service providers to monetize through subscriptions
+- **Incentivized Callers**: Network participants are rewarded for maintaining the time-based functions
+- **ERC20 Token Support**: Works with any ERC20 token for payments
 
-### Build
+## 📚 Documentation Structure
 
-```
-$ yarn build
-```
+The documentation is organized into several main sections:
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+- **Concepts**: Understanding the Clocktower Protocol fundamentals
+- **How-to Guides**: Step-by-step instructions for common tasks
+- **Contract Reference**: Technical documentation for smart contracts
+- **Whitepaper**: Academic and technical deep-dive
 
-### Deployment
+## 📄 License
 
-Using SSH:
+This documentation is part of the Clocktower Protocol project. Please refer to the main project repository for licensing information.
 
-```
-$ USE_SSH=true yarn deploy
-```
+## 🔗 Links
 
-Not using SSH:
+- **Live Site**: [https://clocktower.finance](https://clocktower.finance)
+- **Application**: [https://app.clocktower.finance](https://app.clocktower.finance)
+- **GitHub**: [https://github.com/clocktower-protocol](https://github.com/clocktower-protocol)
 
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
+## 📞 Support
 
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+If you need help with the documentation or have questions about the Clocktower Protocol:
+
+- Check the [Concepts section](docs/concepts/) for fundamental explanations
+- Review the [How-to guides](docs/howto/) for step-by-step instructions
+- Open an issue on GitHub for bug reports or feature requests
+
+---
+
+**Clocktower - It's Time** ⏰
