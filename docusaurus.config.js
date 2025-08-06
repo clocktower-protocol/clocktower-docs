@@ -203,12 +203,8 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
                 label: 'X',
-                href: 'https://twitter.com/docusaurus',
+                href: 'https://x.com/ct_protocol',
               },
             ],
           },
@@ -217,7 +213,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/Clocktower-LLC',
+                href: 'https://github.com/clocktower-protocol',
               },
             ],
           },
