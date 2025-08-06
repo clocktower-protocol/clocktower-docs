@@ -36,7 +36,7 @@ But why is this necessary?
 
 - Even though the contract no longer has approval to remit funds, the subscriber is still subscribed to the subscription. So if approval continues to remain revoked the subscription will fail every cycle creating never-ending cost to the caller with no compensation. 
 
-- Since its cheaper gas-wise for the subscriber to revoke approval than to cancel the subscription subscribers will choose revoking approval as a method of unsubscribing. 
+- Since its cheaper gas-wise for the subscriber to revoke approval than to cancel the subscription subscribers may choose revoking approval as a method of unsubscribing. 
 
 While there are normal reasons for accidentally revoking approval the above two conditions require that the user must be unsubscribed from the subscription automatically by the caller upon failure. If the subscriber revoked approval in error then they will now need to resubscribe costing additional gas.
 
@@ -46,7 +46,7 @@ There are situations where a malicious subscriber would intentionally fail.
 
 #### DOS and Griefing attacks
 
-A subscriber could intentionally fail to create unreimbursed gas costs for the caller. This money losing situation could create too many losses for the caller making it uneconomical and therefore stopping the contract from incrementing through time. 
+A subscriber could intentionally fail thus creating unreimbursed gas costs for the caller. This money losing situation could create too many losses for the caller making it uneconomical and therefore stopping the contract from incrementing through time. 
 
 But by giving enough of the forfeited fee balance to compensate for gas costs on failure these losses are mitigated. But why not give ALL the forfeited balance to the caller?
 
@@ -60,7 +60,7 @@ Since the subscriber would now constantly lose funds it mitigates the above atta
 
 If another vector arises then we have also given the creator of the subscription the ability to remove users from their list of subscribers with their own distinct method. 
 
-Above we have mentioned using a fee balance to pay the caller and mitigate attacks. But how does this actually work? We go over this in the next section. 
+Above we have mentioned using a fee balance to pay the caller and mitigate attacks. But how does this fee balance actually work? We go over this in the next section. 
 
 
 
