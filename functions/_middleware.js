@@ -1,5 +1,11 @@
 export async function onRequest(context) {
     const { request, next, env } = context;
+    
+    // Check if authentication is enabled via environment variable
+    if (env.ENABLE_AUTH !== 'true') {
+      return next();
+    }
+    
     const USERNAME = env.CFP_USERNAME; 
     const PASSWORD = env.CFP_PASSWORD; 
     const REALM = 'Secure Docusaurus Site';
