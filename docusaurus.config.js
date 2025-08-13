@@ -17,7 +17,7 @@ const config = {
   title: 'Clocktower',
   tagline: 'Its Time',
   favicon: 'img/favicon.ico',
-
+ 
   // Set the production url of your site here
   //url: 'https://clocktowerdev.com',
   url: 'https://clocktower.finance',
