@@ -47,6 +47,11 @@
     height: auto; /* Auto height */
     padding-top: 20px;
     padding-left: 15px; /* Reduce left padding */
+    padding-right: 15px; /* Add right padding for balance */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px; /* Ensure minimum height for text */
   }
   
   .doubleBoxImage {
@@ -58,11 +63,16 @@
     padding-left: 15px; /* Reduce left padding for mobile */
     padding-top: 20px;
     font-size: 1.5rem; /* Smaller font size */
+    text-align: center; /* Center text on mobile */
+    padding-right: 15px; /* Add right padding for balance */
   }
   
   .banner3 {
     padding-top: 20px;
     font-size: 1.5rem; /* Smaller font size */
+    text-align: center; /* Center text on mobile */
+    padding-left: 15px; /* Add left padding for balance */
+    padding-right: 15px; /* Add right padding for balance */
   }
 }
 
@@ -103,6 +113,8 @@
   padding-top: 5%;
   font-family: var(--font-family);
   letter-spacing: var(--letter-spacing);
+  word-wrap: break-word; /* Prevent text overflow */
+  hyphens: auto; /* Enable automatic hyphenation */
 }
 
 .banner3 {
@@ -111,6 +123,7 @@
   vertical-align: middle;
   font-family: var(--font-family);
   letter-spacing: var(--letter-spacing);
+  word-wrap: break-word; /* Prevent text overflow */
 }
 
 .doubleBoxGridContainer {
