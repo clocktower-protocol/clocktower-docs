@@ -1,38 +1,38 @@
 ---
 id: summary
-title: Summary
+title: Resumen
 sidebar_position: 1
 ---
 
-## Summary
+## Resumen
 
-(While Clocktower Protocol can support many different contracts supporting different types of timed transactions. For Versions 1.0 we will focus on subscriptions only)
+(Mientras que el Protocolo Clocktower puede soportar muchos contratos diferentes que soportan diferentes tipos de transacciones temporizadas. Para las Versiones 1.0 nos enfocaremos únicamente en suscripciones)
 
-Version 1 of the Clocktower Protocol is a decentralized blockchain based subscription service targeting [three sets of users](three_users#sender-receiver-caller): Providers, Subscribers and Callers. 
+La Versión 1 del Protocolo Clocktower es un servicio de suscripción descentralizado basado en blockchain dirigido a [tres conjuntos de usuarios](three_users#sender-receiver-caller): Proveedores, Suscriptores y Llamadores.
 
-### Providers
+### Proveedores
 
-Providers can create subscriptions either directly to the subscribe contract, through our frontend or through their own custom frontend.  
+Los proveedores pueden crear suscripciones directamente al contrato de suscripción, a través de nuestro frontend o a través de su propio frontend personalizado.
 
-After choosing details of the subscription such as the freqency, amount and due date they will then pay the blockchain fees and be given a unique URL to dissemenate to their subscribers. 
+Después de elegir los detalles de la suscripción como la frecuencia, cantidad y fecha de vencimiento, pagarán las tarifas de blockchain y recibirán una URL única para difundir a sus suscriptores.
 
-### Subscribers
+### Suscriptores
 
-After receiving the unique URL subscribers can then subscribe either directly through the contract, through our frontend or through the providers frontend. 
+Después de recibir la URL única, los suscriptores pueden suscribirse directamente a través del contrato, a través de nuestro frontend o a través del frontend del proveedor.
 
-Upon subsription they will be charged a prorated amount for the first cycle of the subscription. A portion of this amount will be stored in the contract as a [fee balance](fees#caller-fee-reserve). The rest is sent to the provider. 
+Al suscribirse, se les cobrará una cantidad prorrateada para el primer ciclo de la suscripción. Una parte de esta cantidad se almacenará en el contrato como un [saldo de tarifas](fees#caller-fee-reserve). El resto se envía al proveedor.
 
-On the due day the subscriber will be charged the subscription amount If they don't have enough tokens or have revoked approval the transaction will [fail](failed_transactions) and they will automatically be unsubscibed forfeiting the fee balance. 
+En la fecha de vencimiento, al suscriptor se le cobrará la cantidad de la suscripción. Si no tienen suficientes tokens o han revocado la aprobación, la transacción [fallará](failed_transactions) y automáticamente se darán de baja, perdiendo el saldo de tarifas.
 
-They can unsubscribe at anytime by calling the appropriate function. 
+Pueden darse de baja en cualquier momento llamando a la función apropiada.
 
-### Callers
+### Llamadores
 
-Callers are accounts that periodically call the contract function that pays the remittances and increments the time value for the contract. They are paid fees as compensation. 
+Los llamadores son cuentas que periódicamente llaman a la función del contrato que paga las remesas e incrementa el valor de tiempo para el contrato. Se les pagan tarifas como compensación.
 
-Initially the Caller will be restricted to the protocol operators. 
+Inicialmente, el Llamador estará restringido a los operadores del protocolo.
 
-Eventually any user will be able to call the contract. The first to do so each day will pay for remittance of tokens but will also be [rewarded with fees](fees#what-is-the-amount-of-the-caller-fee). 
+Eventualmente, cualquier usuario podrá llamar al contrato. El primero en hacerlo cada día pagará por la remesa de tokens pero también será [recompensado con tarifas](fees#what-is-the-amount-of-the-caller-fee). 
 
 
 
