@@ -1,75 +1,75 @@
 ---
 id: time_functions
-title: Time Functions
+title: Funciones de Tiempo
 sidebar_position: 7
 ---
 
-## Time
+## Tiempo
 
-The computational and human understanding of time is critical for the Clocktower Protocol. In order for the contract to schedule transactions in the future, it must know what time it is. We accomplish this by incentivizing the caller to poll the contract on a regular basis. 
+La comprensión computacional y humana del tiempo es crítica para el Protocolo Clocktower. Para que el contrato pueda programar transacciones en el futuro, debe saber qué hora es. Logramos esto incentivando al llamador para que consulte el contrato de manera regular.
 
-In order to actually schedule the transactions, we must translate different human beings understanding of time into something the contract can recognize and save. 
+Para programar realmente las transacciones, debemos traducir la comprensión del tiempo de diferentes seres humanos en algo que el contrato pueda reconocer y guardar.
 
-But first a digression into the basics of time. 
+Pero primero una digresión sobre los fundamentos del tiempo.
 
-### Two Time Systems
+### Dos Sistemas de Tiempo
 
-Our systems of time are ways for humans to capture regular natural occurances. Years represent how long it takes for the earth to move around the sun, days how long it takes the earth to spin around fully. Seconds roughly translate to the rhythm of a heartbeat and months to the cycle of the moon. 
+Nuestros sistemas de tiempo son formas para que los humanos capturen ocurrencias naturales regulares. Los años representan cuánto tiempo tarda la tierra en moverse alrededor del sol, los días cuánto tiempo tarda la tierra en girar completamente. Los segundos se traducen aproximadamente al ritmo de un latido del corazón y los meses al ciclo de la luna.
 
-While humans (and computers) prefer to think of abstractions in discrete terms, nature usually is not so cut and dry. For example, years don't perfectly line up with 365 days and the rotation of the earth slows down slightly over time. These variances have led to the evolution of two distinct time systems. 
+Si bien los humanos (y las computadoras) prefieren pensar en abstracciones en términos discretos, la naturaleza generalmente no es tan clara y seca. Por ejemplo, los años no se alinean perfectamente con 365 días y la rotación de la tierra se ralentiza ligeramente con el tiempo. Estas variaciones han llevado a la evolución de dos sistemas de tiempo distintos.
 
-#### Unix Time
+#### Tiempo Unix
 
-One of the easiest ways to measure time is to pick an arbitrary point in the past and increment a number at a regular interval. In computers one finds this most often in [Unix Time](https://en.wikipedia.org/wiki/Unix_time) which is a system where a number increments every second past midnight January 1st 1970. 
+Una de las formas más fáciles de medir el tiempo es elegir un punto arbitrario en el pasado e incrementar un número a intervalos regulares. En las computadoras, uno encuentra esto más a menudo en el [Tiempo Unix](https://en.wikipedia.org/wiki/Unix_time), que es un sistema donde un número se incrementa cada segundo después de la medianoche del 1 de enero de 1970.
 
-##### Leap Days and Leap Seconds
+##### Días Bisiestos y Segundos Bisiestos
 
-The problem is that nature doesn't increment so cleanly. In order to deal with the more analog and variable aspects of the slowing rotation of the earth and the fractional days of the year, time must be added or subtracted to the incrementation in order not to become disconnected from nature. 
+El problema es que la naturaleza no se incrementa tan limpiamente. Para lidiar con los aspectos más analógicos y variables de la rotación cada vez más lenta de la tierra y los días fraccionarios del año, se debe agregar o restar tiempo al incremento para no desconectarse de la naturaleza.
 
-Thus, leap days and leap seconds are added to keep things in sync. 
+Así, se agregan días bisiestos y segundos bisiestos para mantener las cosas sincronizadas.
 
-#### Gregorian Time
+#### Tiempo Gregoriano
 
-In order to deal with the days of the year problem most of the world uses the [Gregorian Calendar](https://en.wikipedia.org/wiki/Gregorian_calendar) credited to [Pope Gregory XIII](https://en.wikipedia.org/wiki/Pope_Gregory_XIII) and based on an [earlier version](https://en.wikipedia.org/wiki/Julian_calendar) designed by [Julius Caesar](https://en.wikipedia.org/wiki/Julius_Caesar). The key aspect of the Gregorian calendar is the addition of leap days on February 29th so sync up the calendar with the solar rotation of the earth. 
+Para lidiar con el problema de los días del año, la mayor parte del mundo usa el [Calendario Gregoriano](https://en.wikipedia.org/wiki/Gregorian_calendar) atribuido al [Papa Gregorio XIII](https://en.wikipedia.org/wiki/Pope_Gregory_XIII) y basado en una [versión anterior](https://en.wikipedia.org/wiki/Julian_calendar) diseñada por [Julio César](https://en.wikipedia.org/wiki/Julius_Caesar). El aspecto clave del calendario gregoriano es la adición de días bisiestos el 29 de febrero para sincronizar el calendario con la rotación solar de la tierra.
 
-## Time Ranges
+## Rangos de Tiempo
 
-Subscriptions are an open ended time series. You can't easily save an open ended series with an incrementing number. For instance theres no sane way to save the date "every 5th day of the month" using just unix time. You could theoretically save a long series of calculated dates in seconds after midnight Jan. 1st 1970. But this is inefficient and what happens if the subscription goes longer than the initial series of numbers. Now you have to recalculate somehow and add more. A *much* simpler solution is to use a Gregorian calendar point. 
+Las suscripciones son una serie temporal abierta. No puedes guardar fácilmente una serie abierta con un número incrementando. Por ejemplo, no hay una forma sensata de guardar la fecha "cada 5º día del mes" usando solo tiempo unix. Teóricamente podrías guardar una larga serie de fechas calculadas en segundos después de la medianoche del 1 de enero de 1970. Pero esto es ineficiente y ¿qué pasa si la suscripción dura más que la serie inicial de números? Ahora tienes que recalcular de alguna manera y agregar más. Una solución *mucho* más simple es usar un punto del calendario gregoriano.
 
-So for each type of frequency of subscription we simply create a range of numbers:
+Entonces, para cada tipo de frecuencia de suscripción, simplemente creamos un rango de números:
 
-| Frequency | Range |
+| Frecuencia | Rango |
 |---|---|
-| Weekly | 1 - 7 |
-| Monthly | 1 - 28 |
-| Quarterly | 1 - 90 |
-| Yearly | 1 - 365 |
+| Semanal | 1 - 7 |
+| Mensual | 1 - 28 |
+| Trimestral | 1 - 90 |
+| Anual | 1 - 365 |
 
-But now we've run into a problem. How do we translate this range number back and forth to unix time?
+Pero ahora nos hemos topado con un problema. ¿Cómo traducimos este número de rango de ida y vuelta al tiempo unix?
 
-### Julian Days
+### Días Julianos
 
-The best way to translate the block timestamp incremeting unix number to Gregorian [ranges](#time-ranges) is to use an intermediary incrementing day standard called [Julian Days](https://en.wikipedia.org/wiki/Julian_day). 
+La mejor manera de traducir el número unix incrementando del timestamp del bloque a [rangos](time_functions#time-ranges) gregorianos es usar un estándar de día incrementando intermedio llamado [Días Julianos](https://en.wikipedia.org/wiki/Julian_day).
 
-Using the following code the contract can do this translation [without Oracles or any other external sources](goals#no-oracles)
+Usando el siguiente código, el contrato puede hacer esta traducción [sin Oráculos o cualquier otra fuente externa](goals#no-oracles)
 
-More details about these translation functions can be found in the [technical documention](../../../contracts/01-Subscribe/01-subscribe_tech_reference.mdx)
+Más detalles sobre estas funciones de traducción se pueden encontrar en la [documentación técnica](../../../contracts/01-Subscribe/01-subscribe_tech_reference.mdx)
 
-### Leap Problems
+### Problemas de Año Bisiesto
 
-#### Leap Days
+#### Días Bisiestos
 
-But what happens to our incrementation in the presence of a leap day or leap second? The leap increments in certain situations can cause problems. For instance if you allow the user to set a monthly subscription to pay on the 29th of the month it will only actually work every four years. 
+Pero ¿qué pasa con nuestro incremento en presencia de un día bisiesto o segundo bisiesto? Los incrementos bisiestos en ciertas situaciones pueden causar problemas. Por ejemplo, si permites que el usuario configure una suscripción mensual para pagar el día 29 del mes, solo funcionará realmente cada cuatro años.
 
-This is why in the above [ranges](#time-ranges) we simply don't allow the 29th day of the month or higher to be used in monthly subscriptions or higher than 365 days in the yearly range. 
+Es por eso que en los [rangos](time_functions#time-ranges) anteriores simplemente no permitimos que se use el día 29 del mes o superior en suscripciones mensuales o superior a 365 días en el rango anual.
 
-#### Leap Seconds
+#### Segundos Bisiestos
 
-Leap seconds are less of a concern for the protocol for several reasons. 
+Los segundos bisiestos son menos preocupación para el protocolo por varias razones.
 
-1. The timestamp on a block is calculated currently with a [fifteen second variance](https://consensys.github.io/smart-contract-best-practices/development-recommendations/solidity-specific/timestamp-dependence/) between what the actual time is and the time a validator can put to a block. This fifteen seconds causes more drift than a potential leap second would cause. 
-2. The smallest time unit used in subscriptions is a day. So even if a timestamp is incorrect it would only matter if it occurred at midnight. And this would only give the caller a head start on calling the next day if they were a malicious validator which is a low probability and would only jump the gun by a few seconds. 
-3. By not allowing the 29th day of the month or higher or the 366 day of the year we mitigate the timestamp drifting the time over into a nonallowable day range. 
+1. El timestamp en un bloque se calcula actualmente con una [varianza de quince segundos](https://consensys.github.io/smart-contract-best-practices/development-recommendations/solidity-specific/timestamp-dependence/) entre cuál es el tiempo real y el tiempo que un validador puede poner a un bloque. Estos quince segundos causan más deriva de lo que causaría un segundo bisiesto potencial.
+2. La unidad de tiempo más pequeña usada en suscripciones es un día. Entonces, incluso si un timestamp es incorrecto, solo importaría si ocurriera a medianoche. Y esto solo le daría al llamador una ventaja para llamar al día siguiente si fueran un validador malicioso, lo cual es de baja probabilidad y solo adelantaría por unos segundos.
+3. Al no permitir el día 29 del mes o superior o el día 366 del año, mitigamos que el timestamp derive el tiempo a un rango de día no permitido. 
 
 
 

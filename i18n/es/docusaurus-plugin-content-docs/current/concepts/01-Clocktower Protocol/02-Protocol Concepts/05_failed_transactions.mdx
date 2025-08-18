@@ -1,66 +1,66 @@
 ---
 id: failed_transactions
-title: Failed Transactions
+title: Transacciones Fallidas
 sidebar_position: 5
 ---
 
-# Failed Transactions
+# Transacciones Fallidas
 
-### Reasons for failure
+### Razones del fallo
 
-In an open ended setup like subscriptions where transactions are scheduled indefinitley there will occur situations where a subscriber fails. This can occur for two reasons:
+En una configuración abierta como suscripciones donde las transacciones se programan indefinidamente, ocurrirán situaciones donde un suscriptor falla. Esto puede ocurrir por dos razones:
 
-- Not enough approval
-- Not enough funds
+- No hay suficiente aprobación
+- No hay suficientes fondos
 
-Therefore when the caller function makes its periodic check for scheduled transactions it also checks whether the subscriber has enough approval and funds. 
+Por lo tanto, cuando la función del llamador hace su verificación periódica de transacciones programadas, también verifica si el suscriptor tiene suficiente aprobación y fondos.
 
-In order to avoid attacks on the contract the protocol must create expenses born by the subscriber that make failure costly enough that even a malicious user would want to avoid failing. 
+Para evitar ataques al contrato, el protocolo debe crear gastos soportados por el suscriptor que hagan que el fallo sea lo suficientemente costoso para que incluso un usuario malicioso quiera evitar fallar.
 
-Lets see how this works based on different situations. 
+Veamos cómo funciona esto basado en diferentes situaciones.
 
-### Problems
+### Problemas
 
-#### Revocation
+#### Revocación
 
-If the subscriber has revoked their approval for Clocktower to move funds from their account the transaction will fail. 
+Si el suscriptor ha revocado su aprobación para que Clocktower mueva fondos de su cuenta, la transacción fallará.
 
-When a subscription fails because of lack of approval two things must be done
+Cuando una suscripción falla por falta de aprobación, se deben hacer dos cosas:
 
-- The subscriber must be unsubscribed by the caller.
-- A majority of the [fee balance](fees#caller-fee-reserve) must be refunded to the Provider with a smaller amount going to the caller. 
+- El suscriptor debe ser dado de baja por el llamador.
+- La mayoría del [saldo de tarifas](fees#caller-fee-reserve) debe ser reembolsado al Proveedor con una cantidad menor yendo al llamador.
 
-But why is this necessary?
+Pero ¿por qué es esto necesario?
 
-#### Unsubscribing
+#### Darse de baja
 
-- Even though the contract no longer has approval to remit funds the subscriber is still subscribed to the subscription. So if approval continues to remain revoked the subscription will fail every cycle creating never-ending cost to the caller with no compensation. 
+- Aunque el contrato ya no tiene aprobación para remitir fondos, el suscriptor aún está suscrito a la suscripción. Entonces, si la aprobación continúa siendo revocada, la suscripción fallará cada ciclo creando costos interminables para el llamador sin compensación.
 
-- since its cheaper gas-wise for the subscriber to revoke approval than to cancel the subscription subscribers will choose revoking approval as a method of unsubscribing. 
+- Dado que es más barato en términos de gas para el suscriptor revocar la aprobación que cancelar la suscripción, los suscriptores elegirán revocar la aprobación como método de darse de baja.
 
-While there are normal reasons for accidentally revoking approval the above two conditions require that the user must be unsubscribed from the subscription automatically by the caller upon failure. If the subscriber revoked approval in error then they will now need to resubscribe costing additional gas.
+Si bien hay razones normales para revocar accidentalmente la aprobación, las dos condiciones anteriores requieren que el usuario deba ser dado de baja de la suscripción automáticamente por el llamador al fallar. Si el suscriptor revocó la aprobación por error, ahora necesitarán volver a suscribirse costando gas adicional.
 
-#### Attack vectors
+#### Vectores de ataque
 
-There are situations where a malicious subscriber would intentionally fail. 
+Hay situaciones donde un suscriptor malicioso fallaría intencionalmente.
 
-#### DOS and Griefing attacks
+#### Ataques DOS y Griefing
 
-A subscriber could intentionally fail to create unremeimbursed gas costs for the caller. This money losing situation could create too many losses for the caller making it uneconomical and therefore stopping the contract from incrementing through time. 
+Un suscriptor podría fallar intencionalmente para crear costos de gas no reembolsados para el llamador. Esta situación de pérdida de dinero podría crear demasiadas pérdidas para el llamador haciéndolo antieconómico y por lo tanto deteniendo el contrato de incrementar a través del tiempo.
 
-But by giving enough of the forfeited fee balance to compensate for gas costs on failure these losses are mitigated. But why not give ALL the forfeited balance to the caller?
+Pero al dar suficiente del saldo de tarifas perdido para compensar los costos de gas en el fallo, estas pérdidas se mitigan. Pero ¿por qué no dar TODO el saldo perdido al llamador?
 
-#### Freeloader attack
+#### Ataque de Freeloader
 
-Another attack involves a malicious subscriber being both subscriber and caller while intentionally failing.  If the caller was refunded all of the forfeited [fee balance](fees#caller-fee-reserve) then they could get a free cycle of goods or services from the creator of the subscription since they would be paying themselves back as caller. In order to mitigate this, a majority of the fee balance must be refunded to the provider in order to pay for goods or services rendered within the time period and a smaller portion refunded to the caller to pay for gas costs. 
+Otro ataque involucra a un suscriptor malicioso siendo tanto suscriptor como llamador mientras falla intencionalmente. Si al llamador se le reembolsara todo el [saldo de tarifas](fees#caller-fee-reserve) perdido, entonces podrían obtener un ciclo gratuito de bienes o servicios del creador de la suscripción ya que se estarían pagando a sí mismos como llamador. Para mitigar esto, la mayoría del saldo de tarifas debe ser reembolsado al proveedor para pagar por bienes o servicios prestados dentro del período de tiempo y una porción menor reembolsada al llamador para pagar los costos de gas.
 
-Since the subscriber would now constantly lose funds it mitigates the above attack. 
+Dado que el suscriptor ahora perdería constantemente fondos, esto mitiga el ataque anterior.
 
-#### Other vectors
+#### Otros vectores
 
-If another vector arises then we have also given the creator of the subscription the ability to remove users from their list of subscribers with their own distinct method. 
+Si surge otro vector, también hemos dado al creador de la suscripción la capacidad de eliminar usuarios de su lista de suscriptores con su propio método distintivo.
 
-Above we have mentioned using a fee balance to pay the caller and mitigate attacks. But how does this actually work? We go over this in the next section. 
+Arriba hemos mencionado usar un saldo de tarifas para pagar al llamador y mitigar ataques. Pero ¿cómo funciona esto realmente? Lo revisamos en la siguiente sección. 
 
 
 

@@ -1,79 +1,79 @@
 ---
 id: three_users
-title: The Three Users
+title: Los Tres Usuarios
 sidebar_position: 3
 ---
 
-# The Three Users
+# Los Tres Usuarios
 
-One of the many ways to categorize the evolution of smart contract design is by counting how many primary users exist for the basic functionality of the protocol to work. 
+Una de las muchas formas de categorizar la evolución del diseño de contratos inteligentes es contando cuántos usuarios primarios existen para que funcione la funcionalidad básica del protocolo.
 
-## What is a User?
+## ¿Qué es un Usuario?
 
-While we have called these entities "users" up to now its important to understand that they could be humans or bots. Due to the nature of Ethereum accounts theres also nothing stopping a user from being multiple roles at the same time. 
+Aunque hemos llamado a estas entidades "usuarios" hasta ahora, es importante entender que podrían ser humanos o bots. Debido a la naturaleza de las cuentas de Ethereum, tampoco hay nada que impida que un usuario sea múltiples roles al mismo tiempo.
 
-## One User
+## Un Usuario
 
-In many contracts there is a single user who interacts with the contract and the contract alone. Some examples of these types of protocols:
+En muchos contratos hay un solo usuario que interactúa con el contrato y solo con el contrato. Algunos ejemplos de estos tipos de protocolos:
 
-- Contract Wallets
-- "Vaults" where users stake or deposit tokens
-- Transactions where users transfer assets between addresses controlled by the same user. 
-- Accounts at central exchanges
+- Billeteras de Contrato
+- "Bóvedas" donde los usuarios hacen stake o depositan tokens
+- Transacciones donde los usuarios transfieren activos entre direcciones controladas por el mismo usuario
+- Cuentas en exchanges centralizados
 
-In each of these examples their is a single user who only interacts with the contract. The existence of any other users is parallel to their experience and not involved in their interaction. 
+En cada uno de estos ejemplos hay un solo usuario que solo interactúa con el contrato. La existencia de cualquier otro usuario es paralela a su experiencia y no está involucrada en su interacción.
 
-## Two Users
+## Dos Usuarios
 
-A more complex example is where two users use contracts as an intermediary to interact with the each other. Sometimes this interaction is understood, sometimes the contract blinds each of the user to the existence of the other. Examples are:
+Un ejemplo más complejo es donde dos usuarios usan contratos como intermediario para interactuar entre sí. A veces esta interacción se entiende, a veces el contrato ciega a cada uno de los usuarios sobre la existencia del otro. Ejemplos son:
 
-- Transfers of tokens between users
-- AMM Dexes where users swap or pool
-- Lending protocols where users deposit and borrow
+- Transferencias de tokens entre usuarios
+- DEX AMM donde los usuarios intercambian o hacen pool
+- Protocolos de préstamo donde los usuarios depositan y piden prestado
 
-## Three Users
+## Tres Usuarios
 
-Up until now most protocols have added third user functionality to do behind the scenes utility functions for the protocol such as:
+Hasta ahora, la mayoría de los protocolos han agregado funcionalidad de tercer usuario para hacer funciones de utilidad detrás de escena para el protocolo, como:
 
-- Lending protocol liquidations
-- Farming protocols to sweep earnings 
-- Privacy protocols to increment governance rewards
+- Liquidaciones de protocolos de préstamo
+- Protocolos de farming para barrer ganancias
+- Protocolos de privacidad para incrementar recompensas de gobernanza
 
-While all of these functions are useful and sometimes critical for the overall protocol to function most do not use them primarily for focusing on polling for time. The Clocktower protocol attempts to harness a three user setup to gain better control of the temporal element. 
+Si bien todas estas funciones son útiles y a veces críticas para que el protocolo general funcione, la mayoría no las usa principalmente para enfocarse en consultar el tiempo. El protocolo Clocktower intenta aprovechar una configuración de tres usuarios para obtener mejor control del elemento temporal.
 
-## Sender Receiver Caller
+## Remitente Receptor Llamador
 
-In order to understand the way the Clocktower protocol works its best to think about these three users. For simplicity lets name them after their basic function:
+Para entender la forma en que funciona el protocolo Clocktower, es mejor pensar en estos tres usuarios. Por simplicidad, llamémoslos por su función básica:
 
-- Sender: The user whose primary motivation is sending tokens. This can be done as a subscriber to a subscription or just a transfer. 
+- Remitente: El usuario cuya motivación principal es enviar tokens. Esto se puede hacer como suscriptor a una suscripción o simplemente una transferencia.
 
-- Receiver: This user wishes to receive tokens at some point in the future. For subscriptions we call this a Provider, who provides some sort of service in exchange for receiving tokens on a regular basis. 
+- Receptor: Este usuario desea recibir tokens en algún momento en el futuro. Para suscripciones llamamos a esto un Proveedor, que proporciona algún tipo de servicio a cambio de recibir tokens de manera regular.
 
-- Caller: This user calls the contract at a regular interval and is rewarded for their effort and gas costs by receiving [compensation](incentives). 
+- Llamador: Este usuario llama al contrato a intervalos regulares y es recompensado por su esfuerzo y costos de gas recibiendo [compensación](incentives).
 
-## Subscriber Provider Caller
+## Suscriptor Proveedor Llamador
 
-Since we are focusing on subscriptions for the first version of the protocol we will hereafter refer to the Sender Receiver and Caller as Subscriber, Provider and Caller which are more specific to subscriptions. 
+Dado que nos estamos enfocando en suscripciones para la primera versión del protocolo, de ahora en adelante nos referiremos al Remitente, Receptor y Llamador como Suscriptor, Proveedor y Llamador, que son más específicos para suscripciones.
 
-## Differing relationships
+## Relaciones Diferentes
 
-### One to One
+### Uno a Uno
 
-- Transactions
-- Escrow Payments
+- Transacciones
+- Pagos en Depósito
 
-### One to Many
+### Uno a Muchos
 
-- Payroll
-- Bulk Payments
-- Estate Planning
+- Nómina
+- Pagos Masivos
+- Planificación de Herencia
 
-### Many to One
+### Muchos a Uno
 
-Subscriptions
+Suscripciones
 
-## The importance of the Caller
+## La importancia del Llamador
 
-While sending and receiving is one of the simplest functions of blockchains as seen in simple transfer it is the inclusion of the Caller who polls the contract at regular intervals that gives the ClockTower protocol its time awareness. 
+Si bien enviar y recibir es una de las funciones más simples de las blockchains como se ve en la transferencia simple, es la inclusión del Llamador que consulta el contrato a intervalos regulares lo que le da al protocolo ClockTower su conciencia del tiempo.
 
-While it might seem simple to just add an additional user that polls the contract. We will see in the next section how incentives and structure all work together to make each user stay in their lanes. 
+Si bien puede parecer simple solo agregar un usuario adicional que consulte el contrato, veremos en la siguiente sección cómo los incentivos y la estructura trabajan juntos para hacer que cada usuario se mantenga en su carril. 

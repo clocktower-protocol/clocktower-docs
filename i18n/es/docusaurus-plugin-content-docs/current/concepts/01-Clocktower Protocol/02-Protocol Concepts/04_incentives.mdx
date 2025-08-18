@@ -1,58 +1,58 @@
 ---
 id: incentives
-title: Incentives
+title: Incentivos
 sidebar_position: 4
 ---
 
-## Paying the Caller
+## Pagando al Llamador
 
-As shown in the previous section the caller must be incentivized to poll the contract at regular intervals. So how is this done?
+Como se mostró en la sección anterior, el llamador debe ser incentivado para consultar el contrato a intervalos regulares. Entonces, ¿cómo se hace esto?
 
-## Time Incrementation
+## Incremento de Tiempo
 
-In order to add time awareness to the contract a time value must be incremented by an external account. 
+Para agregar conciencia del tiempo al contrato, un valor de tiempo debe ser incrementado por una cuenta externa.
 
-One can think of process like a virtual button which anyone is allowed to press. And while it costs money to press the button there is a bounty rewarded to the first person to press the button each day. 
+Uno puede pensar en el proceso como un botón virtual que cualquiera puede presionar. Y aunque cuesta dinero presionar el botón, hay una recompensa para la primera persona que presione el botón cada día.
 
-A more real world example is how lending protocols crowd source liquidation in a decentralized manner. 
+Un ejemplo más real es cómo los protocolos de préstamo obtienen liquidaciones de manera descentralizada.
 
-Lending protocols allow any user to liquidate any account by simply calling the contract function themselves and collecting a portion of the seized collateral. 
+Los protocolos de préstamo permiten que cualquier usuario liquide cualquier cuenta simplemente llamando a la función del contrato ellos mismos y recolectando una porción del colateral incautado.
 
-## Considerations
+## Consideraciones
 
-### Why not pay the caller in ETH?
+### ¿Por qué no pagar al llamador en ETH?
 
-One might think that paying the caller in ETH would be appropriate since the caller must pay for the gas of polling the contract. But there are a few reasons this won't work. 
+Uno podría pensar que pagar al llamador en ETH sería apropiado ya que el llamador debe pagar por el gas de consultar el contrato. Pero hay algunas razones por las que esto no funcionará.
 
-#### Ethereum and Approval
+#### Ethereum y Aprobación
 
-The ability for the protocol to have approved access to user accounts is critical to seamlessly transfer tokens at a future date. 
+La capacidad del protocolo de tener acceso aprobado a las cuentas de usuario es crítica para transferir tokens sin problemas en una fecha futura.
 
-While all standard ERC-20 tokens have a built-in process to facilitate approval, ETH does not. We could require a user to keep wrapped ETH in their account but this is not ideal from a UX perspective nor is it common for the average user to hold wrapped ethereum in their wallet. 
+Si bien todos los tokens ERC-20 estándar tienen un proceso integrado para facilitar la aprobación, ETH no lo tiene. Podríamos requerir que un usuario mantenga ETH envuelto en su cuenta, pero esto no es ideal desde una perspectiva de UX ni es común que el usuario promedio mantenga ethereum envuelto en su billetera.
 
-#### No Oracles
+#### Sin Oráculos
 
-Another problem is that if we required one of the parties to pay their fees in ETH but the future transfer was an ERC-20 token we would need some sort of oracle to calculate the price of the ERC-20 vs ETH to have a proportional fee. But since having [no oracles](goals#no-oracles) is a goal of the protocol this conversion won't work. 
+Otro problema es que si requiriéramos que una de las partes pagara sus tarifas en ETH pero la transferencia futura fuera un token ERC-20, necesitaríamos algún tipo de oráculo para calcular el precio del ERC-20 vs ETH para tener una tarifa proporcional. Pero dado que tener [sin oráculos](goals#no-oracles) es un objetivo del protocolo, esta conversión no funcionará.
 
-#### In kind fees
+#### Tarifas en especie
 
-As shown above paying the caller in ETH is not ideal. So the solution is to simply pay the fee in the same ERC-20 token as the subscription. In order to avoid oracles it will need to be a percentage of the overall transaction. But who pays this fee? The subscriber or the provider?
+Como se mostró arriba, pagar al llamador en ETH no es ideal. Entonces la solución es simplemente pagar la tarifa en el mismo token ERC-20 que la suscripción. Para evitar oráculos, necesitará ser un porcentaje de la transacción general. Pero ¿quién paga esta tarifa? ¿El suscriptor o el proveedor?
 
-#### Problem with the Provider paying the Caller
+#### Problema con el Proveedor pagando al Llamador
 
-One might initially think that the provider should pay a portion of their earnings each period to the caller. This seems simpler since there is only one provider and they are the one's receiving all the funds. 
+Uno podría pensar inicialmente que el proveedor debería pagar una porción de sus ganancias cada período al llamador. Esto parece más simple ya que solo hay un proveedor y son los que reciben todos los fondos.
 
-But there is an attack vector if we go this route. Since we have no way of knowing the ownership of an ethereum address it is possible that combinations of the subscriber, provider and caller can be the same entity.
+Pero hay un vector de ataque si vamos por esta ruta. Dado que no tenemos forma de conocer la propiedad de una dirección de ethereum, es posible que las combinaciones del suscriptor, proveedor y llamador puedan ser la misma entidad.
 
-If the subscriber and caller are the same while the provider pays the fee to the caller there is a situation where the subscriber could sign up for a subscription and but not fund their account. When the transaction fails the fee would still be extracted from the provider and paid to the caller (who is also the subscriber.) If the fee is higher than the gas costs of signing up for the subscription then the malicious subscriber now has a method of extracting tokens from the provider. 
+Si el suscriptor y llamador son el mismo mientras el proveedor paga la tarifa al llamador, hay una situación donde el suscriptor podría registrarse para una suscripción pero no financiar su cuenta. Cuando la transacción falla, la tarifa aún se extraería del proveedor y se pagaría al llamador (que también es el suscriptor). Si la tarifa es más alta que los costos de gas de registrarse para la suscripción, entonces el suscriptor malicioso ahora tiene un método de extraer tokens del proveedor.
 
-#### Problems with the sender paying
+#### Problemas con el remitente pagando
 
-If the Provider can't be the one paying the caller it must the subscriber. But this choice presents additional issues that must be considered. 
+Si el Proveedor no puede ser el que paga al llamador, debe ser el suscriptor. Pero esta elección presenta problemas adicionales que deben considerarse.
 
-The biggest issues revolve around the problem of failed transactions which we will go into in the next sections, [failed transactions](failed_transactions). 
+Los problemas más grandes giran en torno al problema de las transacciones fallidas que abordaremos en las siguientes secciones, [transacciones fallidas](failed_transactions).
 
-The solutions is having a [fee balance](06_fees.mdx) where fees can be reserved and paid depending on the situation. 
+La solución es tener un [saldo de tarifas](06_fees.mdx) donde las tarifas pueden ser reservadas y pagadas dependiendo de la situación. 
 
 
 
