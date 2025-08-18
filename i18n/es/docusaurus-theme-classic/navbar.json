@@ -4,7 +4,7 @@
     "description": "The title in the navbar"
   },
   "item.label.Documentation": {
-    "message": "Documentation",
+    "message": "Documentación",
     "description": "Navbar item with label Documentation"
   },
   "item.label.App": {
@@ -12,19 +12,23 @@
     "description": "Navbar item with label App"
   },
   "item.label.Concepts": {
-    "message": "Concepts",
+    "message": "Conceptos",
     "description": "Navbar item with label Concepts"
   },
   "item.label.Contract": {
-    "message": "Contract",
+    "message": "Contrato",
     "description": "Navbar item with label Contract"
   },
   "item.label.How to": {
-    "message": "How to",
+    "message": "Cómo Hacer",
     "description": "Navbar item with label How to"
   },
   "item.label.Whitepaper": {
-    "message": "Whitepaper",
+    "message": "Libro Blanco",
     "description": "Navbar item with label Whitepaper"
+  },
+  "item.label.Whitepaper.to": {
+    "message": "/wp/v5_whitepaper_es.pdf",
+    "description": "Spanish whitepaper PDF link"
   }
 }

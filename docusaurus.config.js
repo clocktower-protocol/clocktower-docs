@@ -123,7 +123,7 @@ const config = {
                 label: 'Contract',
               },
               {
-                to: 'pathname:///wp/v5_whitepaper.pdf',
+                to: '/docs/whitepaper',
                 label: 'Whitepaper',
               },
               {
@@ -203,7 +203,7 @@ const config = {
               },
               {
                 label: 'Whitepaper',
-                to: 'pathname:///wp/v5_whitepaper.pdf',
+                to: '/docs/whitepaper',
               },
             ],
           },
