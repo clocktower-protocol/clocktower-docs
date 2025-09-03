@@ -4,8 +4,8 @@ subtitle: A Protocol for Reccurrent Payments
 author: Hugo Marx and George Atkinson
 date: May 2024
 geometry: margin=3cm
-csl: cell.csl
-bibliography: whitepaper.bib
+csl: ../cell.csl
+bibliography: ../whitepaper.bib
 ---
 
  
@@ -152,7 +152,7 @@ function prorate(uint unixTime, uint40 dueDay, uint fee, uint8 frequency) intern
 
 This section explores the main actors and lifecycle of the protocol, which can be modeled as a three phase process: creation, initiation, and incrementation.
 
-![Creation](static/img/fig1.jpg){ width=75% }
+![Creation](../../img/fig1.jpg){ width=75% }
 
 #### Creation
 In the creation phase (see Figure 1) a Provider configures a subscription they would like to provide at a fixed interval (weekly, monthly, yearly, etc). This can be done through direct interaction with the contract or, in most cases, through a website providing a simple user interface. Regardless, this process involves a Provider making a function call to the Clocktower contract, specifying parameters of the subscription including the amount of the payment, ERC20 token(s) accepted, description/details of the subscription to be emitted in logs, the payment interval, and the due date of the payment.
@@ -167,14 +167,14 @@ A subscription ID is then generated and added to the subscription index of the c
 \ 
 
 
-![Initiation](static/img/fig2.jpg){ width=75% }
+![Initiation](../../img/fig2.jpg){ width=75% }
 
 
 #### Initiation
 After the Provider creates the subscription, it is now available to anyone who would like to set-up recurrent payments (see Figure 2). Off-chain, the Provider advertises the service to potential Subscribers who can sign-up via link (A). Again, either through direct interaction with the contract via scripts or more likely, a web portal, a potential Subscriber will make two transactions (B). The first calls the _approve_ function to the appropriate ERC-20 contract, which allows the contract to make future draws of the token from the specified EOA. The next transaction will call _subscribe_, which takes the Subscription struct parameters. The contract then makes a number of validation checks, most importantly that there is proper allowance and that there is enough of the token to cover the subscription amount. If valid, the Subscriber is added to the contract index (C)for the EOA and the first payment is made to fill the fee balance. A proration calculation ensures that the Subscriber does not overpay based on the day of the cycle that he begins his subscription.
 \
 
-![Incrementation](static/img/fig3.jpg){ width=75% }
+![Incrementation](../../img/fig3.jpg){ width=75% }
 
 
 #### Incrementation
