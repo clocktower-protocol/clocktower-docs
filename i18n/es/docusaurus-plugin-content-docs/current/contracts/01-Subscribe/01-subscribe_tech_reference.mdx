@@ -1,26 +1,24 @@
 ---
 id: subscribe_tech_reference
-title: Technical Reference
+title: Referencia Técnica
 ---
 
 # ClockTower Subscribe
 
-### Allowed Time Ranges
+### Rangos de Tiempo
 
-- Weekly Subscriptions -- 1 - 7 (Weekdays)
-- Monthly Subscriptions -- 1 - 28 (Day of Month)
-- Quarterly Subscriptions -- 1 - 90 (Day of Quarter)
-- Yearly Subscription -- 1 - 365 (Day of Year  (not including leap days))
+- Suscripciones Semanales -- 1 - 7 (Días de la semana)
+- Suscripciones Mensuales -- 1 - 28 (Día del mes)
+- Suscripciones Trimestrales -- 1 - 90 (Día del trimestre)
+- Suscripción Anual -- 1 - 365 (Día del año (sin incluir días bisiestos))
 
-### Future Transaction Range
-- Future Transactions -- Unixtime / 3600 (Unix Hours)
+### Decimales
+Todos los valores ERC20 se almacenan en el contrato como 18 decimales y se convierten antes de interactuar con los contratos de tokens.
 
-## Data Structures
-The following are the data structs required by external functions:
+## Estructuras de Datos
+Las siguientes son las estructuras de datos requeridas o devueltas por funciones externas:
 
-### Subscription Data
-
-#### Structs
+### Estructuras
 
 ##### Subscription
 
@@ -37,17 +35,15 @@ The following are the data structs required by external functions:
     string description;
 }
 ```
-| Name | Type | Description|
+| Nombre | Tipo | Descripción|
 |---|---|---|
-| `id` | bytes32 | Unique hash generated for each subscription |
-| `amount` | uint | Amount of subscription in wei |
-| `provider` | address | Address of the creator of the subscription |
-| `token` | address | ERC20 address of token used in subscription |
-| `exists` | bool | True if subscription exists |
-| `cancelled` | bool | True if subscription is cancelled |
+| `id` | bytes32 | Hash único generado para cada suscripción |
+| `amount` | uint | Cantidad de la suscripción en wei (18 decimales) |
+| `provider` | address | Dirección del creador de la suscripción |
+| `token` | address | Dirección ERC20 del token usado en la suscripción |
+| `cancelled` | bool | Verdadero si la suscripción está cancelada |
 | `frequency` | Frequency | [Frequency](#frequency) |
-| `dueDay` | uint16 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
-| `description` | string | Description of subscription |
+| `dueDay` | uint16 | Día en el rango de [frecuencia](#rangos-de-tiempo) cuando se paga la suscripción |
 
 
 ##### SubView
@@ -58,11 +54,11 @@ The following are the data structs required by external functions:
     uint totalSubscribers;
  }
 ```
-| Name | Type | Description|
+| Nombre | Tipo | Descripción|
 |---|---|---|
 | `subscription` | Subscription | [Subscription](#subscription) |
 | `status` | Status | [Status](#status) |
-| `totalsubscribers` | uint | Total number of subscribers |
+| `totalsubscribers` | uint | Número total de suscriptores |
 
 ##### FeeEstimate
 ```
@@ -71,10 +67,10 @@ struct FeeEstimate {
     address token;
 }
 ```
-| Name | Type | Description|
+| Nombre | Tipo | Descripción|
 |---|---|---|
-| `fee` | uint | Fee amount in wei |
-| `token` | address | ERC20 address of token |
+| `fee` | uint | Cantidad de tarifa en wei (18 decimales) |
+| `token` | address | Dirección ERC20 del token |
 
 ##### SubscriberView
 ```
@@ -83,10 +79,10 @@ struct SubscriberView {
     uint feeBalance;
 }
 ```
-| Name | Type | Description|
+| Nombre | Tipo | Descripción|
 |---|---|---|
-| `subscriber` | address | Subscriber address |
-| `feeBalance` | uint | Fee balance of subscriber in wei |
+| `subscriber` | address | Dirección del suscriptor |
+| `feeBalance` | uint | Saldo de tarifa del suscriptor en wei |
 
 ##### Time
 ```
@@ -99,18 +95,18 @@ struct Time {
     uint16 month;
 }
 ```
-| Name | Type | Description|
+| Nombre | Tipo | Descripción|
 |---|---|---|
-| `day` | uint16 | Day of month |
-| `weekDay` | uint16 | Day of week |
-| `quarterDay` | uint16 | Day of quarter |
-| `yearDay` | uint16 | Day of year |
-| `year` | uint16 | Year |
-| `month` | uint16 | Month |
+| `day` | uint16 | Día del mes |
+| `weekDay` | uint16 | Día de la semana |
+| `quarterDay` | uint16 | Día del trimestre |
+| `yearDay` | uint16 | Día del año |
+| `year` | uint16 | Año |
+| `month` | uint16 | Mes |
 
 
-#### Enums
-(Enum values are represented by numbers starting at zero)
+### Enums
+(Los valores de enum se representan por números que comienzan en cero)
 
 ##### Frequency
 ```
@@ -121,7 +117,7 @@ enum Frequency {
     YEARLY
 }
 ```
-| Value | Description|
+| Valor | Descripción|
 |---|---|
 | `0` | WEEKLY |
 | `1` | MONTHLY |
@@ -136,7 +132,7 @@ enum Status {
     UNSUBSCRIBED
 }
 ```
-| Value | Description|
+| Valor | Descripción|
 |---|---|
 | `0` | ACTIVE |
 | `1` | CANCELLED |
@@ -181,20 +177,17 @@ enum ProvEvent {
 | `4` | REFUND |
 
 
-## Global Variables
-### Subscription Global Variables
+## Variables Globales
 
-| Name | Type | Description| Format |
+| Nombre | Tipo | Descripción| Formato |
 |---|---|---|---|
-| `callerFee` | uint | Percentage paid to caller on remits | 10000 = No fee, 10100 = 1%, 10001 = 0.01% |
-| `systemFee` | uint | Flat fee paid to admin account when systemFee bool is true | wei |
-| `maxGasPrice` | uint | Maximum gas value for remit function | gwei |
-| `maxRemits` | uint | Maximum number of remits per remit function (usually based on block max) | |
-| `admin` | address | Address for admin account |
-| `nextUncheckedDay` | uint40 | Last time remit ws called | Unix epoch time |
+| `callerFee` | uint | Porcentaje de suscripciones pagadas al llamador en remesas | 10000 = Sin tarifa, 10100 = 1%, 10001 = 0.01% |
+| `systemFee` | uint | Porcentaje de tarifa del llamador pagado al sistema cuando systemFee bool es verdadero | 10000 = Sin tarifa, 10100 = 1%, 10001 = 0.01% |
+| `maxRemits` | uint | Número máximo de remesas por función remit (generalmente basado en el máximo del bloque) | |
+| `admin` | address | Dirección de la cuenta de administrador |
+| `nextUncheckedDay` | uint40 | Índice del día del día que no ha sido remitido | Índice del día |
 
-## Events
-### Subscription Events
+## Eventos
 ##### SubscriberLog
 ```
 event SubscriberLog(
@@ -206,14 +199,14 @@ event SubscriberLog(
 )
 ```
 
-Log emitted during subscriber events
+Registro emitido durante eventos de suscriptor
 
-| Name | Type | Indexed | Description |
+| Nombre | Tipo | Indexado | Descripción |
 |---|---|:---:|---|
-| `id` | bytes32 | :heavy_check_mark: | Unique Subscription id |
-| `subscriber` | address | :heavy_check_mark: | Address of subscriber |
-| `timestamp` | uint40 | | Unix Epoch timestamp |
-| `amount` | uint | | ERC20 subscription amount in wei |
+| `id` | bytes32 | :heavy_check_mark: | ID único de suscripción |
+| `subscriber` | address | :heavy_check_mark: | Dirección del suscriptor |
+| `timestamp` | uint40 | | Marca de tiempo Unix Epoch |
+| `amount` | uint | | Cantidad de suscripción ERC20 en wei (18 decimales) |
 | `subEvent` | SubEvent | :heavy_check_mark: | [SubEvent](#subevent)
 
 ##### CallerLog
@@ -226,14 +219,14 @@ event CallerLog(
 )
 ```
 
-Log emitted during Caller events
+Registro emitido durante eventos del Llamador
 
-| Name | Type | Indexed | Description |
+| Nombre | Tipo | Indexado | Descripción |
 |---|---|:---:|---|
-| `timestamp` | uint40 | | Unix epoch timestamp |
-| `checkedDay` | uint40 | | Day in frequency range checked by Caller |
-| `caller` | address | :heavy_check_mark: | Address of caller |
-| `isFinished` | bool | | Shows if Caller is done |
+| `timestamp` | uint40 | | Marca de tiempo Unix epoch |
+| `checkedDay` | uint40 | | Día en el rango de frecuencia verificado por el Llamador |
+| `caller` | address | :heavy_check_mark: | Dirección del llamador |
+| `isFinished` | bool | | Muestra si el Llamador ha terminado |
 
 ##### ProviderLog
 ```
@@ -246,20 +239,19 @@ event ProviderLog(
 )
 ```
 
-Log emitted during Provider events
+Registro emitido durante eventos del Proveedor
 
-| Name | Type | Indexed | Description |
+| Nombre | Tipo | Indexado | Descripción |
 |---|---|:---:|---|
-| `id` | bytes32 | :heavy_check_mark: | Unique subscription id |
-| `provider` | address | :heavy_check_mark: | Provider address |
-| `timestamp` | uint40 | | Unix epoch timestamp |
-| `amount` | uint | | 0 unless refund |
+| `id` | bytes32 | :heavy_check_mark: | ID único de suscripción |
+| `provider` | address | :heavy_check_mark: | Dirección del proveedor |
+| `timestamp` | uint40 | | Marca de tiempo Unix epoch |
+| `amount` | uint | | 0 a menos que sea reembolso |
 | `provEvent` | ProvEvent | :heavy_check_mark: | [ProvEvent](#provevent) |
 
 
-## Functions
-### Subscription Functions
-#### Input Functions
+## Funciones
+### Funciones de Suscripción
 ##### createSubscription
 ```
 function createSubscription(
@@ -270,17 +262,17 @@ function createSubscription(
     uint16 dueDay
 ) external payable
 ```
-Allows provider to create a new subscription. 
+Permite al proveedor crear una nueva suscripción. 
 
-Parameters:
+Parámetros:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `amount` | uint | Amount of subscription in wei |
-| `token` | address | ERC20 address of token used in subscription |
-| `description` | string | Description of subscription |
+| `amount` | uint | Cantidad de la suscripción en wei. (DEBE ESTAR EN 18 DECIMALES) |
+| `token` | address | Dirección ERC20 del token usado en la suscripción |
+| `description` | string | Descripción de la suscripción |
 | `frequency` | Frequency | [Frequency](#frequency) |
-| `dueDay` | uint16 | Day in [range](#allowed-time-ranges) based on frequency when subscription is paid |
+| `dueDay` | uint16 | Día en el [rango](#rangos-de-tiempo) basado en la frecuencia cuando se paga la suscripción |
 
 ##### subscribe
 ```
@@ -288,11 +280,11 @@ function subscribe(
     Subscription subscription
 ) external payable
 ```
-Allows user to subscribe to subscription
+Permite al usuario suscribirse a la suscripción
 
-Parameters: 
+Parámetros: 
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
 | `subscription` | Subscription | [Subscription](#subscription) |
 
@@ -303,15 +295,15 @@ function unsubscribe(
     bytes32 id
 ) external payable
 ```
-Allows user to unsubscribe from subscription. 
+Permite al usuario cancelar la suscripción. 
 
-msg.sender must be subscribed to subscription. 
+msg.sender debe estar suscrito a la suscripción. 
 
-Parameters:
+Parámetros:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `id` | bytes32 | Unique subscription id |
+| `id` | bytes32 | ID único de suscripción |
 
 ##### unsubscribeByProvider
 ```
@@ -320,16 +312,16 @@ function unsubscribeByProvider(
     bytes32 id
 ) external
 ```
-Allows provider to cancel subscriber from their created subscriptions. 
+Permite al proveedor cancelar al suscriptor de sus suscripciones creadas. 
 
-msg.sender must be creator of subscription and subscriber must be subscribed. 
+msg.sender debe ser el creador de la suscripción y el suscriptor debe estar suscrito. 
 
-Parameters: 
+Parámetros: 
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `subscriber` | address | Subscriber address |
-| `id` | bytes32 | Unique subscription id |
+| `subscriber` | address | Dirección del suscriptor |
+| `id` | bytes32 | ID único de suscripción |
 
 
 ##### cancelSubscription
@@ -338,18 +330,18 @@ function cancelSubscription(
     Subscription subscription
 ) external
 ```
-Allows provider to cancel subscription. All existing subscribers will no longer be charged
+Permite al proveedor cancelar la suscripción. Todos los suscriptores existentes ya no serán cobrados
 
-msg.sender must be creator of subscription
+msg.sender debe ser el creador de la suscripción
 
-Parameters: 
+Parámetros: 
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
 | `subscription` | Subscription | [Subscription](#subscription) |
 
 
-#### View Functions
+### Funciones de Vista
 ##### getAccountSubscriptions
 ```
 function getAccountSubscriptions(
@@ -357,23 +349,23 @@ function getAccountSubscriptions(
     address account
     ) returns (SubView[])
 ```
-Returns an array of objects containing subscription and status by account. 
+Devuelve un array de objetos que contienen suscripción y estado por cuenta. 
 
-If bySubscriber is true it gets a list of subscriptions account is subscribed to. 
-If false it gets a list of subscriptions account created as the provider. 
+Si bySubscriber es verdadero, obtiene una lista de suscripciones a las que la cuenta está suscrita. 
+Si es falso, obtiene una lista de suscripciones que la cuenta creó como proveedor. 
 
-Parameters: 
+Parámetros: 
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `bySubscriber` | bool | See above description of bool |
-| `account` | address | Account address for subscriptions | 
+| `bySubscriber` | bool | Ver descripción anterior del bool |
+| `account` | address | Dirección de la cuenta para suscripciones | 
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `SubView[]` | SubView | Array of [Subview](#subview) structs |
+| `SubView[]` | SubView | Array de estructuras [Subview](#subview) |
 
 ##### getTotalSubscribers
 ```
@@ -381,13 +373,13 @@ function getTotalSubscribers(
     ) returns (uint)
 ```
 
-Returns total number of subscribers so user can iterate through accountLookup() array.
+Devuelve el número total de suscriptores.
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `uint` | uint | Total amount of subscribers in contract |
+| `uint` | uint | Cantidad total de suscriptores en el contrato |
 
 ##### getSubscribersById
 ```
@@ -396,19 +388,19 @@ function getSubscribersById(
     ) external view returns (SubscriberView[] memory)
 ```
 
-Returns array of objects containing subscriber info. 
+Devuelve un array de objetos que contienen información del suscriptor. 
 
-Parameters: 
+Parámetros: 
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `id` | bytes32 | Unique subscription id |
+| `id` | bytes32 | ID único de suscripción |
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `SubscriberView[]` | SubscriberView | Array of [SubscriberView](#subscriberview) structs |
+| `SubscriberView[]` | SubscriberView | Array de estructuras [SubscriberView](#subscriberview) |
 
 ##### getSubByIndex
 ```
@@ -419,19 +411,19 @@ function getSubByIndex(
     ) view public returns(Subscription subscription)
 ```
 
-Returns subscription object
+Devuelve el objeto de suscripción
 
-Parameters: 
+Parámetros: 
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `id` | bytes32 | Unique subscription id |
+| `id` | bytes32 | ID único de suscripción |
 | `frequency` | Frequency | [Frequency](#frequency) |
-| `dueDay` | uint16 | Day in [range](#allowed-time-ranges) based on frequency when subscription is paid |
+| `dueDay` | uint16 | Día en el [rango](#rangos-de-tiempo) basado en la frecuencia cuando se paga la suscripción |
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
 | `subscription` | Subscription | [Subscription](#subscription) |
 
@@ -442,15 +434,15 @@ function feeEstimate(
 
 ) returns(FeeEstimate[]) 
 ```
-Returns an array of objects showing the next batch of remits and possible fees
+Devuelve un array de objetos que muestran el siguiente lote de remesas y tarifas posibles
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `FeeEstimate[]` | FeeEstimate | Array of [FeeEstimate](#feeestimate) structs |
+| `FeeEstimate[]` | FeeEstimate | Array de estructuras [FeeEstimate](#feeestimate) |
 
-#### Time Functions
+### Funciones de Tiempo
 
 ##### unixToTime
 ```
@@ -458,19 +450,19 @@ function unixToTime(
     uint unix
 ) returns(Time time)
 ```
-Converts a unix time value to [Time](#time) struct
+Convierte un valor de tiempo unix a la estructura [Time](#time)
 
-Parameter:
+Parámetro:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `unix` | uint | Unix time value |
+| `unix` | uint | Valor de tiempo unix |
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `time` | Time | [Time](#time) struct |
+| `time` | Time | Estructura [Time](#time) |
 
 Code:
 
@@ -525,19 +517,19 @@ function isLeapYear(
 ) returns (bool leapYear)
 ```
 
-Checks if year is a leap year
+Verifica si el año es bisiesto
 
-Parameter:
+Parámetro:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `year` | uint | Number of year in Gregorian Calendar |
+| `year` | uint | Número del año en el Calendario Gregoriano |
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `leapYear` | bool | True if leap year |
+| `leapYear` | bool | Verdadero si es año bisiesto |
 
 Code:
 
@@ -552,20 +544,20 @@ function getDaysInMonth(
     uint month
 ) returns (uint daysInMonth)
 ```
-Returns the number of days in the month based on Gregorian year and month calendar values
+Devuelve el número de días en el mes basado en los valores del calendario gregoriano de año y mes
 
-Parameters:
+Parámetros:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `year` | uint | Number of year in Gregorian Calendar |
-| `month`| uint | Number of month in Gregorian Calendar |
+| `year` | uint | Número del año en el Calendario Gregoriano |
+| `month`| uint | Número del mes en el Calendario Gregoriano |
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `daysInMonth` | uint | Number of days in the month |
+| `daysInMonth` | uint | Número de días en el mes |
 
 Code: 
 
@@ -586,19 +578,19 @@ function getDaysofWeek(
 ) returns (uint16 dayOfWeek)
 ```
 
-Returns the number of the day of the week
+Devuelve el número del día de la semana
 
-Parameter:
+Parámetro:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `unixTime` | uint | Unix time value |
+| `unixTime` | uint | Valor de tiempo unix |
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `dayOfWeek` | uint16 | Day of the week (1 = Monday, 7 = Sunday) |
+| `dayOfWeek` | uint16 | Día de la semana (1 = Lunes, 7 = Domingo) |
 
 Code:
 
@@ -616,20 +608,20 @@ function getdayOfQuarter(
 ) returns (uint16 quarterDay)
 ```
 
-Returns the day of the quarter range day based the year and the day of the year
+Devuelve el día del rango del trimestre basado en el año y el día del año
 
-Parameters:
+Parámetros:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `yearDays` | uint | Day of the year (Between 1 - 365) |
-| `year`| uint | Number of year in Gregorian Calendar |
+| `yearDays` | uint | Día del año (Entre 1 - 365) |
+| `year`| uint | Número del año en el Calendario Gregoriano |
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `quarterDay` | uint16 | Day of the quarter (1 - 90) |
+| `quarterDay` | uint16 | Día del trimestre (1 - 90) |
 
 Code:
 ```
@@ -658,19 +650,19 @@ function unixToDays (
 ) returns (uint40 dayCount)
 ```
 
-Returns the amount of days (rounded down) since unix epoch based on a provided unix time
+Devuelve la cantidad de días (redondeado hacia abajo) desde la época unix basado en un tiempo unix proporcionado
 
-Parameter:
+Parámetro:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `unixTime` | uint | Unix time value |
+| `unixTime` | uint | Valor de tiempo unix |
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `dayCount` | uint16 | Number of days (rounded down) since unix epoch |
+| `dayCount` | uint16 | Número de días (redondeado hacia abajo) desde la época unix |
 
 Code:
 
@@ -687,22 +679,22 @@ function prorate (
     uint8 frequency) returns (uint) 
 ```
 
-Returns prorated amount of subscription based upons subscription parameters
+Devuelve la cantidad prorrateada de la suscripción basada en los parámetros de suscripción
 
-Parameters:
+Parámetros:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `unixTime` | uint | Unix time value |
-| `dueDay` | uint40 | Day in frequency [range](#allowed-time-ranges) when subscription is paid |
-| `fee` | uint | Fee amount in wei |
+| `unixTime` | uint | Valor de tiempo unix |
+| `dueDay` | uint40 | Día en el rango de [frecuencia](#rangos-de-tiempo) cuando se paga la suscripción |
+| `fee` | uint | Cantidad de tarifa en wei (18 decimales) |
 | `frequency` | uint8 | [Frequency](#frequency) |
 
-Return Value:
+Valor de Retorno:
 
-| Name | Type | Description |
+| Nombre | Tipo | Descripción |
 |---|---|---|
-| `uint` | uint | Prorated amount of susbcription in wei |
+| `uint` | uint | Cantidad prorrateada de la suscripción en wei (18 decimales) |
 
 Code: 
 
