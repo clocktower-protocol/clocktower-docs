@@ -32,7 +32,7 @@ const config = {
   organizationName: 'Clocktower', // Usually your GitHub org/user name.
   projectName: 'Clocktower', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internalization, you can use this field to set useful
@@ -135,12 +135,10 @@ const config = {
             position: 'right',
             label: 'Documentation'
           },
-          /*
           {
             type: 'localeDropdown',
             position: 'right',
           },
-          */
           {
             to: 'https://app.clocktower.finance', // The path you want to link to
             label: 'App', // The text on the button
@@ -222,6 +220,15 @@ const config = {
               {
                 label: 'GitHub',
                 href: 'https://github.com/clocktower-protocol',
+              },
+            ],
+          },
+          {
+            title: 'Language',
+            items: [
+              {
+                label: 'Sitio en Español',
+                to: '/es/docs/concepts/Clocktower Protocol/whatis',
               },
             ],
           },
