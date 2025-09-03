@@ -223,15 +223,6 @@ const config = {
               },
             ],
           },
-          {
-            title: 'Language',
-            items: [
-              {
-                label: 'Sitio en Español',
-                to: '/es/docs/concepts/Clocktower Protocol/whatis',
-              },
-            ],
-          },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Clocktower LLC.`,
       },
