@@ -7,6 +7,26 @@
     "message": "Suscripciones Descentralizadas",
     "description": "Layout Description"
   },
+  "homepage.hero.title": {
+    "message": "Suscripciones para Todos",
+    "description": "The main hero title on the homepage"
+  },
+  "homepage.banner2.title": {
+    "message": "Descentralizados",
+    "description": "The second banner title about decentralized payments"
+  },
+  "homepage.banner2.subtitle1": {
+    "message": "Recurrentes",
+    "description": "The first subtitle about recurring payments"
+  },
+  "homepage.banner2.subtitle2": {
+    "message": "Pagos en Cripto",
+    "description": "The second subtitle about crypto payments"
+  },
+  "homepage.banner3.title": {
+    "message": "Es Hora",
+    "description": "The third banner title"
+  },
   "theme.ErrorPageContent.title": {
     "message": "Esta página ha fallado.",
     "description": "The title of the fallback page when the page crashed"

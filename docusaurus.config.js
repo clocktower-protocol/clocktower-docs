@@ -123,7 +123,7 @@ const config = {
                 label: 'Contract',
               },
               {
-                to: '/docs/whitepaper',
+                to: '/whitepaper',
                 label: 'Whitepaper',
               },
               {
@@ -201,7 +201,7 @@ const config = {
               },
               {
                 label: 'Whitepaper',
-                to: '/docs/whitepaper',
+                to: '/whitepaper',
               },
             ],
           },

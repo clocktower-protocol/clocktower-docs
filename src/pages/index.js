@@ -17,7 +17,13 @@ function HomepageHeader() {
   return (
     <div>
       <div style={{paddingTop: "20px"}}>
-        <h1 className={styles.heroBanner}>Subscriptions for Everyone</h1>
+        <h1 className={styles.heroBanner}>
+          <Translate
+            id="homepage.hero.title"
+            description="The main hero title on the homepage">
+            Subscriptions for Everyone
+          </Translate>
+        </h1>
       </div>
       <div className={styles.imageContainer}>
         <img src={MainImage} className={styles.imageFitter} alt={
@@ -29,7 +35,25 @@ function HomepageHeader() {
       </div>
       <div className={styles.doubleBoxGridContainer}>
         <div className={styles.doubleBoxText}>
-          <h1 className={styles.banner2}>Decentralized <p></p>Recurring <p></p> Crypto Payments</h1>
+          <h1 className={styles.banner2}>
+            <Translate
+              id="homepage.banner2.title"
+              description="The second banner title about decentralized payments">
+              Decentralized
+            </Translate>
+            <p></p>
+            <Translate
+              id="homepage.banner2.subtitle1"
+              description="The first subtitle about recurring payments">
+              Recurring
+            </Translate>
+            <p></p>
+            <Translate
+              id="homepage.banner2.subtitle2"
+              description="The second subtitle about crypto payments">
+              Crypto Payments
+            </Translate>
+          </h1>
         </div>
         <div className={styles.doubleBoxImage}>
           <img className={styles.imageFitter} src={ChurchImage} alt="towerimage"></img>
@@ -40,7 +64,13 @@ function HomepageHeader() {
             <img className={styles.imageFitter} src={WiresImage} alt="wiresimage"></img>
         </div>
         <div className={styles.doubleBoxText}>
-            <h1 className={styles.banner3}>It's Time</h1>
+            <h1 className={styles.banner3}>
+              <Translate
+                id="homepage.banner3.title"
+                description="The third banner title">
+                It's Time
+              </Translate>
+            </h1>
         </div>
       </div>
     </div>
