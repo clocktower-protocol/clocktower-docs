@@ -8,7 +8,7 @@ sidebar_position: 1
 
 (Mientras que el Protocolo Clocktower puede soportar muchos contratos diferentes que soportan diferentes tipos de transacciones temporizadas. Para las Versiones 1.0 nos enfocaremos únicamente en suscripciones)
 
-La Versión 1 del Protocolo Clocktower es un servicio de suscripción descentralizado basado en blockchain dirigido a [tres conjuntos de usuarios](three_users#sender-receiver-caller): Proveedores, Suscriptores y Llamadores.
+La Versión 1 del Protocolo Clocktower es un servicio de suscripción descentralizado basado en blockchain dirigido a [tres conjuntos de usuarios](three_users): Proveedores, Suscriptores y Llamadores.
 
 ### Proveedores
 
@@ -20,7 +20,7 @@ Después de elegir los detalles de la suscripción como la frecuencia, cantidad 
 
 Después de recibir la URL única, los suscriptores pueden suscribirse directamente a través del contrato, a través de nuestro frontend o a través del frontend del proveedor.
 
-Al suscribirse, se les cobrará una cantidad prorrateada para el primer ciclo de la suscripción. Una parte de esta cantidad se almacenará en el contrato como un [saldo de tarifas](fees#caller-fee-reserve). El resto se envía al proveedor.
+Al suscribirse, se les cobrará una cantidad prorrateada para el primer ciclo de la suscripción. Una parte de esta cantidad se almacenará en el contrato como un [saldo de tarifas](fees). El resto se envía al proveedor.
 
 En la fecha de vencimiento, al suscriptor se le cobrará la cantidad de la suscripción. Si no tienen suficientes tokens o han revocado la aprobación, la transacción [fallará](failed_transactions) y automáticamente se darán de baja, perdiendo el saldo de tarifas.
 
@@ -32,7 +32,7 @@ Los llamadores son cuentas que periódicamente llaman a la función del contrato
 
 Inicialmente, el Llamador estará restringido a los operadores del protocolo.
 
-Eventualmente, cualquier usuario podrá llamar al contrato. El primero en hacerlo cada día pagará por la remesa de tokens pero también será [recompensado con tarifas](fees#what-is-the-amount-of-the-caller-fee). 
+Eventualmente, cualquier usuario podrá llamar al contrato. El primero en hacerlo cada día pagará por la remesa de tokens pero también será [recompensado con tarifas](fees). 
 
 
 
