@@ -28,7 +28,7 @@ Si el suscriptor ha revocado su aprobación para que Clocktower mueva fondos de 
 Cuando una suscripción falla por falta de aprobación, se deben hacer dos cosas:
 
 - El suscriptor debe ser dado de baja por el llamador.
-- La mayoría del [saldo de tarifas](fees#caller-fee-reserve) debe ser reembolsado al Proveedor con una cantidad menor yendo al llamador.
+- La mayoría del [saldo de tarifas](fees) debe ser reembolsado al Proveedor con una cantidad menor yendo al llamador.
 
 Pero ¿por qué es esto necesario?
 
@@ -52,7 +52,7 @@ Pero al dar suficiente del saldo de tarifas perdido para compensar los costos de
 
 #### Ataque de Freeloader
 
-Otro ataque involucra a un suscriptor malicioso siendo tanto suscriptor como llamador mientras falla intencionalmente. Si al llamador se le reembolsara todo el [saldo de tarifas](fees#caller-fee-reserve) perdido, entonces podrían obtener un ciclo gratuito de bienes o servicios del creador de la suscripción ya que se estarían pagando a sí mismos como llamador. Para mitigar esto, la mayoría del saldo de tarifas debe ser reembolsado al proveedor para pagar por bienes o servicios prestados dentro del período de tiempo y una porción menor reembolsada al llamador para pagar los costos de gas.
+Otro ataque involucra a un suscriptor malicioso siendo tanto suscriptor como llamador mientras falla intencionalmente. Si al llamador se le reembolsara todo el [saldo de tarifas](fees) perdido, entonces podrían obtener un ciclo gratuito de bienes o servicios del creador de la suscripción ya que se estarían pagando a sí mismos como llamador. Para mitigar esto, la mayoría del saldo de tarifas debe ser reembolsado al proveedor para pagar por bienes o servicios prestados dentro del período de tiempo y una porción menor reembolsada al llamador para pagar los costos de gas.
 
 Dado que el suscriptor ahora perdería constantemente fondos, esto mitiga el ataque anterior.
 

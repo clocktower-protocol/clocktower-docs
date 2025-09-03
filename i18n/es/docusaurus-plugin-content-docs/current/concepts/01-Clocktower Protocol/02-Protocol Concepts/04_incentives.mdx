@@ -32,7 +32,7 @@ Si bien todos los tokens ERC-20 estándar tienen un proceso integrado para facil
 
 #### Sin Oráculos
 
-Otro problema es que si requiriéramos que una de las partes pagara sus tarifas en ETH pero la transferencia futura fuera un token ERC-20, necesitaríamos algún tipo de oráculo para calcular el precio del ERC-20 vs ETH para tener una tarifa proporcional. Pero dado que tener [sin oráculos](goals#no-oracles) es un objetivo del protocolo, esta conversión no funcionará.
+Otro problema es que si requiriéramos que una de las partes pagara sus tarifas en ETH pero la transferencia futura fuera un token ERC-20, necesitaríamos algún tipo de oráculo para calcular el precio del ERC-20 vs ETH para tener una tarifa proporcional. Pero dado que tener [sin oráculos](#sin-oráculos) es un objetivo del protocolo, esta conversión no funcionará.
 
 #### Tarifas en especie
 
@@ -52,7 +52,7 @@ Si el Proveedor no puede ser el que paga al llamador, debe ser el suscriptor. Pe
 
 Los problemas más grandes giran en torno al problema de las transacciones fallidas que abordaremos en las siguientes secciones, [transacciones fallidas](failed_transactions).
 
-La solución es tener un [saldo de tarifas](06_fees.mdx) donde las tarifas pueden ser reservadas y pagadas dependiendo de la situación. 
+La solución es tener un [saldo de tarifas](fees) donde las tarifas pueden ser reservadas y pagadas dependiendo de la situación. 
 
 
 

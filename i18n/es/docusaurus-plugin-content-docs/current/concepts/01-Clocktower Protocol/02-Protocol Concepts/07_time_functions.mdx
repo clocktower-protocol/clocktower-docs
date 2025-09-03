@@ -49,9 +49,9 @@ Pero ahora nos hemos topado con un problema. ¿Cómo traducimos este número de 
 
 ### Días Julianos
 
-La mejor manera de traducir el número unix incrementando del timestamp del bloque a [rangos](time_functions#time-ranges) gregorianos es usar un estándar de día incrementando intermedio llamado [Días Julianos](https://en.wikipedia.org/wiki/Julian_day).
+La mejor manera de traducir el número unix incrementando del timestamp del bloque a [rangos](#rangos-de-tiempo) gregorianos es usar un estándar de día incrementando intermedio llamado [Días Julianos](https://en.wikipedia.org/wiki/Julian_day).
 
-Usando el siguiente código, el contrato puede hacer esta traducción [sin Oráculos o cualquier otra fuente externa](goals#no-oracles)
+Usando el siguiente código, el contrato puede hacer esta traducción [sin Oráculos o cualquier otra fuente externa](goals#sin-oráculos)
 
 Más detalles sobre estas funciones de traducción se pueden encontrar en la [documentación técnica](../../../contracts/01-Subscribe/01-subscribe_tech_reference.mdx)
 
@@ -61,7 +61,7 @@ Más detalles sobre estas funciones de traducción se pueden encontrar en la [do
 
 Pero ¿qué pasa con nuestro incremento en presencia de un día bisiesto o segundo bisiesto? Los incrementos bisiestos en ciertas situaciones pueden causar problemas. Por ejemplo, si permites que el usuario configure una suscripción mensual para pagar el día 29 del mes, solo funcionará realmente cada cuatro años.
 
-Es por eso que en los [rangos](time_functions#time-ranges) anteriores simplemente no permitimos que se use el día 29 del mes o superior en suscripciones mensuales o superior a 365 días en el rango anual.
+Es por eso que en los [rangos](#rangos-de-tiempo) anteriores simplemente no permitimos que se use el día 29 del mes o superior en suscripciones mensuales o superior a 365 días en el rango anual.
 
 #### Segundos Bisiestos
 
