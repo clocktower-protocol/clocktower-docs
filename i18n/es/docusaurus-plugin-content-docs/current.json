@@ -1,30 +1,30 @@
 {
   "version.label": {
-    "message": "Next",
+    "message": "Siguiente",
     "description": "The label for version current"
   },
   "sidebar.contractsSidebar.category.Subscribe": {
-    "message": "Subscribe",
+    "message": "Suscribirse",
     "description": "The label for category Subscribe in sidebar contractsSidebar"
   },
   "sidebar.conceptsSidebar.category.Clocktower Protocol": {
-    "message": "Clocktower Protocol",
+    "message": "Protocolo Clocktower",
     "description": "The label for category Clocktower Protocol in sidebar conceptsSidebar"
   },
   "sidebar.conceptsSidebar.category.Protocol Concepts": {
-    "message": "Protocol Concepts",
+    "message": "Conceptos del Protocolo",
     "description": "The label for category Protocol Concepts in sidebar conceptsSidebar"
   },
   "sidebar.howtoSidebar.category.HowTo": {
-    "message": "HowTo",
+    "message": "Cómo Hacer",
     "description": "The label for category HowTo in sidebar howtoSidebar"
   },
   "sidebar.howtoSidebar.category.Manage Subscriptions": {
-    "message": "Manage Subscriptions",
+    "message": "Gestionar Suscripciones",
     "description": "The label for category Manage Subscriptions in sidebar howtoSidebar"
   },
   "sidebar.howtoSidebar.category.Manage Account": {
-    "message": "Manage Account",
+    "message": "Gestionar Cuenta",
     "description": "The label for category Manage Account in sidebar howtoSidebar"
   }
 }
