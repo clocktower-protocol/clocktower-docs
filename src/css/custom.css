@@ -32,6 +32,50 @@
   letter-spacing: var(--letter-spacing);
 }
 
+/* Center footer links */
+.footer__links {
+  justify-content: center;
+  text-align: center;
+}
+
+.footer__col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.footer__title {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.footer__items {
+  text-align: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer__item {
+  margin-bottom: 0.5rem;
+}
+
+.footer__link-item {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-primary);
+}
+
+.footer__bottom {
+  text-align: center;
+  margin-top: 2rem;
+}
+
 /* You can override the default Infima variables here. */
 :root {
   --letter-spacing: 1.5px;
