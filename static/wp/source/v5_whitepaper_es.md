@@ -4,8 +4,8 @@ subtitle: Un Protocolo para Pagos Recurrentes
 author: Hugo Marx y George Atkinson
 date: Mayo 2024
 geometry: margin=3cm
-csl: cell.csl
-bibliography: whitepaper.bib
+csl: ../cell.csl
+bibliography: ../whitepaper.bib
 ---
 
  
@@ -152,7 +152,7 @@ function prorate(uint unixTime, uint40 dueDay, uint fee, uint8 frequency) intern
 
 Esta sección explora los actores principales y el ciclo de vida del protocolo, que puede ser modelado como un proceso de tres fases: creación, iniciación e incrementación.
 
-![Creación](static/img/fig1.jpg){ width=75% }
+![Creación](../../img/fig1.jpg){ width=75% }
 
 #### Creación
 En la fase de creación (ver Figura 1) un Proveedor configura una suscripción que le gustaría proporcionar en un intervalo fijo (semanal, mensual, anual, etc.). Esto puede hacerse a través de interacción directa con el contrato o, en la mayoría de los casos, a través de un sitio web que proporcione una interfaz de usuario simple. Independientemente, este proceso involucra a un Proveedor haciendo una llamada de función al contrato Clocktower, especificando parámetros de la suscripción incluyendo la cantidad del pago, token(s) ERC20 aceptados, descripción/detalles de la suscripción para ser emitidos en logs, el intervalo de pago, y la fecha de vencimiento del pago.
@@ -167,14 +167,14 @@ Se genera entonces un ID de suscripción y se agrega al índice de suscripciones
 \ 
 
 
-![Iniciación](static/img/fig2.jpg){ width=75% }
+![Iniciación](../../img/fig2.jpg){ width=75% }
 
 
 #### Iniciación
 Después de que el Proveedor crea la suscripción, ahora está disponible para cualquiera que quiera configurar pagos recurrentes (ver Figura 2). Fuera de la cadena, el Proveedor anuncia el servicio a potenciales Suscriptores que pueden registrarse vía enlace (A). Nuevamente, ya sea a través de interacción directa con el contrato vía scripts o más probablemente, un portal web, un potencial Suscriptor hará dos transacciones (B). La primera llama a la función _approve_ al contrato ERC-20 apropiado, lo que permite al contrato hacer futuros retiros del token de la EOA especificada. La siguiente transacción llamará a _subscribe_, que toma los parámetros de la estructura Subscription. El contrato entonces hace una serie de verificaciones de validación, más importante que haya una asignación adecuada y que haya suficiente del token para cubrir la cantidad de la suscripción. Si es válida, el Suscriptor es agregado al índice del contrato (C) para la EOA y se hace el primer pago para llenar el saldo de tarifas. Un cálculo de prorrateo asegura que el Suscriptor no pague de más basado en el día del ciclo en que comienza su suscripción.
 \
 
-![Incrementación](static/img/fig3.jpg){ width=75% }
+![Incrementación](../../img/fig3.jpg){ width=75% }
 
 
 #### Incrementación
