@@ -221,6 +221,10 @@ const config = {
                 label: 'GitHub',
                 href: 'https://github.com/clocktower-protocol',
               },
+              {
+                label: 'IPFS App',
+                href: 'https://ipfs.clocktower.finance',
+              },
             ],
           },
         ],
