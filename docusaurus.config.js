@@ -223,7 +223,7 @@ const config = {
               },
               {
                 label: 'IPFS App',
-                href: 'https://ipfs.clocktower.finance',
+                href: 'https://clocktower.eth.limo',
               },
             ],
           },
