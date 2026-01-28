@@ -26,10 +26,11 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250417.0",
     "@docusaurus/module-type-aliases": "^3.8",
-    "wrangler": "^4.12.0"
+    "wrangler": "^4.59.1"
   },
   "overrides": {
-    "qs": ">=6.14.1"
+    "qs": ">=6.14.1",
+    "lodash": ">=4.17.23"
   },
   "browserslist": {
     "production": [
