@@ -33,7 +33,13 @@ const config = {
   projectName: 'Clocktower', // Usually your repo name.
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+      onBrokenMarkdownImages: 'throw',
+    },
+  },
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -49,7 +55,7 @@ const config = {
       tagName: "link",
       attributes: {
         rel: "stylesheet",
-        href: "/static/fonts/univiapro-regular-webfont.woff2",
+        href: "/fonts/univiapro-regular-webfont.woff2",
       },
     },
   ],

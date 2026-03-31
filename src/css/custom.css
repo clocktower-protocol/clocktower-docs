@@ -8,12 +8,12 @@
  
  @font-face {
   font-family: "Univia";
-  src: url("/static/fonts/univiapro-regular-webfont.woff2") format("woff2");
+  src: url("/fonts/univiapro-regular-webfont.woff2") format("woff2");
 }
   
   @font-face {
     font-family: "Satoshi";
-    src: url("/static/fonts/Satoshi-Medium.woff2") format("woff2");
+    src: url("/fonts/Satoshi-Medium.woff2") format("woff2");
   }
 
 
