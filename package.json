@@ -29,6 +29,7 @@
     "wrangler": "^4.59.1"
   },
   "overrides": {
+    "esbuild": ">=0.28.1",
     "webpackbar": "^7.0.0",
     "qs": ">=6.15.2",
     "lodash": ">=4.17.23",
