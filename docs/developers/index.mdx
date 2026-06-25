@@ -1,0 +1,41 @@
+---
+id: developers_index
+title: Developers
+sidebar_position: 1
+---
+
+# Clocktower for Developers
+
+Integrate with the Clocktower Protocol on Base through three surfaces: a free REST API, an MCP server for AI agents, and a TypeScript SDK for direct on-chain access.
+
+:::warning Pre-release
+The REST API and MCP server have no public production URL yet. The SDK is not published to npm. Endpoints, pricing, and APIs may change before launch.
+:::
+
+## Choose your integration path
+
+| Surface | Best for | Auth | Writes |
+|---------|----------|------|--------|
+| [REST API](/docs/developers/REST%20API/authentication) | Backends, scripts, browser apps (with CORS) | None (free tier) or SIWE session (Builder) | Prepare-only — sign in wallet |
+| [MCP Server](/docs/developers/MCP/connection) | AI agents and MCP clients | x402 USDC micropayments on Base | Prepare-only — sign in wallet |
+| [TypeScript SDK](/docs/developers/SDK/installation) | dApps, Node scripts, bots | Your RPC + wallet (viem) | Direct on-chain via `walletClient` |
+
+All API/MCP write paths follow the same model: **prepare → sign → broadcast**. The server never relays signed transactions.
+
+For raw on-chain contract structs and function signatures, see the [Contract Technical Reference](/docs/contracts/Subscribe/subscribe_tech_reference).
+
+## Quick links
+
+- [Getting Started overview](/docs/developers/Getting%20Started/overview)
+- [REST quickstart](/docs/developers/Getting%20Started/quickstart-rest)
+- [MCP quickstart](/docs/developers/Getting%20Started/quickstart-mcp)
+- [SDK quickstart](/docs/developers/Getting%20Started/quickstart-sdk)
+- [Integrator workflows](/docs/developers/Workflows/subscribe)
+
+## Source repositories
+
+| Repo | Description |
+|------|-------------|
+| [clocktower-api](https://github.com/clocktower-protocol/api) | Cloudflare Worker — REST `/api` and MCP `/mcp` |
+| [clocktower-sdk](https://github.com/clocktower-protocol/sdk) | `@clocktower-protocol/sdk` TypeScript library |
+| [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) | CLI for testing REST and MCP locally |

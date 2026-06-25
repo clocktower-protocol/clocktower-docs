@@ -1,0 +1,88 @@
+---
+id: quickstart-sdk
+title: SDK Quickstart
+sidebar_position: 4
+---
+
+# SDK Quickstart
+
+`@clocktower-protocol/sdk` is a TypeScript library for on-chain interaction via [viem](https://viem.sh). It is a **client library** — not the REST/MCP server.
+
+:::warning Pre-release
+The SDK is not published to npm yet. Clone [clocktower-sdk](https://github.com/clocktower-protocol/sdk) and build locally until an official release is announced.
+:::
+
+## Installation
+
+```bash
+npm install @clocktower-protocol/sdk viem
+```
+
+Peer dependencies for React hooks: `react`, `wagmi` (^3.0.0), `@tanstack/react-query`.
+
+## Read protocol state
+
+```typescript
+import { createClocktowerClient } from '@clocktower-protocol/sdk'
+import { baseSepolia } from 'viem/chains'
+import { http } from 'viem'
+
+const client = createClocktowerClient({
+  chain: baseSepolia,
+  transport: http(process.env.RPC_URL!),
+})
+
+const state = await client.getProtocolState()
+console.log(state.nextUncheckedDate, state.isRemitCaughtUp)
+```
+
+## Read a subscription
+
+```typescript
+const sub = await client.getSubscription('0x...')
+console.log(sub.amount)        // "10" — human-readable
+console.log(sub.amountRaw)     // 10000000n — token-native wei
+console.log(sub.tokenDecimals) // 6
+```
+
+## Create a subscription (provider)
+
+Pass amounts in human-readable token units:
+
+```typescript
+import { Frequency } from '@clocktower-protocol/sdk'
+
+const { hash } = await client.createSubscription({
+  amount: '10',
+  token: '0x036CbD53842c5426634e7929541eC2318f3dCF7e',
+  details: { url: 'https://example.com/', description: 'Premium' },
+  frequency: Frequency.MONTHLY,
+  dueDay: 15,
+})
+```
+
+Requires a `walletClient` with `account` configured.
+
+## Subscribe with approval
+
+```typescript
+const subscription = await client.getSubscription(subscriptionId)
+const { approveHash, hash } = await client.subscribeWithApproval(
+  subscription,
+  subscriberAddress,
+  { waitForReceipt: true },
+)
+```
+
+## Supported chains
+
+| Chain | ID |
+|-------|-----|
+| Base | 8453 |
+| Base Sepolia | 84532 |
+
+## Next steps
+
+- [Client setup](/docs/developers/SDK/client-setup)
+- [Reads and writes](/docs/developers/SDK/reads-and-writes)
+- [React hooks](/docs/developers/SDK/react-hooks)

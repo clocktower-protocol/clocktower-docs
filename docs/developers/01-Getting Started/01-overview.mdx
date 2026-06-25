@@ -1,0 +1,49 @@
+---
+id: overview
+title: Overview
+sidebar_position: 1
+---
+
+# Developer Overview
+
+Clocktower exposes protocol data and write preparation through a Cloudflare Worker (`clocktower-mcp`) and a TypeScript SDK. Both target **Base mainnet** (chain ID 8453).
+
+:::warning Pre-release
+There is no public production API URL yet. Use a local deployment (`wrangler dev` on port 8787) or wait for the production announcement.
+:::
+
+## Access tiers
+
+| Lane | Surface | Auth | Default limits |
+|------|---------|------|----------------|
+| **Free** | REST `/api/*` | None | 20 rpm/IP; expensive routes 3 rpm; subgraph 100/day/IP; writes 2 prepare/min/IP |
+| **Builder** | REST `/api/*` | SIWE session (`Authorization: Bearer cts_…`) | 120 rpm/address; subgraph 10k/day; writes 30/min; scoped to your wallet |
+| **Agent** | MCP `/mcp` | x402 (USDC on Base) | 300 rpm/IP; writes 60/min/address |
+
+- **Free tier** — no API key. Same REST endpoints as Builder with lower rate limits. Cross-account reads allowed (expensive bucket).
+- **Builder tier** — subscribe to the on-chain Builder entitlement subscription, then complete SIWE auth. Use `:me` routes for your own account. See [Builder auth workflow](/docs/developers/Workflows/builder-auth).
+- **MCP** — paid per tool call via x402. Higher rate limits than legacy flat caps.
+
+See `GET /api/catalog` for the machine-readable tier manifest.
+
+## Write model (prepare-only)
+
+Neither REST nor MCP relays signed transactions. Every write follows:
+
+```
+check readiness (optional) → prepare → sign in wallet → broadcast → poll status (optional)
+```
+
+The SDK can broadcast directly when configured with a `walletClient`.
+
+## Protocol hosting
+
+- **Chain:** Base mainnet (`eip155:8453`)
+- **Worker:** Cloudflare Workers + Durable Objects
+- **Subgraph:** The Graph (history, discovery, profiles)
+
+## Next steps
+
+- [REST quickstart](/docs/developers/Getting%20Started/quickstart-rest)
+- [MCP quickstart](/docs/developers/Getting%20Started/quickstart-mcp)
+- [SDK quickstart](/docs/developers/Getting%20Started/quickstart-sdk)

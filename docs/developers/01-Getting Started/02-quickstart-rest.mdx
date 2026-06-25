@@ -1,0 +1,105 @@
+---
+id: quickstart-rest
+title: REST Quickstart
+sidebar_position: 2
+---
+
+# REST API Quickstart
+
+The REST API exposes the same capabilities as MCP over standard HTTP. **No x402 payment is required** — access is controlled by rate limits and optional Builder sessions.
+
+## Base URL
+
+When deployed:
+
+```
+https://your-worker.your-subdomain.workers.dev/api
+```
+
+Local development:
+
+```
+http://127.0.0.1:8787/api
+```
+
+## Read protocol state
+
+```bash
+curl -s http://127.0.0.1:8787/api/catalog | jq .
+curl -s http://127.0.0.1:8787/api/protocol/state | jq .
+```
+
+## Search subscriptions
+
+```bash
+curl -s "http://127.0.0.1:8787/api/subscriptions?first=10" | jq .
+```
+
+## Prepare a subscribe (readiness only)
+
+Check whether an account can subscribe without generating unsigned transactions:
+
+```bash
+curl -s -X POST http://127.0.0.1:8787/api/prepare/subscribe \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "0xYourAddress",
+    "subscription": { "id": "0x..." },
+    "readinessOnly": true
+  }' | jq .
+```
+
+## Full prepare
+
+Omit `readinessOnly` to receive `unsignedTransactions`, simulation, and gas estimates:
+
+```bash
+curl -s -X POST http://127.0.0.1:8787/api/prepare/subscribe \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "0xYourAddress",
+    "subscription": { "id": "0x..." }
+  }' | jq .
+```
+
+Sign `unsignedTransactions` in your wallet, broadcast to Base, then poll status:
+
+```bash
+curl -s -X POST http://127.0.0.1:8787/api/transactions/status \
+  -H "Content-Type: application/json" \
+  -d '{ "hash": "0x..." }' | jq .
+```
+
+## Builder session (optional)
+
+For higher limits and `:me` routes:
+
+```bash
+# 1. Challenge
+curl -s -X POST http://127.0.0.1:8787/api/auth/challenge \
+  -H "Content-Type: application/json" \
+  -d '{ "address": "0xYourAddress" }'
+
+# 2. Sign the returned message with your wallet (personal_sign)
+
+# 3. Verify
+curl -s -X POST http://127.0.0.1:8787/api/auth/verify \
+  -H "Content-Type: application/json" \
+  -d '{ "message": "...", "signature": "0x..." }'
+
+# 4. Use the token
+curl -s http://127.0.0.1:8787/api/accounts/me/subscriptions \
+  -H "Authorization: Bearer cts_..."
+```
+
+See [Authentication](/docs/developers/REST%20API/authentication) and [Builder auth workflow](/docs/developers/Workflows/builder-auth).
+
+## CLI helper
+
+The [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) repo provides a Node CLI:
+
+```bash
+npm start rest get /catalog
+npm start rest get /protocol/state
+npm start rest post /prepare/subscribe --body '{"from":"0x...","subscription":{...},"readinessOnly":true}'
+```

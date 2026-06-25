@@ -1,0 +1,79 @@
+---
+id: quickstart-mcp
+title: MCP Quickstart
+sidebar_position: 3
+---
+
+# MCP Quickstart
+
+The MCP server exposes Clocktower protocol tools for AI agents. Connect any MCP-compatible client to the `/mcp` endpoint.
+
+## Endpoint
+
+```
+https://your-worker.your-subdomain.workers.dev/mcp
+```
+
+Local development:
+
+```
+http://127.0.0.1:8787/mcp
+```
+
+## Requirements
+
+- MCP-compatible client
+- x402 support for USDC payments on Base (all tool calls are paid)
+- Wallet for signing prepared transactions
+
+See [x402 payments](/docs/developers/MCP/x402-payments) for pricing and payment flow.
+
+## List and call tools
+
+Using [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent):
+
+```bash
+cd clocktower-mcp && npm run dev   # start the Worker locally
+
+cd clocktower-agent
+npm start mcp list
+npm start mcp call get_protocol_state
+npm start mcp call search_subscriptions '{"first":10}'
+```
+
+## Example: read subscription
+
+```bash
+npm start mcp call get_subscription '{"id":"0x..."}'
+```
+
+## Example: prepare subscribe
+
+```bash
+npm start mcp call prepare_subscribe '{
+  "from": "0xYourAddress",
+  "subscription": { "id": "0x..." },
+  "readinessOnly": true
+}'
+```
+
+Full prepare returns `unsignedTransactions`, `signingMode`, `instructions`, and `requestId`. Sign and broadcast from your wallet, then:
+
+```bash
+npm start mcp call get_transaction_status '{"hash":"0x..."}'
+```
+
+## Write workflow
+
+```
+check_*_readiness (optional) → prepare_* → sign → broadcast → get_transaction_status
+```
+
+See [MCP write workflow](/docs/developers/MCP/write-workflow) and [Subscribe workflow](/docs/developers/Workflows/subscribe).
+
+## Environment
+
+| Variable | Purpose |
+|----------|---------|
+| `MCP_URL` | MCP endpoint (default `http://127.0.0.1:8787/mcp`) |
+| `PRIVATE_KEY` | x402 payments + SIWE signing for builder auth |
