@@ -54,7 +54,7 @@ sequenceDiagram
 **Challenge:**
 
 ```bash
-curl -s -X POST http://127.0.0.1:8787/api/auth/challenge \
+curl -s -X POST https://api.clocktower.finance/api/auth/challenge \
   -H "Content-Type: application/json" \
   -d '{ "address": "0xYourAddress" }'
 ```
@@ -62,7 +62,7 @@ curl -s -X POST http://127.0.0.1:8787/api/auth/challenge \
 **Verify:**
 
 ```bash
-curl -s -X POST http://127.0.0.1:8787/api/auth/verify \
+curl -s -X POST https://api.clocktower.finance/api/auth/verify \
   -H "Content-Type: application/json" \
   -d '{ "message": "...", "signature": "0x..." }'
 ```
@@ -70,7 +70,7 @@ curl -s -X POST http://127.0.0.1:8787/api/auth/verify \
 **Authenticated request:**
 
 ```bash
-curl -s http://127.0.0.1:8787/api/accounts/me/subscriptions \
+curl -s https://api.clocktower.finance/api/accounts/me/subscriptions \
   -H "Authorization: Bearer cts_..."
 ```
 

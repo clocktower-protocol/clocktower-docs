@@ -10,8 +10,10 @@ The MCP server exposes Clocktower protocol tools for AI agents. Connect any MCP-
 
 ## Endpoint
 
+Production:
+
 ```
-https://your-worker.your-subdomain.workers.dev/mcp
+https://mcp.clocktower.finance/mcp
 ```
 
 Local development:
@@ -75,5 +77,5 @@ See [MCP write workflow](/docs/developers/MCP/write-workflow) and [Subscribe wor
 
 | Variable | Purpose |
 |----------|---------|
-| `MCP_URL` | MCP endpoint (default `http://127.0.0.1:8787/mcp`) |
+| `MCP_URL` | MCP endpoint (production: `https://mcp.clocktower.finance/mcp`; local: `http://127.0.0.1:8787/mcp`) |
 | `PRIVATE_KEY` | x402 payments + SIWE signing for builder auth |
