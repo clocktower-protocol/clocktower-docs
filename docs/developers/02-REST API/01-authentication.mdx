@@ -1,0 +1,52 @@
+---
+id: authentication
+title: Authentication
+sidebar_position: 1
+---
+
+# REST Authentication
+
+The REST API supports three access modes. x402 is **not** used on REST — only on MCP.
+
+| Method | When |
+|--------|------|
+| None | Free tier — call any allowed endpoint directly |
+| `Authorization: Bearer <session>` | Builder tier — after SIWE verify |
+| x402 | **MCP only** — not used on REST |
+
+## Free tier
+
+No API key required. Send requests directly to `/api/*`. Rate limits apply per IP.
+
+## Builder tier (SIWE session)
+
+Builder access requires an **ACTIVE** on-chain subscription to the server's Builder entitlement subscription (`BUILDER_SUB_ID`).
+
+### Flow
+
+1. `POST /api/auth/challenge` with `{ "address": "0x…" }` → receive `message` + `nonce`
+2. Wallet `personal_sign` on the message
+3. `POST /api/auth/verify` with `{ "message", "signature" }` → receive `token`
+4. Send `Authorization: Bearer <token>` on subsequent `/api` calls
+
+### Builder scope
+
+- Own account (`/api/accounts/me`, …)
+- Content subscriptions you subscribe to or created
+- Discovery and subscriber writes for your wallet
+
+Provider management and cross-account reads are **not** included in Builder scope. Use the free tier for public cross-account reads.
+
+### Session token
+
+The session token (`cts_…`) is not a pre-shared API key. It is obtained via SIWE and cached client-side.
+
+See [Builder auth workflow](/docs/developers/Workflows/builder-auth).
+
+## Optional Basic Auth
+
+HTTP Basic Auth on `/api` is controlled by `API_REQUIRE_BASIC_AUTH` (default `false`). Intended for local development only.
+
+## CORS
+
+Browser cross-origin requests are disabled by default. Ops must whitelist origins via `API_CORS_ALLOWED_ORIGINS`. CORS is not granted by a Builder subscription.

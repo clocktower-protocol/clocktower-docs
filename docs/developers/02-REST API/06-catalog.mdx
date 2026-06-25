@@ -1,0 +1,49 @@
+---
+id: catalog
+title: Catalog
+sidebar_position: 6
+---
+
+# API Catalog
+
+`GET /api/catalog` returns the machine-readable manifest of routes, access tiers, and limits.
+
+## Example request
+
+```bash
+curl -s http://127.0.0.1:8787/api/catalog | jq .
+```
+
+## Response shape
+
+```json
+{
+  "version": "2",
+  "chainId": 8453,
+  "access": {
+    "rest": {
+      "free": {
+        "auth": "none",
+        "limits": { "...": "..." },
+        "note": "Cross-account and provider reads allowed under expensive bucket"
+      },
+      "builder": {
+        "auth": "SIWE session (Bearer token)",
+        "enabled": "BUILDER_SUB_ID configured",
+        "limits": { "...": "..." },
+        "authEndpoints": ["/api/auth/challenge", "/api/auth/verify"]
+      }
+    },
+    "mcp": {
+      "auth": "x402 (USDC on Base)",
+      "limits": { "...": "..." }
+    }
+  },
+  "builderAuthEnabled": true,
+  "routes": [
+    { "method": "GET", "path": "/api/protocol/state", "description": "..." }
+  ]
+}
+```
+
+Use the catalog to discover available endpoints programmatically and to verify which auth mode and limits apply at runtime.

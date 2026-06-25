@@ -1,0 +1,47 @@
+---
+id: errors
+title: Errors
+sidebar_position: 5
+---
+
+# Error Format
+
+All errors return a consistent JSON shape:
+
+```json
+{
+  "error": "Human readable message",
+  "code": "VALIDATION_ERROR",
+  "requestId": "optional-uuid-for-prepare-failures"
+}
+```
+
+## Error codes
+
+| Code | Description |
+|------|-------------|
+| `VALIDATION_ERROR` | Invalid request body or parameters |
+| `NOT_FOUND` | Resource does not exist |
+| `UPSTREAM_ERROR` | RPC or subgraph failure |
+| `RATE_LIMITED` | Tier rate limit exceeded |
+| `PREPARE_FAILURE` | MCP/REST prepare layer failure (may include `requestId`) |
+
+## Validation errors
+
+Write endpoints may include an `issues` array with field-level details:
+
+```json
+{
+  "error": "Validation failed",
+  "code": "VALIDATION_ERROR",
+  "issues": [
+    { "path": "from", "message": "Invalid address" }
+  ]
+}
+```
+
+## Prepare failures
+
+Include `requestId` when reporting prepare issues. MCP prepare failures return `code: "PREPARE_FAILURE"` when the error originated in the prepare layer.
+
+Simulation failures on MCP throw before x402 payment settles — you are not charged.

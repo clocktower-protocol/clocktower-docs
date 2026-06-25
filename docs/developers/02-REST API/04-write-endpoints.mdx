@@ -1,0 +1,58 @@
+---
+id: write-endpoints
+title: Write Endpoints
+sidebar_position: 4
+---
+
+# Write Endpoints
+
+All write endpoints use `POST`. The server returns unsigned transactions — you sign and broadcast from your wallet.
+
+## Prepare response format
+
+Full prepare responses include:
+
+| Field | Description |
+|-------|-------------|
+| `requestId` | Correlation UUID for support (not stored server-side) |
+| `instructions` | Ordered steps for signing and broadcasting |
+| `warnings` | Non-fatal hints (e.g. remit may need multiple txs) |
+| `unsignedTransactions` | Calldata: `to`, `data`, `value`, `chainId`, `from` |
+| `signingMode` | `raw` (single tx) or `eip5792` (multi-tx batch) |
+| `eip5792` | Batch descriptor when `signingMode` is `eip5792` |
+| `simulation` | On-chain simulation (must succeed before MCP payment settles) |
+| `gasEstimates` | Per-tx gas budget on Base |
+| `gasSummary` | Aggregated totals; remit backlogs include `backlogMultiplier` |
+| `preflight` | Operation-specific context |
+
+### Optional request fields
+
+On any `prepare_*` endpoint:
+
+- **`readinessOnly: true`** — preflight only; no unsigned transactions or gas estimates
+- **`simulateFromAddress`** — address for `eth_estimateGas` when signing wallet differs from broadcaster
+
+## Endpoints
+
+| Endpoint | Free tier | Description |
+|----------|-----------|-------------|
+| `POST /api/check_subscribe_readiness` | Allowed | Validate whether an account can subscribe |
+| `POST /api/prepare/create_subscription` | 2/min/IP | Prepare a new subscription |
+| `POST /api/prepare/subscribe` | 2/min/IP | Prepare subscribing (includes ERC-20 approve when needed) |
+| `POST /api/prepare/cancel_subscription` | 2/min/IP | Provider cancel |
+| `POST /api/prepare/unsubscribe` | 2/min/IP | Subscriber unsubscribe |
+| `POST /api/prepare/unsubscribe_by_provider` | 2/min/IP | Provider-initiated unsubscribe |
+| `POST /api/prepare/edit_details` | 2/min/IP | Provider metadata edit |
+| `POST /api/check_remit_readiness` | Allowed | Check whether `remit()` is callable |
+| `POST /api/prepare/remit` | 2/min/IP | Prepare permissionless `remit()` |
+| `POST /api/transactions/status` | Allowed | Poll confirmation status after broadcast |
+
+## Remit flow
+
+```
+check_remit_readiness → prepare_remit → sign → broadcast → repeat until caught up
+```
+
+One `remit()` clears at most `maxRemits` payments per transaction. Use `get_subscriptions_due` for a lightweight single-day read; use `check_remit_readiness` before preparing remit.
+
+See [Remit caller workflow](/docs/developers/Workflows/remit-caller).

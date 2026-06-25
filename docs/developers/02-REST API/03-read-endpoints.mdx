@@ -1,0 +1,68 @@
+---
+id: read-endpoints
+title: Read Endpoints
+sidebar_position: 3
+---
+
+# Read Endpoints
+
+All read endpoints use `GET` unless noted.
+
+## Protocol and catalog
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/catalog` | Machine-readable route catalog and tier limits |
+| `GET /api/protocol/state` | Current protocol fee configuration |
+| `GET /api/status` | Lightweight health check |
+
+## Subscriptions
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/subscriptions` | Search/discover subscriptions. Query: `provider`, `token`, `frequency`, `cancelled` (default `false`), `includeDetails`, `first` (max 50), `skip` |
+| `GET /api/subscriptions/due` | Subscriptions due on a given day/frequency |
+| `GET /api/subscriptions/:id` | Single subscription by ID |
+| `GET /api/subscriptions/:id/subscribers` | Subscribers for a subscription |
+| `GET /api/subscriptions/:id/fee-balance?address=0x…` | Fee balance for a subscriber |
+| `GET /api/subscriptions/:id/details` | Current url/description (latest DetailsLog) |
+
+## Accounts
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/accounts/:address/subscriptions` | Subscriptions for an account (rich) |
+| `GET /api/accounts/:address` | Enriched account: `subscribedTo` and `created` arrays |
+| `GET /api/accounts/me/subscriptions` | Builder session — your subscriptions |
+
+## Tokens
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/approved-tokens` | List approved tokens with `minimum` and `paused` |
+| `GET /api/approved-tokens/:token` | Single token configuration |
+
+## History and profiles (subgraph-backed)
+
+These hit the **expensive rate bucket** and subgraph daily cap. Support `?first=N&skip=M` pagination.
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/subscriptions/:id/history` | Activity history (SubLog events) |
+| `GET /api/accounts/:address/activity` | Combined subscriber + provider activity |
+| `GET /api/providers/:address` | Latest provider profile |
+| `GET /api/subscriptions/:id/details-history` | URL/description change history |
+
+Subgraph errors return a graceful response with an `error` field rather than failing the entire request.
+
+### History response fields
+
+SubLog events include:
+
+- `eventName` — human-readable event type
+- `amount`, `amountRaw`, `tokenDecimals` — normalized amounts
+- `formattedTimestamp`, `formattedAmount`
+
+:::info Design note
+There is no raw GraphQL proxy. All subgraph access goes through shaped, rate-limited endpoints with formatting and normalization.
+:::
