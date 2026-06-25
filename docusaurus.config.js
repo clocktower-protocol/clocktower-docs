@@ -121,6 +121,12 @@ const config = {
             position: 'right'
           },
           {
+            type: 'docSidebar',
+            sidebarId: 'developersSidebar',
+            label: 'Developers',
+            position: 'right',
+          },
+          {
             type: 'dropdown',
             items: [
               {
@@ -206,6 +212,10 @@ const config = {
               {
                 label: 'HowTo',
                 to: '/docs/howto/howto/',
+              },
+              {
+                label: 'Developers',
+                to: '/docs/developers/',
               },
               {
                 label: 'Whitepaper',
