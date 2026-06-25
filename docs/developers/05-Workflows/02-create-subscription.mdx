@@ -1,0 +1,53 @@
+---
+id: create-subscription
+title: Create Subscription
+sidebar_position: 2
+---
+
+# Create Subscription Workflow
+
+A provider creates a new subscription on-chain.
+
+**Actor:** Provider wallet (`from`).
+
+```mermaid
+sequenceDiagram
+  participant App
+  participant API as Clocktower API
+  participant Wallet
+  participant Chain as Base
+
+  App->>API: prepare_create_subscription
+  API-->>App: unsignedTransactions, requestId
+  App->>Wallet: sign
+  Wallet->>Chain: broadcast
+  App->>API: get_transaction_status (optional)
+  App->>API: get_subscription (poll for new id)
+```
+
+## By surface
+
+| Step | REST | MCP | SDK |
+|------|------|-----|-----|
+| Prepare | `POST /api/prepare/create_subscription` | `prepare_create_subscription` | `createSubscription()` |
+| Sign & broadcast | Wallet | Wallet | `walletClient` via viem |
+| Poll for ID | `GET /api/subscriptions/:id` or search | `get_subscription` | `waitForSubscription()` |
+
+## Request body
+
+```json
+{
+  "from": "0xProviderAddress",
+  "subscription": {
+    "amount": "10",
+    "token": "0x...",
+    "details": { "url": "https://example.com/", "description": "Premium" },
+    "frequency": 1,
+    "dueDay": 15
+  }
+}
+```
+
+SDK accepts human-readable `amount` strings and `Frequency` enum values.
+
+See [Due day ranges](/docs/developers/SDK/reads-and-writes) for valid `dueDay` per frequency.
