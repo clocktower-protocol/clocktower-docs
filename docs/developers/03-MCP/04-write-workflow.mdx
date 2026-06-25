@@ -1,0 +1,52 @@
+---
+id: write-workflow
+title: Write Workflow
+sidebar_position: 4
+---
+
+# MCP Write Workflow
+
+All MCP writes follow the prepare-only model:
+
+```
+check_*_readiness (optional) → prepare_* → sign → broadcast → get_transaction_status
+```
+
+The server never relays signed transactions.
+
+## Prepare response
+
+Full prepare returns:
+
+- `requestId` — correlation ID for support
+- `unsignedTransactions` — calldata to sign
+- `signingMode` — `raw` or `eip5792` (approve + subscribe batch)
+- `instructions` — ordered signing steps
+- `simulation` — on-chain simulation results
+- `gasEstimates` / `gasSummary` — advisory gas budget on Base
+- `preflight` — operation-specific context
+- `warnings` — non-fatal hints
+
+## Readiness-only mode
+
+Pass `readinessOnly: true` to any `prepare_*` tool:
+
+- Returns `ready`, `errors`, `warnings`, `details`
+- No `unsignedTransactions` or simulation
+- Billed at readiness tier ($0.01; remit path $0.02)
+
+Dedicated readiness tools: `check_subscribe_readiness`, `check_remit_readiness`.
+
+## After broadcast
+
+Poll `get_transaction_status` with the transaction hash. Include `requestId` when reporting issues.
+
+## Remit
+
+```
+check_remit_readiness → prepare_remit → sign → broadcast → repeat until caught up
+```
+
+One `remit()` clears at most `maxRemits` payments per transaction. When the backlog needs multiple broadcasts, `preflight.expectedTransactions` and `gasSummary.backlogMultiplier` describe the total gas budget.
+
+See [Remit caller workflow](/docs/developers/Workflows/remit-caller).

@@ -1,0 +1,60 @@
+---
+id: connection
+title: Connection
+sidebar_position: 1
+---
+
+# MCP Connection
+
+The MCP server exposes Clocktower protocol tools at the `/mcp` endpoint.
+
+## Endpoint
+
+```
+https://your-worker.your-subdomain.workers.dev/mcp
+```
+
+Local development (after `npm run dev` in clocktower-api):
+
+```
+http://127.0.0.1:8787/mcp
+```
+
+## Client setup
+
+Connect using any MCP-compatible client. Your client must support:
+
+1. MCP transport to `/mcp`
+2. x402 USDC payments on Base for tool calls
+3. Wallet signing for prepared transactions
+
+## Tool categories
+
+| Category | Examples |
+|----------|----------|
+| Read | `get_protocol_state`, `get_subscription`, `get_account` |
+| Discovery | `search_subscriptions`, `get_subscription_details` |
+| History | `get_subscription_history`, `get_account_activity` |
+| Write (prepare) | `prepare_subscribe`, `prepare_create_subscription`, `prepare_remit` |
+| Status | `get_transaction_status`, `check_subscribe_readiness` |
+
+See [Tools reference](/docs/developers/MCP/tools-reference) for the full list and pricing.
+
+## Local testing
+
+```bash
+# Terminal 1 — start the Worker
+cd clocktower-api && npm run dev
+
+# Terminal 2 — use the agent CLI
+cd clocktower-agent
+export MCP_URL=http://127.0.0.1:8787/mcp
+npm start mcp list
+npm start mcp call get_protocol_state
+```
+
+## Protocol
+
+- **Chain:** Base mainnet (chainId 8453)
+- **Payments:** x402 USDC micropayments per tool call
+- **Writes:** prepare-only — server never relays signed transactions
