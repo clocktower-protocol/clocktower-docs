@@ -11,6 +11,14 @@
     "message": "Suscripciones para Todos",
     "description": "The main hero title on the homepage"
   },
+  "whitepaper.redirect.message": {
+    "message": "Redirigiendo al PDF del libro blanco...",
+    "description": "Message shown while redirecting to the whitepaper PDF"
+  },
+  "whitepaper.redirect.link": {
+    "message": "Haz clic aquí si no eres redirigido automáticamente.",
+    "description": "Fallback link when the whitepaper redirect does not happen automatically"
+  },
   "homepage.banner2.title": {
     "message": "Descentralizados",
     "description": "The second banner title about decentralized payments"
