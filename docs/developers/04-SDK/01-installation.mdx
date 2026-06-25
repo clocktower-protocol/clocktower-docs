@@ -1,0 +1,45 @@
+---
+id: installation
+title: Installation
+sidebar_position: 1
+---
+
+# SDK Installation
+
+:::warning Pre-release
+`@clocktower-protocol/sdk` is not published to npm yet. APIs may change before a stable release.
+:::
+
+## Install
+
+```bash
+npm install @clocktower-protocol/sdk viem
+```
+
+## Peer dependencies
+
+For React hooks:
+
+```bash
+npm install react wagmi @tanstack/react-query
+```
+
+- **wagmi** ^3.0.0 — install connector packages separately (e.g. `@walletconnect/ethereum-provider` for WalletConnect)
+
+## Build from source
+
+```bash
+git clone git@github.com:clocktower-protocol/sdk.git
+cd sdk
+npm install
+npm run build
+```
+
+## Relationship to clocktower-api
+
+| Package | Use when |
+|---------|----------|
+| `@clocktower-protocol/sdk` | Typed on-chain methods in dApps, scripts, backends |
+| clocktower-api (REST/MCP) | HTTP/MCP access with rate limits or x402 payments |
+
+The SDK talks directly to the chain via viem. The API server adds subgraph history, prepare-only writes with simulation, and agent-facing MCP tools.

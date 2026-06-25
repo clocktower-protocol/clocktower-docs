@@ -1,0 +1,40 @@
+---
+id: subgraph
+title: Subgraph
+sidebar_position: 5
+---
+
+# Subgraph Client
+
+Query indexed events via The Graph.
+
+```typescript
+import { createSubgraphClient, searchSubscriptions } from '@clocktower-protocol/sdk/subgraph'
+
+const subgraph = createSubgraphClient({
+  chainId: 84532,
+  subgraphUrl: process.env.GRAPH_BASE_SEPOLIA_URL!,
+  apiKey: process.env.GRAPH_API_KEY,
+})
+
+const history = await subgraph.getSubscriptionHistory('0x...')
+const activity = await subgraph.getAccountActivity('0x...')
+```
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `getSubscriptionHistory(id, { first?, skip? })` | Event log for one subscription |
+| `getSubscriptionDetails(id)` | Latest URL/description |
+| `getSubscriptionDetailsHistory(id, options?)` | Paginated detail changes |
+| `getAccountActivity(address, options?)` | Merged subscriber + provider events |
+| `getProviderProfile(address)` | Latest provider profile |
+| `searchSubscriptionCreates(options?)` | Filter by `provider`, `token` |
+| `searchSubscriptions(subgraph, client, options?)` | Discovery + on-chain filter |
+
+## Errors
+
+Subgraph methods throw `ClocktowerSubgraphError` on failure. `getAccountActivity` may return `partial: true` with `warnings` when one query leg fails.
+
+Amount fields use the same `amount` / `amountRaw` / `tokenDecimals` shape as on-chain reads.

@@ -1,0 +1,57 @@
+---
+id: client-setup
+title: Client Setup
+sidebar_position: 2
+---
+
+# Client Setup
+
+## Standalone client (scripts, backends)
+
+```typescript
+import { createClocktowerClient } from '@clocktower-protocol/sdk'
+import { baseSepolia } from 'viem/chains'
+import { http } from 'viem'
+
+const client = createClocktowerClient({
+  chain: baseSepolia,
+  transport: http(process.env.RPC_URL!),
+  walletClient,           // optional — required for writes
+  contractAddress,        // optional — defaults to chain config
+  writes: { waitForReceipt: true },
+  rpc: {
+    retries: 2,
+    timeoutMs: 30_000,
+  },
+})
+```
+
+## From wagmi/viem (inside ClocktowerProvider)
+
+```typescript
+import { createClocktowerClientFromViem } from '@clocktower-protocol/sdk'
+
+const client = createClocktowerClientFromViem({ publicClient, walletClient })
+```
+
+## Supported chains
+
+| Chain | ID | Contract |
+|-------|-----|----------|
+| Base | 8453 | `0xFaF5fc2f77b21BC188f492b827D366B03a07c61f` |
+| Base Sepolia | 84532 | `0x6A0791Cd884f2199dC8F372f6715f675D2950922` |
+
+`createClocktowerClient` throws `UnsupportedChainError` for other chain IDs.
+
+## Write options
+
+Pass per call or set defaults via `ClocktowerClientConfig.writes`:
+
+```typescript
+const { hash, gas, receipt } = await client.createSubscription(params, {
+  waitForReceipt: true,
+  skipSimulation: false,
+})
+```
+
+`WriteResult` includes `hash`, optional `gas`, and optional `receipt`.

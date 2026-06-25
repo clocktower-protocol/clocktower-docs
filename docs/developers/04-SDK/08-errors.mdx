@@ -1,0 +1,53 @@
+---
+id: sdk-errors
+title: Errors
+sidebar_position: 8
+---
+
+# SDK Errors
+
+All SDK errors extend `ClocktowerError`. Catch by `instanceof` or `error.name`.
+
+| Error | When |
+|-------|------|
+| `UnsupportedChainError` | Chain id not in `SUPPORTED_CHAIN_IDS` |
+| `InvalidAddressError` | Malformed address |
+| `InvalidSubscriptionIdError` | Malformed bytes32 subscription id |
+| `InvalidInputError` | Base class for validation errors |
+| `InvalidDueDayError` | `dueDay` outside range for `frequency` |
+| `InvalidAmountError` | Amount below minimum or malformed |
+| `SubscriptionNotFoundError` | `getSubscription` returned zero id |
+| `SubscriptionWaitTimeoutError` | `waitForSubscription` timed out |
+| `SubscriptionCancelledError` | Subscribe on cancelled subscription |
+| `TokenNotApprovedError` | Token not in `approvedERC20` map |
+| `TokenPausedError` | Token paused on protocol |
+| `WalletRequiredError` | Write without `walletClient.account` |
+| `InsufficientBalanceError` | Subscriber balance too low |
+| `InsufficientAllowanceError` | Token allowance too low |
+| `ClocktowerContractError` | Write simulation or broadcast reverted |
+| `ClocktowerSubgraphError` | Subgraph HTTP/GraphQL failure |
+
+## Example
+
+```typescript
+import {
+  ClocktowerError,
+  WalletRequiredError,
+  SubscriptionNotFoundError,
+} from '@clocktower-protocol/sdk'
+
+try {
+  await client.subscribe(subscription)
+} catch (err) {
+  if (err instanceof WalletRequiredError) {
+    // connect wallet
+  } else if (err instanceof SubscriptionNotFoundError) {
+    // bad id
+  } else if (err instanceof ClocktowerError) {
+    // other SDK validation
+  }
+  throw err
+}
+```
+
+Export helpers for UI preflight: `validateAddress`, `validateSubscriptionId`, `validateDueDay`, `validateDetails`, `assertSubscriptionWritable`.

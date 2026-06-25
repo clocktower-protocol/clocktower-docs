@@ -1,0 +1,54 @@
+---
+id: react-hooks
+title: React Hooks
+sidebar_position: 4
+---
+
+# React Hooks
+
+Import from `@clocktower-protocol/sdk/react`. Requires `ClocktowerProvider` wrapping your app.
+
+## Setup
+
+```tsx
+import { WagmiProvider } from 'wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ClocktowerProvider, useSubscription } from '@clocktower-protocol/sdk/react'
+
+const queryClient = new QueryClient()
+
+function App() {
+  return (
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <ClocktowerProvider>
+          <SubscriptionPage />
+        </ClocktowerProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  )
+}
+```
+
+## Query hooks
+
+| Hook | Description |
+|------|-------------|
+| `useSubscription` | Single subscription by ID |
+| `useProtocolState` | Protocol fee configuration and remit status |
+| `useAccountSubscriptions` | Subscriptions for an account |
+| `useEnrichedAccount` | Enriched account view |
+| `useApprovedToken` | Token configuration |
+| `useSubscriptionsDue` | Due-queue summary |
+
+## Mutation hooks
+
+| Hook | Description |
+|------|-------------|
+| `useCreateSubscription` | Create a new subscription |
+| `useSubscribe` | Subscribe to existing subscription |
+| `useSubscribeWithApproval` | Subscribe with optional approve |
+| `useUnsubscribe` | Unsubscribe |
+| `useCancelSubscription` | Provider cancel |
+
+Query keys are scoped by `chainId`. Mutations invalidate related queries on success.

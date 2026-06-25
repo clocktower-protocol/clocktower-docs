@@ -1,0 +1,38 @@
+---
+id: caller
+title: Caller
+sidebar_position: 6
+---
+
+# Caller (Remit)
+
+For bots and cron jobs that call `remit()` and earn caller fees:
+
+```typescript
+import { createClocktowerClient } from '@clocktower-protocol/sdk'
+import { checkRemitReadiness, runRemitUntilCaughtUp } from '@clocktower-protocol/sdk/caller'
+
+const readiness = await checkRemitReadiness(client, { from: callerAddress })
+if (!readiness.ready) {
+  console.log(readiness.errors, readiness.warnings)
+  return
+}
+
+const result = await runRemitUntilCaughtUp(client, { from: callerAddress })
+console.log(result.status, result.transactions)
+```
+
+## Exports
+
+| Export | Description |
+|--------|-------------|
+| `checkRemitReadiness(client, { from? })` | `RemitReadinessResult` with `ready`, `errors`, `warnings`, queue size |
+| `runRemitUntilCaughtUp(client, options?)` | Loops `remit()` until caught up or `maxIterations` |
+| `scanDueSubscriptionIds`, `listDueSubscriptionIds` | Low-level Multicall3 scan helpers |
+
+## Result types
+
+- `RemitReadinessResult` — `ready`, `currentDate`, `nextUncheckedDate`, `isRemitCaughtUp`, `totalSubscriptions`, `maxRemits`, `expectedTransactions`, `errors[]`, `warnings[]`
+- `RunRemitResult` — `status` (`caught_up`, `no_work`, `max_iterations`, `wallet_required`, `failed`), `transactions[]`, `iterations`
+
+See [Remit caller workflow](/docs/developers/Workflows/remit-caller).

@@ -1,0 +1,33 @@
+---
+id: amounts-and-dates
+title: Amounts and Dates
+sidebar_position: 7
+---
+
+# Amounts and Dates
+
+## Human-readable amounts
+
+You do not need to handle protocol 18-decimal storage for normal SDK usage.
+
+| Field | Meaning | 10 USDC example |
+|-------|---------|-----------------|
+| `amount` | Human-readable string | `"10"` |
+| `amountRaw` | Token-native wei (`bigint`) | `10000000n` |
+| `tokenDecimals` | Token precision | `6` |
+
+- **Creating subscriptions:** pass `amount: '10'` (human-readable token units)
+- **Reading subscriptions:** all read methods return formatted amounts
+- **Subscribe / unsubscribe / cancel:** pass subscription objects from `getSubscription`
+
+Low-level helpers (`parseHumanAmount`, `formatHumanAmount`) are exported for advanced use.
+
+## Remit progress dates
+
+The contract tracks remit progress with an internal day index. The SDK converts it to UTC Gregorian timestamps:
+
+- `nextUncheckedDate` — calendar day the contract will process next
+- `currentDate` — today's protocol calendar day (UTC)
+- `isRemitCaughtUp` — `true` when remit is up to date
+
+Use `dayNumberToGregorian` from the main export to format other protocol day numbers.

@@ -1,0 +1,49 @@
+---
+id: reads-and-writes
+title: Reads and Writes
+sidebar_position: 3
+---
+
+# Reads and Writes
+
+## Read methods
+
+| Method | Returns | Notes |
+|--------|---------|-------|
+| `getSubscription(id)` | `Subscription` | Throws `SubscriptionNotFoundError` for zero id |
+| `getAccountSubscriptions(bySubscriber, address)` | `AccountSubscription[]` | `bySubscriber: true` lists subscriptions the account pays for |
+| `getSubscribers(id)` | `Subscriber[]` | Fee balances formatted per token decimals |
+| `getApprovedToken(token)` | `ApprovedToken` | Throws `TokenNotApprovedError` if not approved |
+| `getFeeBalance(id, subscriber)` | `FeeBalance` | Prepaid fee balance |
+| `getAccount(address)` | `Account` | Parsed on-chain view |
+| `getEnrichedAccount(address)` | `EnrichedAccount` | Batched fee balances + `created` |
+| `getProtocolState()` | `ProtocolState` | Fees, `maxRemits`, dates, `isRemitCaughtUp` |
+| `getSubscriptionsDue(day?)` | Due-queue summary | Optional day override |
+| `watchSubscription(id, onUpdate, options?)` | `() => void` | Poll; call returned function to stop |
+| `waitForSubscription(id, options?)` | `Subscription` | Poll until exists (post-create) |
+
+## Write methods (require `walletClient`)
+
+| Method | Returns | Notes |
+|--------|---------|-------|
+| `createSubscription(params, options?)` | `WriteResult` | Validates `dueDay`, metadata, token minimum |
+| `subscribe(subscription, options?)` | `WriteResult` | Preflight: cancelled, paused, allowance, balance |
+| `subscribeWithApproval(subscription, account, options?)` | `{ approveHash?, hash }` | Approves if allowance low |
+| `unsubscribe(id, options?)` | `WriteResult` | Fetches subscription then unsubscribes |
+| `cancelSubscription(id, options?)` | `WriteResult` | Provider cancels |
+| `editDetails(id, details, options?)` | `WriteResult` | Updates URL/description |
+| `editProviderDetails(details, options?)` | `WriteResult` | Provider profile fields |
+| `remit(options?)` | `WriteResult` | Permissionless caller payout |
+
+All writes throw `WalletRequiredError` when no `walletClient` with `account` is configured.
+
+## Due day ranges
+
+| `Frequency` | Valid `dueDay` |
+|-------------|----------------|
+| `WEEKLY` (0) | 1–7 |
+| `MONTHLY` (1) | 1–28 |
+| `QUARTERLY` (2) | 1–90 |
+| `YEARLY` (3) | 1–365 |
+
+For on-chain function signatures, see [Contract Technical Reference](/docs/contracts/Subscribe/subscribe_tech_reference).
