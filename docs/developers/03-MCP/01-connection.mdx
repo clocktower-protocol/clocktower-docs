@@ -6,15 +6,17 @@ sidebar_position: 1
 
 # MCP Connection
 
-The MCP server exposes Clocktower protocol tools at the `/mcp` endpoint.
+The MCP server exposes Clocktower protocol tools at `mcp.clocktower.finance`.
 
 ## Endpoint
 
 Production:
 
 ```
-https://mcp.clocktower.finance/mcp
+https://mcp.clocktower.finance
 ```
+
+The MCP client connects to the subdomain root — no `/mcp` path suffix.
 
 Local development (after `npm run dev` in clocktower-api):
 
@@ -22,11 +24,13 @@ Local development (after `npm run dev` in clocktower-api):
 http://127.0.0.1:8787/mcp
 ```
 
+On a single local Worker, the MCP handler is mounted at `/mcp`.
+
 ## Client setup
 
 Connect using any MCP-compatible client. Your client must support:
 
-1. MCP transport to `/mcp`
+1. MCP transport to `mcp.clocktower.finance` (or `/mcp` on local dev)
 2. x402 USDC payments on Base for tool calls
 3. Wallet signing for prepared transactions
 

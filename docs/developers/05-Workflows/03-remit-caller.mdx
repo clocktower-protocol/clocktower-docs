@@ -51,8 +51,8 @@ sequenceDiagram
 
 | Step | REST | MCP tool | SDK |
 |------|------|----------|-----|
-| 1. Readiness | `POST /api/check_remit_readiness` | `check_remit_readiness` | `checkRemitReadiness()` |
-| 2. Prepare | `POST /api/prepare/remit` | `prepare_remit` | `remit()` |
+| 1. Readiness | `POST /check_remit_readiness` | `check_remit_readiness` | `checkRemitReadiness()` |
+| 2. Prepare | `POST /prepare/remit` | `prepare_remit` | `remit()` |
 | 3–4. Loop | Repeat until caught up | Same | `runRemitUntilCaughtUp()` |
 
 ## Tips

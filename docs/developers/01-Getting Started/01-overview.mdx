@@ -16,15 +16,15 @@ Production endpoints are planned at `api.clocktower.finance` (REST) and `mcp.clo
 
 | Lane | Surface | Auth | Default limits |
 |------|---------|------|----------------|
-| **Free** | REST `/api/*` | None | 20 rpm/IP; expensive routes 3 rpm; subgraph 100/day/IP; writes 2 prepare/min/IP |
-| **Builder** | REST `/api/*` | SIWE session (`Authorization: Bearer cts_…`) | 120 rpm/address; subgraph 10k/day; writes 30/min; scoped to your wallet |
-| **Agent** | MCP `/mcp` | x402 (USDC on Base) | 300 rpm/IP; writes 60/min/address |
+| **Free** | `api.clocktower.finance` | None | 20 rpm/IP; expensive routes 3 rpm; subgraph 100/day/IP; writes 2 prepare/min/IP |
+| **Builder** | `api.clocktower.finance` | SIWE session (`Authorization: Bearer cts_…`) | 120 rpm/address; subgraph 10k/day; writes 30/min; scoped to your wallet |
+| **Agent** | `mcp.clocktower.finance` | x402 (USDC on Base) | 300 rpm/IP; writes 60/min/address |
 
 - **Free tier** — no API key. Same REST endpoints as Builder with lower rate limits. Cross-account reads allowed (expensive bucket).
 - **Builder tier** — subscribe to the on-chain Builder entitlement subscription, then complete SIWE auth. Use `:me` routes for your own account. See [Builder auth workflow](/docs/developers/Workflows/builder-auth).
 - **MCP** — paid per tool call via x402. Higher rate limits than legacy flat caps.
 
-See `GET /api/catalog` for the machine-readable tier manifest.
+See `GET /catalog` on `api.clocktower.finance` for the machine-readable tier manifest. Local dev uses `GET /api/catalog`.
 
 ## Write model (prepare-only)
 

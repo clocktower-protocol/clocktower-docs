@@ -13,28 +13,28 @@ The REST API exposes the same capabilities as MCP over standard HTTP. **No x402 
 Production:
 
 ```
-https://api.clocktower.finance/api
+https://api.clocktower.finance
 ```
 
-Local development:
+Local development (single Worker — paths include an `/api` prefix):
 
 ```
 http://127.0.0.1:8787/api
 ```
 
-Examples below use the production URL. Substitute the local base URL when running `wrangler dev`.
+Examples below use production URLs (`/catalog`, not `/api/catalog`). When running `wrangler dev` locally, prepend `/api` to each path.
 
 ## Read protocol state
 
 ```bash
-curl -s https://api.clocktower.finance/api/catalog | jq .
-curl -s https://api.clocktower.finance/api/protocol/state | jq .
+curl -s https://api.clocktower.finance/catalog | jq .
+curl -s https://api.clocktower.finance/protocol/state | jq .
 ```
 
 ## Search subscriptions
 
 ```bash
-curl -s "https://api.clocktower.finance/api/subscriptions?first=10" | jq .
+curl -s "https://api.clocktower.finance/subscriptions?first=10" | jq .
 ```
 
 ## Prepare a subscribe (readiness only)
@@ -42,7 +42,7 @@ curl -s "https://api.clocktower.finance/api/subscriptions?first=10" | jq .
 Check whether an account can subscribe without generating unsigned transactions:
 
 ```bash
-curl -s -X POST https://api.clocktower.finance/api/prepare/subscribe \
+curl -s -X POST https://api.clocktower.finance/prepare/subscribe \
   -H "Content-Type: application/json" \
   -d '{
     "from": "0xYourAddress",
@@ -56,7 +56,7 @@ curl -s -X POST https://api.clocktower.finance/api/prepare/subscribe \
 Omit `readinessOnly` to receive `unsignedTransactions`, simulation, and gas estimates:
 
 ```bash
-curl -s -X POST https://api.clocktower.finance/api/prepare/subscribe \
+curl -s -X POST https://api.clocktower.finance/prepare/subscribe \
   -H "Content-Type: application/json" \
   -d '{
     "from": "0xYourAddress",
@@ -67,7 +67,7 @@ curl -s -X POST https://api.clocktower.finance/api/prepare/subscribe \
 Sign `unsignedTransactions` in your wallet, broadcast to Base, then poll status:
 
 ```bash
-curl -s -X POST https://api.clocktower.finance/api/transactions/status \
+curl -s -X POST https://api.clocktower.finance/transactions/status \
   -H "Content-Type: application/json" \
   -d '{ "hash": "0x..." }' | jq .
 ```
@@ -78,19 +78,19 @@ For higher limits and `:me` routes:
 
 ```bash
 # 1. Challenge
-curl -s -X POST https://api.clocktower.finance/api/auth/challenge \
+curl -s -X POST https://api.clocktower.finance/auth/challenge \
   -H "Content-Type: application/json" \
   -d '{ "address": "0xYourAddress" }'
 
 # 2. Sign the returned message with your wallet (personal_sign)
 
 # 3. Verify
-curl -s -X POST https://api.clocktower.finance/api/auth/verify \
+curl -s -X POST https://api.clocktower.finance/auth/verify \
   -H "Content-Type: application/json" \
   -d '{ "message": "...", "signature": "0x..." }'
 
 # 4. Use the token
-curl -s https://api.clocktower.finance/api/accounts/me/subscriptions \
+curl -s https://api.clocktower.finance/accounts/me/subscriptions \
   -H "Authorization: Bearer cts_..."
 ```
 

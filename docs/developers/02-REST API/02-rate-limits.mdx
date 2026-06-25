@@ -6,15 +6,17 @@ sidebar_position: 2
 
 # Rate Limits
 
+Paths are relative to `https://api.clocktower.finance` (production) or `http://127.0.0.1:8787/api` (local).
+
 Access is tiered across free REST, Builder REST, and MCP lanes.
 
 ## Default limits
 
 | Lane | Surface | Auth | Default limits |
 |------|---------|------|----------------|
-| **Free** | REST `/api/*` | None | 20 rpm/IP; expensive routes 3 rpm; subgraph 100/day/IP; writes 2 prepare/min/IP |
-| **Builder** | REST `/api/*` | SIWE session | 120 rpm/address; subgraph 10k/day; writes 30/min; scoped to wallet |
-| **Agent** | MCP `/mcp` | x402 | 300 rpm/IP; writes 60/min/address |
+| **Free** | `api.clocktower.finance` | None | 20 rpm/IP; expensive routes 3 rpm; subgraph 100/day/IP; writes 2 prepare/min/IP |
+| **Builder** | `api.clocktower.finance` | SIWE session | 120 rpm/address; subgraph 10k/day; writes 30/min; scoped to wallet |
+| **Agent** | `mcp.clocktower.finance` | x402 | 300 rpm/IP; writes 60/min/address |
 
 ## Rate buckets
 
@@ -31,7 +33,7 @@ Access is tiered across free REST, Builder REST, and MCP lanes.
 
 ## Machine-readable catalog
 
-`GET /api/catalog` returns the full route manifest and tier limits. See [Catalog](/docs/developers/REST%20API/catalog).
+`GET /catalog` returns the full route manifest and tier limits. See [Catalog](/docs/developers/REST%20API/catalog).
 
 ## Edge protections
 
@@ -39,7 +41,7 @@ Production deployments should configure Cloudflare edge rules:
 
 | Rule | Suggested config |
 |------|------------------|
-| Rate Limiting | Block `>500 req / 5 min` per IP on `/api*` and `/mcp` |
-| WAF | Block empty `User-Agent`; challenge `/api/auth/*` at `>30/min/IP` |
+| Rate Limiting | Block `>500 req / 5 min` per IP on `api.clocktower.finance` and `mcp.clocktower.finance` |
+| WAF | Block empty `User-Agent`; challenge `/auth/*` at `>30/min/IP` |
 | DDoS | Keep HTTP DDoS managed ruleset enabled |
 | Bot Fight Mode | Enable on zone to reduce scripted free-tier abuse |

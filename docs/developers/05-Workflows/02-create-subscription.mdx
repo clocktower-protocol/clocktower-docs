@@ -49,9 +49,9 @@ sequenceDiagram
 
 | Step | REST | MCP tool | SDK |
 |------|------|----------|-----|
-| 1. Prepare | `POST /api/prepare/create_subscription` | `prepare_create_subscription` | `createSubscription()` |
+| 1. Prepare | `POST /prepare/create_subscription` | `prepare_create_subscription` | `createSubscription()` |
 | 2–3. Sign & broadcast | Your wallet + RPC | Same | `walletClient` via viem |
-| 5. Fetch ID | `GET /api/subscriptions/:id` or search | `get_subscription` | `waitForSubscription()` |
+| 5. Fetch ID | `GET /subscriptions/:id` or search | `get_subscription` | `waitForSubscription()` |
 
 ## Example request body
 

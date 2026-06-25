@@ -6,6 +6,8 @@ sidebar_position: 1
 
 # REST Authentication
 
+Production base URL: `https://api.clocktower.finance`. Paths below are relative to that host (no `/api` prefix). Local `wrangler dev` uses the same paths prefixed with `/api` on `http://127.0.0.1:8787`.
+
 The REST API supports three access modes. x402 is **not** used on REST — only on MCP.
 
 | Method | When |
@@ -16,7 +18,7 @@ The REST API supports three access modes. x402 is **not** used on REST — only 
 
 ## Free tier
 
-No API key required. Send requests directly to `/api/*`. Rate limits apply per IP.
+No API key required. Send requests directly to `/*`. Rate limits apply per IP.
 
 ## Builder tier (SIWE session)
 
@@ -24,14 +26,14 @@ Builder access requires an **ACTIVE** on-chain subscription to the server's Buil
 
 ### Flow
 
-1. `POST /api/auth/challenge` with `{ "address": "0x…" }` → receive `message` + `nonce`
+1. `POST /auth/challenge` with `{ "address": "0x…" }` → receive `message` + `nonce`
 2. Wallet `personal_sign` on the message
-3. `POST /api/auth/verify` with `{ "message", "signature" }` → receive `token`
+3. `POST /auth/verify` with `{ "message", "signature" }` → receive `token`
 4. Send `Authorization: Bearer <token>` on subsequent `/api` calls
 
 ### Builder scope
 
-- Own account (`/api/accounts/me`, …)
+- Own account (`/accounts/me`, …)
 - Content subscriptions you subscribe to or created
 - Discovery and subscriber writes for your wallet
 

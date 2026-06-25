@@ -6,6 +6,8 @@ sidebar_position: 4
 
 # Write Endpoints
 
+All paths are relative to `https://api.clocktower.finance`. Local dev prefixes each path with `/api` on port 8787.
+
 All write endpoints use `POST`. The server returns unsigned transactions — you sign and broadcast from your wallet.
 
 ## Prepare response format
@@ -36,16 +38,16 @@ On any `prepare_*` endpoint:
 
 | Endpoint | Free tier | Description |
 |----------|-----------|-------------|
-| `POST /api/check_subscribe_readiness` | Allowed | Validate whether an account can subscribe |
-| `POST /api/prepare/create_subscription` | 2/min/IP | Prepare a new subscription |
-| `POST /api/prepare/subscribe` | 2/min/IP | Prepare subscribing (includes ERC-20 approve when needed) |
-| `POST /api/prepare/cancel_subscription` | 2/min/IP | Provider cancel |
-| `POST /api/prepare/unsubscribe` | 2/min/IP | Subscriber unsubscribe |
-| `POST /api/prepare/unsubscribe_by_provider` | 2/min/IP | Provider-initiated unsubscribe |
-| `POST /api/prepare/edit_details` | 2/min/IP | Provider metadata edit |
-| `POST /api/check_remit_readiness` | Allowed | Check whether `remit()` is callable |
-| `POST /api/prepare/remit` | 2/min/IP | Prepare permissionless `remit()` |
-| `POST /api/transactions/status` | Allowed | Poll confirmation status after broadcast |
+| `POST /check_subscribe_readiness` | Allowed | Validate whether an account can subscribe |
+| `POST /prepare/create_subscription` | 2/min/IP | Prepare a new subscription |
+| `POST /prepare/subscribe` | 2/min/IP | Prepare subscribing (includes ERC-20 approve when needed) |
+| `POST /prepare/cancel_subscription` | 2/min/IP | Provider cancel |
+| `POST /prepare/unsubscribe` | 2/min/IP | Subscriber unsubscribe |
+| `POST /prepare/unsubscribe_by_provider` | 2/min/IP | Provider-initiated unsubscribe |
+| `POST /prepare/edit_details` | 2/min/IP | Provider metadata edit |
+| `POST /check_remit_readiness` | Allowed | Check whether `remit()` is callable |
+| `POST /prepare/remit` | 2/min/IP | Prepare permissionless `remit()` |
+| `POST /transactions/status` | Allowed | Poll confirmation status after broadcast |
 
 ## Remit flow
 

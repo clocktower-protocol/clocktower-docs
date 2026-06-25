@@ -25,10 +25,10 @@ Obtain a **Builder session** so your REST calls get higher rate limits and acces
 
 ## Steps
 
-1. **Request challenge** — `POST /api/auth/challenge` with your address; receive a message and nonce.
+1. **Request challenge** — `POST /auth/challenge` with your address; receive a message and nonce.
 2. **Sign** — wallet `personal_sign` on the returned message.
-3. **Verify** — `POST /api/auth/verify` with message + signature; receive `cts_…` token.
-4. **Use Builder routes** — send `Authorization: Bearer cts_…` on subsequent `/api` calls (e.g. `/api/accounts/me/subscriptions`).
+3. **Verify** — `POST /auth/verify` with message + signature; receive `cts_…` token.
+4. **Use Builder routes** — send `Authorization: Bearer cts_…` on subsequent calls to `api.clocktower.finance` (e.g. `/accounts/me/subscriptions`).
 
 The session token is not a pre-shared API key — it is obtained via SIWE and cached client-side.
 
@@ -40,13 +40,13 @@ sequenceDiagram
   participant API as Clocktower API
   participant Wallet as Builder wallet
 
-  App->>API: 1. POST /api/auth/challenge
+  App->>API: 1. POST /auth/challenge
   API-->>App: message, nonce
   App->>Wallet: 2. personal_sign(message)
   Wallet-->>App: signature
-  App->>API: 3. POST /api/auth/verify
+  App->>API: 3. POST /auth/verify
   API-->>App: token (cts_...)
-  App->>API: 4. GET /api/accounts/me/subscriptions
+  App->>API: 4. GET /accounts/me/subscriptions
 ```
 
 ## Example commands
@@ -54,7 +54,7 @@ sequenceDiagram
 **Challenge:**
 
 ```bash
-curl -s -X POST https://api.clocktower.finance/api/auth/challenge \
+curl -s -X POST https://api.clocktower.finance/auth/challenge \
   -H "Content-Type: application/json" \
   -d '{ "address": "0xYourAddress" }'
 ```
@@ -62,7 +62,7 @@ curl -s -X POST https://api.clocktower.finance/api/auth/challenge \
 **Verify:**
 
 ```bash
-curl -s -X POST https://api.clocktower.finance/api/auth/verify \
+curl -s -X POST https://api.clocktower.finance/auth/verify \
   -H "Content-Type: application/json" \
   -d '{ "message": "...", "signature": "0x..." }'
 ```
@@ -70,7 +70,7 @@ curl -s -X POST https://api.clocktower.finance/api/auth/verify \
 **Authenticated request:**
 
 ```bash
-curl -s https://api.clocktower.finance/api/accounts/me/subscriptions \
+curl -s https://api.clocktower.finance/accounts/me/subscriptions \
   -H "Authorization: Bearer cts_..."
 ```
 
