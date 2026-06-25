@@ -25,3 +25,23 @@ In the context of subscriptions the provider is user receinging the regular tran
 ## Caller
 
 The Caller is the name given to user to calls the contract at its regular timely interval. 
+
+## REST API
+
+HTTP interface to Clocktower protocol data and write preparation. Free tier with rate limits; optional Builder session for higher limits. See [Developers](/docs/developers/).
+
+## MCP (Model Context Protocol)
+
+Agent-facing tool interface at `/mcp`. Paid per call via x402 USDC micropayments on Base. See [MCP Connection](/docs/developers/MCP/connection).
+
+## SDK
+
+`@clocktower-protocol/sdk` — TypeScript client library for direct on-chain access via viem. See [SDK Installation](/docs/developers/SDK/installation).
+
+## x402
+
+Micropayment protocol used by the MCP server. Agents pay USDC on Base per tool call. See [x402 Payments](/docs/developers/MCP/x402-payments).
+
+## Builder lane
+
+REST access tier requiring SIWE wallet authentication and an on-chain Builder entitlement subscription. See [Builder Auth](/docs/developers/Workflows/builder-auth).
