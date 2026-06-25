@@ -138,7 +138,7 @@ const config = {
                 label: 'Contract',
               },
               {
-                to: 'pathname:///wp/v5_whitepaper.pdf',
+                to: '/whitepaper',
                 label: 'Whitepaper',
               },
               {
@@ -150,12 +150,10 @@ const config = {
             position: 'right',
             label: 'Documentation'
           },
-          /*
           {
             type: 'localeDropdown',
             position: 'right',
           },
-          */
           {
             to: 'https://app.clocktower.finance', // The path you want to link to
             label: 'App', // The text on the button
@@ -222,7 +220,7 @@ const config = {
               },
               {
                 label: 'Whitepaper',
-                to: 'pathname:///wp/v5_whitepaper.pdf',
+                to: '/whitepaper',
               },
             ],
           },
@@ -241,6 +239,10 @@ const config = {
               {
                 label: 'GitHub',
                 href: 'https://github.com/clocktower-protocol',
+              },
+              {
+                label: 'IPFS App',
+                href: 'https://clocktower.eth.limo',
               },
             ],
           },
