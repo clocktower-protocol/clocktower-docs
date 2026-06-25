@@ -6,40 +6,63 @@ sidebar_position: 1
 
 # Subscribe Workflow
 
-An account starts paying into an existing subscription.
+## Goal
 
-**Actor:** Subscriber wallet (`from`).
+A **subscriber** starts paying into an **existing** subscription created by a provider.
+
+## Who is involved
+
+| Role | What they do |
+|------|----------------|
+| **Subscriber** | The wallet address passed as `from` — must hold enough ERC-20 and approve the Clocktower contract |
+| **Your app** | Calls the API/MCP or SDK, then asks the wallet to sign |
+| **Clocktower API** | Validates readiness and returns unsigned transactions (never broadcasts for you) |
+| **Wallet** | Signs transactions; your app broadcasts them to Base |
+
+:::info SDK path
+The SDK skips the prepare step and talks to the chain directly via viem when you call `subscribeWithApproval()`.
+:::
+
+## Steps
+
+1. **Check readiness** (optional) — confirm allowance, balance, and protocol rules before preparing a transaction.
+2. **Prepare subscribe** — request unsigned `subscribe` calldata (and an `approve` tx if allowance is low).
+3. **Sign** — subscriber wallet signs `unsignedTransactions`. If two txs are needed, signing mode is `eip5792` (approve + subscribe batch).
+4. **Broadcast** — your app sends the signed transaction(s) to Base mainnet.
+5. **Confirm** (optional) — poll transaction status or wait for an on-chain receipt.
+
+The server never holds your keys and never relays signed transactions.
+
+## Flow diagram
 
 ```mermaid
 sequenceDiagram
-  participant App
+  participant App as Your app
   participant API as Clocktower API
-  participant Wallet
+  participant Wallet as Subscriber wallet
   participant Chain as Base
 
-  App->>API: check_subscribe_readiness (optional)
+  App->>API: 1. check_subscribe_readiness (optional)
   API-->>App: allowance, balance, needsApproval
-  App->>API: prepare_subscribe
+  App->>API: 2. prepare_subscribe
   API-->>App: unsignedTransactions, signingMode, requestId
-  App->>Wallet: sign (EIP-5792 batch if 2 txs)
-  Wallet->>Chain: broadcast
-  App->>API: get_transaction_status (optional)
+  App->>Wallet: 3. sign transactions
+  Wallet-->>App: signed txs
+  App->>Chain: 4. broadcast
+  App->>API: 5. get_transaction_status (optional)
 ```
 
-## By surface
+## Calls by surface
 
-| Step | REST | MCP | SDK |
-|------|------|-----|-----|
-| Readiness | `POST /api/check_subscribe_readiness` | `check_subscribe_readiness` | Preflight in `subscribe()` |
-| Prepare | `POST /api/prepare/subscribe` | `prepare_subscribe` | `subscribeWithApproval()` |
-| Sign | Wallet signs `unsignedTransactions` | Same | `walletClient` signs |
-| Broadcast | Client broadcasts to Base | Same | SDK broadcasts via viem |
-| Status | `POST /api/transactions/status` | `get_transaction_status` | `waitForReceipt: true` |
+| Step | REST | MCP tool | SDK |
+|------|------|----------|-----|
+| 1. Readiness | `POST /api/check_subscribe_readiness` | `check_subscribe_readiness` | Built into `subscribe()` preflight |
+| 2. Prepare | `POST /api/prepare/subscribe` | `prepare_subscribe` | `subscribeWithApproval()` |
+| 3–4. Sign & broadcast | Your wallet + RPC | Same | `walletClient` via viem |
+| 5. Confirm | `POST /api/transactions/status` | `get_transaction_status` | `waitForReceipt: true` |
 
-## EIP-5792 batching
+## Tips
 
-When ERC-20 allowance is insufficient, prepare returns `signingMode: "eip5792"` with approve + subscribe in one batch.
+**EIP-5792 batching** — when ERC-20 allowance is insufficient, prepare returns `signingMode: "eip5792"` with approve + subscribe in one batch.
 
-## Readiness-only shortcut
-
-Pass `readinessOnly: true` to `prepare_subscribe` / `POST /api/prepare/subscribe` to validate without generating unsigned transactions.
+**Readiness-only** — pass `readinessOnly: true` to `prepare_subscribe` (or `POST /api/prepare/subscribe`) to validate without generating unsigned transactions.

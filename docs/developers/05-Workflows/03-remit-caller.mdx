@@ -6,38 +6,56 @@ sidebar_position: 3
 
 # Remit Caller Workflow
 
-A permissionless caller executes `remit()` to process due subscription payments and earn caller fees.
+## Goal
 
-**Actor:** Caller wallet.
+A **caller** runs the permissionless `remit()` function to process due subscription payments and earn caller fees in the subscription's ERC-20 token.
+
+## Who is involved
+
+| Role | What they do |
+|------|----------------|
+| **Caller** | Any wallet — pays gas and receives caller fee payouts |
+| **Your bot** | Checks readiness, prepares remit txs, signs, and broadcasts in a loop |
+| **Clocktower API** | Scans the due queue and returns unsigned `remit()` calldata |
+
+## Steps
+
+1. **Check remit readiness** — scan how many subscriptions are due and whether `remit()` can run now.
+2. **Prepare remit** — get unsigned `remit()` calldata plus gas estimates.
+3. **Sign & broadcast** — caller wallet signs and your bot sends to Base.
+4. **Repeat** — one `remit()` clears at most `maxRemits` payments; loop until the backlog is caught up.
+
+The caller pays gas for every broadcast (unlike the protocol's operator cron).
+
+## Flow diagram
 
 ```mermaid
 sequenceDiagram
-  participant Bot
+  participant Bot as Your bot
   participant API as Clocktower API
-  participant Wallet
+  participant Wallet as Caller wallet
   participant Chain as Base
 
-  Bot->>API: check_remit_readiness
+  Bot->>API: 1. check_remit_readiness
   API-->>Bot: ready, expectedTransactions, warnings
   loop Until caught up
-    Bot->>API: prepare_remit
+    Bot->>API: 2. prepare_remit
     API-->>Bot: unsignedTransactions, gasSummary
-    Bot->>Wallet: sign
-    Wallet->>Chain: broadcast
+    Bot->>Wallet: 3. sign
+    Wallet-->>Bot: signed tx
+    Bot->>Chain: 4. broadcast
   end
 ```
 
-## By surface
+## Calls by surface
 
-| Step | REST | MCP | SDK |
-|------|------|-----|-----|
-| Readiness | `POST /api/check_remit_readiness` | `check_remit_readiness` | `checkRemitReadiness()` |
-| Prepare | `POST /api/prepare/remit` | `prepare_remit` | `remit()` |
-| Loop | Repeat until caught up | Same | `runRemitUntilCaughtUp()` |
+| Step | REST | MCP tool | SDK |
+|------|------|----------|-----|
+| 1. Readiness | `POST /api/check_remit_readiness` | `check_remit_readiness` | `checkRemitReadiness()` |
+| 2. Prepare | `POST /api/prepare/remit` | `prepare_remit` | `remit()` |
+| 3–4. Loop | Repeat until caught up | Same | `runRemitUntilCaughtUp()` |
 
-## Notes
+## Tips
 
-- One `remit()` clears at most `maxRemits` payments per transaction
-- Caller pays gas (unlike the operator cron bot)
-- Large backlogs may need multiple broadcasts — check `gasSummary.backlogMultiplier`
-- Use `get_subscriptions_due` / `getSubscriptionsDue()` for lightweight single-day reads
+- Large backlogs may need multiple broadcasts — check `gasSummary.backlogMultiplier` in prepare responses.
+- Use `get_subscriptions_due` / `getSubscriptionsDue()` for a lightweight single-day read without preparing a transaction.

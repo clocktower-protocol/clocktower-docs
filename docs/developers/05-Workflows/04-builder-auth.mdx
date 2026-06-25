@@ -6,35 +6,52 @@ sidebar_position: 4
 
 # Builder Auth Workflow
 
-Builder tier unlocks higher REST rate limits and `:me` routes scoped to your wallet.
+## Goal
 
-**Prerequisites:**
+Obtain a **Builder session** so your REST calls get higher rate limits and access to `:me` routes scoped to your wallet.
 
-1. An **ACTIVE** on-chain subscription to the server's Builder entitlement subscription (`BUILDER_SUB_ID`)
-2. A wallet to sign the SIWE message
+## Who is involved
 
-```mermaid
-sequenceDiagram
-  participant App
-  participant API as Clocktower API
-  participant Wallet
+| Role | What they do |
+|------|----------------|
+| **Builder** | A wallet with an active on-chain subscription to the Builder entitlement (`BUILDER_SUB_ID`) |
+| **Your app** | Requests a SIWE challenge, asks the wallet to sign, exchanges the signature for a session token |
+| **Clocktower API** | Issues a `cts_…` bearer token after verifying the signature and entitlement |
 
-  App->>API: POST /api/auth/challenge
-  API-->>App: message, nonce
-  App->>Wallet: personal_sign(message)
-  Wallet-->>App: signature
-  App->>API: POST /api/auth/verify
-  API-->>App: token (cts_...)
-  App->>API: GET /api/accounts/me/subscriptions (Bearer token)
-```
+## Prerequisites
+
+1. An **ACTIVE** on-chain subscription to the server's Builder entitlement subscription.
+2. A wallet to sign the SIWE message.
 
 ## Steps
 
-### 1. Subscribe to Builder entitlement
+1. **Request challenge** — `POST /api/auth/challenge` with your address; receive a message and nonce.
+2. **Sign** — wallet `personal_sign` on the returned message.
+3. **Verify** — `POST /api/auth/verify` with message + signature; receive `cts_…` token.
+4. **Use Builder routes** — send `Authorization: Bearer cts_…` on subsequent `/api` calls (e.g. `/api/accounts/me/subscriptions`).
 
-Subscribe to the Clocktower Builder entitlement subscription on Base. The subscription ID is configured server-side as `BUILDER_SUB_ID`.
+The session token is not a pre-shared API key — it is obtained via SIWE and cached client-side.
 
-### 2. Request challenge
+## Flow diagram
+
+```mermaid
+sequenceDiagram
+  participant App as Your app
+  participant API as Clocktower API
+  participant Wallet as Builder wallet
+
+  App->>API: 1. POST /api/auth/challenge
+  API-->>App: message, nonce
+  App->>Wallet: 2. personal_sign(message)
+  Wallet-->>App: signature
+  App->>API: 3. POST /api/auth/verify
+  API-->>App: token (cts_...)
+  App->>API: 4. GET /api/accounts/me/subscriptions
+```
+
+## Example commands
+
+**Challenge:**
 
 ```bash
 curl -s -X POST http://127.0.0.1:8787/api/auth/challenge \
@@ -42,11 +59,7 @@ curl -s -X POST http://127.0.0.1:8787/api/auth/challenge \
   -d '{ "address": "0xYourAddress" }'
 ```
 
-### 3. Sign SIWE message
-
-Use `personal_sign` in your wallet on the returned `message`.
-
-### 4. Verify and cache token
+**Verify:**
 
 ```bash
 curl -s -X POST http://127.0.0.1:8787/api/auth/verify \
@@ -54,9 +67,7 @@ curl -s -X POST http://127.0.0.1:8787/api/auth/verify \
   -d '{ "message": "...", "signature": "0x..." }'
 ```
 
-The session token (`cts_…`) is cached client-side — it is not a pre-shared API key.
-
-### 5. Use Builder routes
+**Authenticated request:**
 
 ```bash
 curl -s http://127.0.0.1:8787/api/accounts/me/subscriptions \

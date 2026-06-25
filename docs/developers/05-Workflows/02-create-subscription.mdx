@@ -6,34 +6,54 @@ sidebar_position: 2
 
 # Create Subscription Workflow
 
-A provider creates a new subscription on-chain.
+## Goal
 
-**Actor:** Provider wallet (`from`).
+A **provider** publishes a new subscription on-chain so others can subscribe to it.
+
+## Who is involved
+
+| Role | What they do |
+|------|----------------|
+| **Provider** | The wallet address passed as `from` — creates and owns the subscription |
+| **Your app** | Builds the subscription params and requests unsigned `createSubscription` calldata |
+| **Clocktower API** | Simulates and returns unsigned transactions |
+| **Wallet** | Signs and broadcasts to Base |
+
+## Steps
+
+1. **Prepare create** — send amount, token, frequency, due day, and metadata; receive unsigned `createSubscription` calldata.
+2. **Sign** — provider wallet signs the transaction.
+3. **Broadcast** — your app sends it to Base mainnet.
+4. **Confirm** (optional) — poll transaction status.
+5. **Fetch new ID** — after mining, read the subscription by ID or poll until it appears on-chain.
+
+## Flow diagram
 
 ```mermaid
 sequenceDiagram
-  participant App
+  participant App as Your app
   participant API as Clocktower API
-  participant Wallet
+  participant Wallet as Provider wallet
   participant Chain as Base
 
-  App->>API: prepare_create_subscription
+  App->>API: 1. prepare_create_subscription
   API-->>App: unsignedTransactions, requestId
-  App->>Wallet: sign
-  Wallet->>Chain: broadcast
-  App->>API: get_transaction_status (optional)
-  App->>API: get_subscription (poll for new id)
+  App->>Wallet: 2. sign
+  Wallet-->>App: signed tx
+  App->>Chain: 3. broadcast
+  App->>API: 4. get_transaction_status (optional)
+  App->>API: 5. get_subscription (poll for new id)
 ```
 
-## By surface
+## Calls by surface
 
-| Step | REST | MCP | SDK |
-|------|------|-----|-----|
-| Prepare | `POST /api/prepare/create_subscription` | `prepare_create_subscription` | `createSubscription()` |
-| Sign & broadcast | Wallet | Wallet | `walletClient` via viem |
-| Poll for ID | `GET /api/subscriptions/:id` or search | `get_subscription` | `waitForSubscription()` |
+| Step | REST | MCP tool | SDK |
+|------|------|----------|-----|
+| 1. Prepare | `POST /api/prepare/create_subscription` | `prepare_create_subscription` | `createSubscription()` |
+| 2–3. Sign & broadcast | Your wallet + RPC | Same | `walletClient` via viem |
+| 5. Fetch ID | `GET /api/subscriptions/:id` or search | `get_subscription` | `waitForSubscription()` |
 
-## Request body
+## Example request body
 
 ```json
 {
@@ -48,6 +68,4 @@ sequenceDiagram
 }
 ```
 
-SDK accepts human-readable `amount` strings and `Frequency` enum values.
-
-See [Due day ranges](/docs/developers/SDK/reads-and-writes) for valid `dueDay` per frequency.
+The SDK accepts human-readable `amount` strings and `Frequency` enum values. See [Due day ranges](/docs/developers/SDK/reads-and-writes) for valid `dueDay` per frequency.
