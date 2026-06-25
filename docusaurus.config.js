@@ -240,10 +240,11 @@ const config = {
                 label: 'GitHub',
                 href: 'https://github.com/clocktower-protocol',
               },
-              {
-                label: 'IPFS App',
-                href: 'https://clocktower.eth.limo',
-              },
+              // IPFS App link disabled until the deployment is stable.
+              // {
+              //   label: 'IPFS App',
+              //   href: 'https://clocktower.eth.limo',
+              // },
             ],
           },
         ],
