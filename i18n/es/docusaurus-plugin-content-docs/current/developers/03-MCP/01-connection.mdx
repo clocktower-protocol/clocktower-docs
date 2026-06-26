@@ -1,0 +1,66 @@
+---
+id: connection
+title: Conexión
+sidebar_position: 1
+---
+
+# Conexión MCP
+
+El servidor MCP expone herramientas del protocolo Clocktower en `mcp.clocktower.finance`.
+
+## Endpoint
+
+Producción:
+
+```
+https://mcp.clocktower.finance
+```
+
+El cliente MCP se conecta a la raíz del subdominio — sin sufijo de ruta `/mcp`.
+
+Desarrollo local (después de `npm run dev` en clocktower-api):
+
+```
+http://127.0.0.1:8787/mcp
+```
+
+En un Worker local único, el manejador MCP está montado en `/mcp`.
+
+## Configuración del cliente
+
+Conéctate usando cualquier cliente compatible con MCP. Tu cliente debe admitir:
+
+1. Transporte MCP a `mcp.clocktower.finance` (o `/mcp` en desarrollo local)
+2. Pagos x402 en USDC en Base para llamadas a herramientas
+3. Firma con wallet para transacciones preparadas
+
+## Categorías de herramientas
+
+| Categoría | Ejemplos |
+|----------|----------|
+| Lectura | `get_protocol_state`, `get_subscription`, `get_account` |
+| Descubrimiento | `search_subscriptions`, `get_subscription_details` |
+| Historial | `get_subscription_history`, `get_account_activity` |
+| Escritura (preparación) | `prepare_subscribe`, `prepare_create_subscription`, `prepare_remit` |
+| Estado | `get_transaction_status`, `check_subscribe_readiness` |
+
+Consulta la [referencia de herramientas](/docs/developers/MCP/tools-reference) para la lista completa y precios.
+
+## Pruebas locales
+
+```bash
+# Terminal 1 — iniciar el Worker
+cd clocktower-api && npm run dev
+
+# Terminal 2 — usar el CLI del agente
+cd clocktower-agent
+export MCP_URL=http://127.0.0.1:8787/mcp
+npm start mcp list
+npm start mcp call get_protocol_state
+```
+
+## Protocolo
+
+- **Cadena:** Base mainnet (chainId 8453)
+- **Pagos:** micropagos x402 en USDC por llamada a herramienta
+- **Escrituras:** solo preparación — el servidor nunca retransmite transacciones firmadas

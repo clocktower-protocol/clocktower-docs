@@ -1,0 +1,34 @@
+---
+id: export-map
+title: Mapa de Exportaciones
+sidebar_position: 9
+---
+
+# Mapa de Exportaciones
+
+| Importación | Descripción |
+|--------|-------------|
+| `@clocktower-protocol/sdk` | Cliente principal, utilidades, errores, re-exportaciones de caller |
+| `@clocktower-protocol/sdk/types` | Exportaciones solo de tipos |
+| `@clocktower-protocol/sdk/react` | Hooks de wagmi + React Query |
+| `@clocktower-protocol/sdk/subgraph` | Historial y descubrimiento GraphQL |
+| `@clocktower-protocol/sdk/caller` | Escaneo de remit, preparación, bucle de ejecución |
+
+## Tipos clave
+
+Importa desde `@clocktower-protocol/sdk` o `@clocktower-protocol/sdk/types`.
+
+### Enums
+
+- `Frequency` — `WEEKLY`, `MONTHLY`, `QUARTERLY`, `YEARLY`
+- `Status` — `ACTIVE`, `CANCELLED`, `UNSUBSCRIBED`
+
+### Tipos principales
+
+| Tipo | Campos clave |
+|------|------------|
+| `Subscription` | `id`, `amount`, `amountRaw`, `tokenDecimals`, `provider`, `token`, `cancelled`, `frequency`, `dueDay` |
+| `EnrichedAccount` | `chainId`, `accountAddress`, `subscribedTo`, `created` |
+| `ProtocolState` | `callerFeePercent`, `systemFeePercent`, `maxRemits`, `nextUncheckedDate`, `currentDate`, `isRemitCaughtUp` |
+| `CreateSubscriptionParams` | `amount`, `token`, `details`, `frequency`, `dueDay` |
+| `WriteResult` | `hash` |

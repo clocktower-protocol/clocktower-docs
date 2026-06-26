@@ -26,5 +26,29 @@
   "sidebar.howtoSidebar.category.Manage Account": {
     "message": "Gestionar Cuenta",
     "description": "The label for category Manage Account in sidebar howtoSidebar"
+  },
+  "sidebar.developersSidebar.category.Developers": {
+    "message": "Desarrolladores",
+    "description": "The label for category Developers in sidebar developersSidebar"
+  },
+  "sidebar.developersSidebar.category.Getting Started": {
+    "message": "Primeros Pasos",
+    "description": "The label for category Getting Started in sidebar developersSidebar"
+  },
+  "sidebar.developersSidebar.category.REST API": {
+    "message": "API REST",
+    "description": "The label for category REST API in sidebar developersSidebar"
+  },
+  "sidebar.developersSidebar.category.MCP": {
+    "message": "MCP",
+    "description": "The label for category MCP in sidebar developersSidebar"
+  },
+  "sidebar.developersSidebar.category.SDK": {
+    "message": "SDK",
+    "description": "The label for category SDK in sidebar developersSidebar"
+  },
+  "sidebar.developersSidebar.category.Workflows": {
+    "message": "Flujos de Trabajo",
+    "description": "The label for category Workflows in sidebar developersSidebar"
   }
 }

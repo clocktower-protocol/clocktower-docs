@@ -1,0 +1,76 @@
+---
+id: tools-reference
+title: Referencia de Herramientas
+sidebar_position: 2
+---
+
+# Referencia de Herramientas MCP
+
+Todas las herramientas MCP se pagan vía x402 (USDC en Base). REST `/api` proporciona las mismas capacidades de forma gratuita (con límites de tasa).
+
+## Precios
+
+| Herramienta | Precio MCP |
+|------|-----------|
+| `get_protocol_state`, `get_subscription`, `get_account_subscriptions`, `get_subscribers`, `get_approved_token`, `list_approved_tokens`, `get_fee_balance` | $0.01 |
+| `get_subscriptions_due` | $0.02 |
+| `get_account` | $0.03 |
+| `get_subscription_details`, `get_provider_profile` | $0.02 |
+| `get_subscription_history` | $0.03 + $0.01 por 50 filas (máx. 200 → $0.06) |
+| `get_subscription_details_history` | $0.02 + $0.01 por 50 filas (máx. → $0.05) |
+| `get_account_activity` | $0.04 + $0.01 por 50 filas (máx. → $0.07) |
+| `search_subscriptions` | $0.05 + $0.01 × `first` (máx. 50) + $0.01 si `includeDetails` |
+| `check_subscribe_readiness`, `get_transaction_status` | $0.01 |
+| `check_remit_readiness` | $0.02 |
+| `prepare_*` completo (simulación + gas) | $0.02 |
+| `prepare_*` con `readinessOnly: true` | $0.01 (remit: $0.02) |
+| `prepare_remit` completo | $0.03 |
+
+## Herramientas de lectura
+
+| Herramienta | Descripción |
+|------|-------------|
+| `get_protocol_state` | Configuración actual de comisiones |
+| `get_subscription` | Suscripción individual por ID |
+| `get_account_subscriptions` | Lista suscripciones de una cuenta |
+| `get_account` | Cuenta enriquecida: `subscribedTo` + `created` |
+| `get_fee_balance` | Saldo de comisiones de un suscriptor en una suscripción |
+| `get_subscribers` | Suscriptores y saldos de comisiones |
+| `get_approved_token` | Configuración del token (on-chain) |
+| `list_approved_tokens` | Todos los tokens aprobados con `minimum` y `paused` |
+| `get_subscriptions_due` | Sonda de vencimiento de un solo día |
+
+## Herramientas de descubrimiento
+
+| Herramienta | Descripción |
+|------|-------------|
+| `search_subscriptions` | Filtros: `provider`, `token`, `frequency`, `cancelled`, `includeDetails`, `first`, `skip` |
+| `get_subscription_details` | url/description actual |
+
+## Herramientas de historial y perfil
+
+Respaldadas por subgrafo. Máx. 200 registros por llamada; incluye `hasMore` para paginación.
+
+| Herramienta | Descripción |
+|------|-------------|
+| `get_subscription_history` | Eventos SubLog con montos normalizados |
+| `get_account_activity` | Actividad fusionada de suscriptor + proveedor |
+| `get_provider_profile` | Perfil de proveedor más reciente |
+| `get_subscription_details_history` | Historial de cambios de URL/descripción |
+
+## Herramientas de escritura
+
+| Herramienta | Descripción |
+|------|-------------|
+| `check_subscribe_readiness` | Validar allowance, saldo, reglas del protocolo |
+| `prepare_create_subscription` | Preparar `createSubscription` sin firmar |
+| `prepare_subscribe` | Preparar `subscribe` (incluye approve cuando sea necesario) |
+| `prepare_cancel_subscription` | Cancelación por proveedor |
+| `prepare_unsubscribe` | Cancelación de suscripción por suscriptor |
+| `prepare_unsubscribe_by_provider` | Cancelación iniciada por proveedor |
+| `prepare_edit_details` | Edición de metadatos por proveedor |
+| `check_remit_readiness` | Escaneo multi-día de vencimientos antes de `remit()` |
+| `prepare_remit` | Preparar `remit()` sin permisos |
+| `get_transaction_status` | Consultar confirmación de tx después de transmitir |
+
+La preparación completa ejecuta simulación on-chain antes de que se liquide el pago x402. Una simulación fallida lanza excepción — no se te cobra.

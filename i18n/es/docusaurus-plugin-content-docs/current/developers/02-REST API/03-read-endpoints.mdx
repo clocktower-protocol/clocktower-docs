@@ -1,0 +1,70 @@
+---
+id: read-endpoints
+title: Endpoints de Lectura
+sidebar_position: 3
+---
+
+# Endpoints de Lectura
+
+Todas las rutas son relativas a `https://api.clocktower.finance`. El desarrollo local antepone `/api` a cada ruta en el puerto 8787.
+
+Todos los endpoints de lectura usan `GET` salvo que se indique lo contrario.
+
+## Protocolo y catálogo
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /catalog` | Catálogo de rutas legible por máquina y límites de nivel |
+| `GET /protocol/state` | Configuración actual de comisiones del protocolo |
+| `GET /status` | Verificación de salud ligera |
+
+## Suscripciones
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /subscriptions` | Buscar/descubrir suscripciones. Query: `provider`, `token`, `frequency`, `cancelled` (predeterminado `false`), `includeDetails`, `first` (máx. 50), `skip` |
+| `GET /subscriptions/due` | Suscripciones vencidas en un día/frecuencia dado |
+| `GET /subscriptions/:id` | Suscripción individual por ID |
+| `GET /subscriptions/:id/subscribers` | Suscriptores de una suscripción |
+| `GET /subscriptions/:id/fee-balance?address=0x…` | Saldo de comisiones para un suscriptor |
+| `GET /subscriptions/:id/details` | url/description actual (último DetailsLog) |
+
+## Cuentas
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /accounts/:address/subscriptions` | Suscripciones de una cuenta (enriquecidas) |
+| `GET /accounts/:address` | Cuenta enriquecida: arrays `subscribedTo` y `created` |
+| `GET /accounts/me/subscriptions` | Sesión Builder — tus suscripciones |
+
+## Tokens
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /approved-tokens` | Lista tokens aprobados con `minimum` y `paused` |
+| `GET /approved-tokens/:token` | Configuración de un token individual |
+
+## Historial y perfiles (respaldados por subgrafo)
+
+Estos entran en el **bucket de tasa costoso** y el límite diario del subgrafo. Admiten paginación `?first=N&skip=M`.
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /subscriptions/:id/history` | Historial de actividad (eventos SubLog) |
+| `GET /accounts/:address/activity` | Actividad combinada de suscriptor + proveedor |
+| `GET /providers/:address` | Perfil de proveedor más reciente |
+| `GET /subscriptions/:id/details-history` | Historial de cambios de URL/descripción |
+
+Los errores del subgrafo devuelven una respuesta elegante con un campo `error` en lugar de fallar toda la solicitud.
+
+### Campos de respuesta del historial
+
+Los eventos SubLog incluyen:
+
+- `eventName` — tipo de evento legible para humanos
+- `amount`, `amountRaw`, `tokenDecimals` — montos normalizados
+- `formattedTimestamp`, `formattedAmount`
+
+:::info Nota de diseño
+No hay proxy GraphQL sin procesar. Todo el acceso al subgrafo pasa por endpoints con forma definida, límites de tasa, formateo y normalización.
+:::

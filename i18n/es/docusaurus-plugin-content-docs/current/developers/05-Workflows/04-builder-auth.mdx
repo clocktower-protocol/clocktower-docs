@@ -1,0 +1,85 @@
+---
+id: builder-auth
+title: Autenticación Builder
+sidebar_position: 4
+---
+
+# Flujo de Autenticación Builder
+
+## Objetivo
+
+Obtener una **sesión Builder** para que tus llamadas REST tengan límites de tasa más altos y acceso a rutas `:me` limitadas a tu wallet.
+
+## Quién participa
+
+| Rol | Qué hace |
+|------|----------------|
+| **Builder** | Una wallet con una suscripción on-chain activa al derecho Builder (`BUILDER_SUB_ID`) |
+| **Tu app** | Solicita un desafío SIWE, pide a la wallet que firme, intercambia la firma por un token de sesión |
+| **API Clocktower** | Emite un token bearer `cts_…` después de verificar la firma y el derecho |
+
+## Requisitos previos
+
+1. Una suscripción on-chain **ACTIVE** al derecho Builder del servidor.
+2. Una wallet para firmar el mensaje SIWE.
+
+## Pasos
+
+1. **Solicitar desafío** — `POST /auth/challenge` con tu dirección; recibe un mensaje y nonce.
+2. **Firmar** — `personal_sign` de la wallet en el mensaje devuelto.
+3. **Verificar** — `POST /auth/verify` con mensaje + firma; recibe token `cts_…`.
+4. **Usar rutas Builder** — envía `Authorization: Bearer cts_…` en llamadas posteriores a `api.clocktower.finance` (p. ej. `/accounts/me/subscriptions`).
+
+El token de sesión no es una clave API precompartida — se obtiene vía SIWE y se almacena en caché en el cliente.
+
+## Diagrama de flujo
+
+```mermaid
+sequenceDiagram
+  participant App as Tu app
+  participant API as API Clocktower
+  participant Wallet as Wallet Builder
+
+  App->>API: 1. POST /auth/challenge
+  API-->>App: message, nonce
+  App->>Wallet: 2. personal_sign(message)
+  Wallet-->>App: signature
+  App->>API: 3. POST /auth/verify
+  API-->>App: token (cts_...)
+  App->>API: 4. GET /accounts/me/subscriptions
+```
+
+## Comandos de ejemplo
+
+**Desafío:**
+
+```bash
+curl -s -X POST https://api.clocktower.finance/auth/challenge \
+  -H "Content-Type: application/json" \
+  -d '{ "address": "0xYourAddress" }'
+```
+
+**Verificar:**
+
+```bash
+curl -s -X POST https://api.clocktower.finance/auth/verify \
+  -H "Content-Type: application/json" \
+  -d '{ "message": "...", "signature": "0x..." }'
+```
+
+**Solicitud autenticada:**
+
+```bash
+curl -s https://api.clocktower.finance/accounts/me/subscriptions \
+  -H "Authorization: Bearer cts_..."
+```
+
+## Ayudante CLI
+
+```bash
+npm start rest auth login
+npm start rest auth status
+npm start rest get /accounts/me/subscriptions
+```
+
+Consulta [Autenticación](/docs/developers/REST%20API/authentication) y [Límites de tasa](/docs/developers/REST%20API/rate-limits).

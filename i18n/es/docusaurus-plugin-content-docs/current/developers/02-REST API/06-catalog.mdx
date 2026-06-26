@@ -1,0 +1,49 @@
+---
+id: catalog
+title: Catálogo
+sidebar_position: 6
+---
+
+# Catálogo de la API
+
+`GET /catalog` en `api.clocktower.finance` devuelve el manifiesto legible por máquina de rutas, niveles de acceso y límites.
+
+## Ejemplo de solicitud
+
+```bash
+curl -s https://api.clocktower.finance/catalog | jq .
+```
+
+## Estructura de respuesta
+
+```json
+{
+  "version": "2",
+  "chainId": 8453,
+  "access": {
+    "rest": {
+      "free": {
+        "auth": "none",
+        "limits": { "...": "..." },
+        "note": "Cross-account and provider reads allowed under expensive bucket"
+      },
+      "builder": {
+        "auth": "SIWE session (Bearer token)",
+        "enabled": "BUILDER_SUB_ID configured",
+        "limits": { "...": "..." },
+        "authEndpoints": ["/auth/challenge", "/auth/verify"]
+      }
+    },
+    "mcp": {
+      "auth": "x402 (USDC on Base)",
+      "limits": { "...": "..." }
+    }
+  },
+  "builderAuthEnabled": true,
+  "routes": [
+    { "method": "GET", "path": "/protocol/state", "description": "..." }
+  ]
+}
+```
+
+Usa el catálogo para descubrir endpoints disponibles de forma programática y verificar qué modo de autenticación y límites aplican en tiempo de ejecución.

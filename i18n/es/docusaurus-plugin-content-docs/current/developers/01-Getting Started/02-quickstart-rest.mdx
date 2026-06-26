@@ -1,0 +1,107 @@
+---
+id: quickstart-rest
+title: Inicio Rápido REST
+sidebar_position: 2
+---
+
+# Inicio Rápido de la API REST
+
+La API REST expone las mismas capacidades que MCP sobre HTTP estándar. **No se requiere pago x402** — el acceso se controla mediante límites de tasa y sesiones Builder opcionales.
+
+## URL base
+
+Producción:
+
+```
+https://api.clocktower.finance
+```
+
+Desarrollo local (Worker único — las rutas incluyen el prefijo `/api`):
+
+```
+http://127.0.0.1:8787/api
+```
+
+Los ejemplos a continuación usan URLs de producción (`/catalog`, no `/api/catalog`). Al ejecutar `wrangler dev` localmente, antepone `/api` a cada ruta.
+
+## Leer el estado del protocolo
+
+```bash
+curl -s https://api.clocktower.finance/catalog | jq .
+curl -s https://api.clocktower.finance/protocol/state | jq .
+```
+
+## Buscar suscripciones
+
+```bash
+curl -s "https://api.clocktower.finance/subscriptions?first=10" | jq .
+```
+
+## Preparar una suscripción (solo preparación)
+
+Verifica si una cuenta puede suscribirse sin generar transacciones sin firmar:
+
+```bash
+curl -s -X POST https://api.clocktower.finance/prepare/subscribe \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "0xYourAddress",
+    "subscription": { "id": "0x..." },
+    "readinessOnly": true
+  }' | jq .
+```
+
+## Preparación completa
+
+Omite `readinessOnly` para recibir `unsignedTransactions`, simulación y estimaciones de gas:
+
+```bash
+curl -s -X POST https://api.clocktower.finance/prepare/subscribe \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "0xYourAddress",
+    "subscription": { "id": "0x..." }
+  }' | jq .
+```
+
+Firma `unsignedTransactions` en tu wallet, transmite a Base y luego consulta el estado:
+
+```bash
+curl -s -X POST https://api.clocktower.finance/transactions/status \
+  -H "Content-Type: application/json" \
+  -d '{ "hash": "0x..." }' | jq .
+```
+
+## Sesión Builder (opcional)
+
+Para límites más altos y rutas `:me`:
+
+```bash
+# 1. Desafío
+curl -s -X POST https://api.clocktower.finance/auth/challenge \
+  -H "Content-Type: application/json" \
+  -d '{ "address": "0xYourAddress" }'
+
+# 2. Firma el mensaje devuelto con tu wallet (personal_sign)
+
+# 3. Verificar
+curl -s -X POST https://api.clocktower.finance/auth/verify \
+  -H "Content-Type: application/json" \
+  -d '{ "message": "...", "signature": "0x..." }'
+
+# 4. Usa el token
+curl -s https://api.clocktower.finance/accounts/me/subscriptions \
+  -H "Authorization: Bearer cts_..."
+```
+
+Consulta [Autenticación](/docs/developers/REST%20API/authentication) y el [flujo de autenticación Builder](/docs/developers/Workflows/builder-auth).
+
+## Ayudante CLI
+
+El repositorio [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) proporciona un CLI de Node:
+
+```bash
+npm start rest get /catalog
+npm start rest get /protocol/state
+npm start rest post /prepare/subscribe --body '{"from":"0x...","subscription":{...},"readinessOnly":true}'
+```

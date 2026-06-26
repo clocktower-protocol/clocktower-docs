@@ -1,0 +1,41 @@
+---
+id: developers_index
+title: Desarrolladores
+sidebar_position: 1
+---
+
+# Clocktower para Desarrolladores
+
+Integra con el Protocolo Clocktower en Base a través de tres superficies: una API REST gratuita en `api.clocktower.finance`, un servidor MCP para agentes de IA en `mcp.clocktower.finance`, y un SDK de TypeScript para acceso directo on-chain.
+
+:::warning Pre-lanzamiento
+La API REST (`api.clocktower.finance`) y el servidor MCP (`mcp.clocktower.finance`) aún no están en producción. El SDK no está publicado en npm. Los endpoints, precios y APIs pueden cambiar antes del lanzamiento.
+:::
+
+## Elige tu ruta de integración
+
+| Superficie | Ideal para | Autenticación | Escrituras |
+|---------|----------|------|--------|
+| [API REST](/docs/developers/REST%20API/authentication) | Backends, scripts, apps de navegador (con CORS) | Ninguna (nivel gratuito) o sesión SIWE (Builder) | Solo preparación — firmar en la wallet |
+| [Servidor MCP](/docs/developers/MCP/connection) | Agentes de IA y clientes MCP | Micropagos x402 en USDC en Base | Solo preparación — firmar en la wallet |
+| [SDK de TypeScript](/docs/developers/SDK/installation) | dApps, scripts Node, bots | Tu RPC + wallet (viem) | Directo on-chain vía `walletClient` |
+
+Todas las rutas de escritura de API/MCP siguen el mismo modelo: **preparar → firmar → transmitir**. El servidor nunca retransmite transacciones firmadas.
+
+Para structs de contratos on-chain y firmas de funciones, consulta la [Referencia Técnica del Contrato](/docs/contracts/Subscribe/subscribe_tech_reference).
+
+## Enlaces rápidos
+
+- [Resumen de Primeros Pasos](/docs/developers/Getting%20Started/overview)
+- [Inicio rápido REST](/docs/developers/Getting%20Started/quickstart-rest)
+- [Inicio rápido MCP](/docs/developers/Getting%20Started/quickstart-mcp)
+- [Inicio rápido SDK](/docs/developers/Getting%20Started/quickstart-sdk)
+- [Flujos de trabajo para integradores](/docs/developers/Workflows/subscribe)
+
+## Repositorios fuente
+
+| Repo | Descripción |
+|------|-------------|
+| [clocktower-api](https://github.com/clocktower-protocol/api) | Cloudflare Worker — `api.clocktower.finance` y `mcp.clocktower.finance` |
+| [clocktower-sdk](https://github.com/clocktower-protocol/sdk) | Biblioteca TypeScript `@clocktower-protocol/sdk` |
+| [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) | CLI para probar REST y MCP localmente |

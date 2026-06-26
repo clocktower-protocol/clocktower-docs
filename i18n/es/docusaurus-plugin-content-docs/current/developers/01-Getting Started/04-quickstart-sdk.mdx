@@ -1,0 +1,88 @@
+---
+id: quickstart-sdk
+title: Inicio Rápido SDK
+sidebar_position: 4
+---
+
+# Inicio Rápido SDK
+
+`@clocktower-protocol/sdk` es una biblioteca TypeScript para interacción on-chain vía [viem](https://viem.sh). Es una **biblioteca cliente** — no el servidor REST/MCP.
+
+:::warning Pre-lanzamiento
+El SDK aún no está publicado en npm. Clona [clocktower-sdk](https://github.com/clocktower-protocol/sdk) y compila localmente hasta que se anuncie un lanzamiento oficial.
+:::
+
+## Instalación
+
+```bash
+npm install @clocktower-protocol/sdk viem
+```
+
+Dependencias peer para hooks de React: `react`, `wagmi` (^3.0.0), `@tanstack/react-query`.
+
+## Leer el estado del protocolo
+
+```typescript
+import { createClocktowerClient } from '@clocktower-protocol/sdk'
+import { baseSepolia } from 'viem/chains'
+import { http } from 'viem'
+
+const client = createClocktowerClient({
+  chain: baseSepolia,
+  transport: http(process.env.RPC_URL!),
+})
+
+const state = await client.getProtocolState()
+console.log(state.nextUncheckedDate, state.isRemitCaughtUp)
+```
+
+## Leer una suscripción
+
+```typescript
+const sub = await client.getSubscription('0x...')
+console.log(sub.amount)        // "10" — legible para humanos
+console.log(sub.amountRaw)     // 10000000n — wei nativo del token
+console.log(sub.tokenDecimals) // 6
+```
+
+## Crear una suscripción (proveedor)
+
+Pasa montos en unidades de token legibles para humanos:
+
+```typescript
+import { Frequency } from '@clocktower-protocol/sdk'
+
+const { hash } = await client.createSubscription({
+  amount: '10',
+  token: '0x036CbD53842c5426634e7929541eC2318f3dCF7e',
+  details: { url: 'https://example.com/', description: 'Premium' },
+  frequency: Frequency.MONTHLY,
+  dueDay: 15,
+})
+```
+
+Requiere un `walletClient` con `account` configurado.
+
+## Suscribirse con aprobación
+
+```typescript
+const subscription = await client.getSubscription(subscriptionId)
+const { approveHash, hash } = await client.subscribeWithApproval(
+  subscription,
+  subscriberAddress,
+  { waitForReceipt: true },
+)
+```
+
+## Cadenas compatibles
+
+| Cadena | ID |
+|-------|-----|
+| Base | 8453 |
+| Base Sepolia | 84532 |
+
+## Próximos pasos
+
+- [Configuración del cliente](/docs/developers/SDK/client-setup)
+- [Lecturas y escrituras](/docs/developers/SDK/reads-and-writes)
+- [Hooks de React](/docs/developers/SDK/react-hooks)

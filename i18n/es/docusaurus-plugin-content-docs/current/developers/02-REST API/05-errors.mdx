@@ -1,0 +1,47 @@
+---
+id: errors
+title: Errores
+sidebar_position: 5
+---
+
+# Formato de Errores
+
+Todos los errores devuelven una estructura JSON consistente:
+
+```json
+{
+  "error": "Human readable message",
+  "code": "VALIDATION_ERROR",
+  "requestId": "optional-uuid-for-prepare-failures"
+}
+```
+
+## Códigos de error
+
+| Código | Descripción |
+|------|-------------|
+| `VALIDATION_ERROR` | Cuerpo de solicitud o parámetros inválidos |
+| `NOT_FOUND` | El recurso no existe |
+| `UPSTREAM_ERROR` | Fallo de RPC o subgrafo |
+| `RATE_LIMITED` | Límite de tasa del nivel excedido |
+| `PREPARE_FAILURE` | Fallo de la capa de preparación MCP/REST (puede incluir `requestId`) |
+
+## Errores de validación
+
+Los endpoints de escritura pueden incluir un array `issues` con detalles a nivel de campo:
+
+```json
+{
+  "error": "Validation failed",
+  "code": "VALIDATION_ERROR",
+  "issues": [
+    { "path": "from", "message": "Invalid address" }
+  ]
+}
+```
+
+## Fallos de preparación
+
+Incluye `requestId` al reportar problemas de preparación. Los fallos de preparación MCP devuelven `code: "PREPARE_FAILURE"` cuando el error se originó en la capa de preparación.
+
+Los fallos de simulación en MCP lanzan excepción antes de que se liquide el pago x402 — no se te cobra.

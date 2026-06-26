@@ -11,6 +11,10 @@
     "message": "Cómo Hacer",
     "description": "Navbar item with label How to"
   },
+  "item.label.Developers": {
+    "message": "Desarrolladores",
+    "description": "Navbar item with label Developers"
+  },
   "item.label.Documentation": {
     "message": "Documentación",
     "description": "Navbar item with label Documentation"

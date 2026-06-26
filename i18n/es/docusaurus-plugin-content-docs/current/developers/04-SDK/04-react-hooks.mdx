@@ -1,0 +1,54 @@
+---
+id: react-hooks
+title: Hooks de React
+sidebar_position: 4
+---
+
+# Hooks de React
+
+Importa desde `@clocktower-protocol/sdk/react`. Requiere que `ClocktowerProvider` envuelva tu app.
+
+## Configuración
+
+```tsx
+import { WagmiProvider } from 'wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ClocktowerProvider, useSubscription } from '@clocktower-protocol/sdk/react'
+
+const queryClient = new QueryClient()
+
+function App() {
+  return (
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <ClocktowerProvider>
+          <SubscriptionPage />
+        </ClocktowerProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  )
+}
+```
+
+## Hooks de consulta
+
+| Hook | Descripción |
+|------|-------------|
+| `useSubscription` | Suscripción individual por ID |
+| `useProtocolState` | Configuración de comisiones del protocolo y estado de remit |
+| `useAccountSubscriptions` | Suscripciones de una cuenta |
+| `useEnrichedAccount` | Vista de cuenta enriquecida |
+| `useApprovedToken` | Configuración del token |
+| `useSubscriptionsDue` | Resumen de cola de vencimientos |
+
+## Hooks de mutación
+
+| Hook | Descripción |
+|------|-------------|
+| `useCreateSubscription` | Crear una nueva suscripción |
+| `useSubscribe` | Suscribirse a una suscripción existente |
+| `useSubscribeWithApproval` | Suscribirse con approve opcional |
+| `useUnsubscribe` | Cancelar suscripción |
+| `useCancelSubscription` | Cancelación por proveedor |
+
+Las claves de consulta están limitadas por `chainId`. Las mutaciones invalidan consultas relacionadas al tener éxito.

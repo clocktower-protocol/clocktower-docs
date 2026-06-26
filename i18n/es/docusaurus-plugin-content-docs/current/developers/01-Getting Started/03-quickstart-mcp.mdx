@@ -1,0 +1,81 @@
+---
+id: quickstart-mcp
+title: Inicio Rápido MCP
+sidebar_position: 3
+---
+
+# Inicio Rápido MCP
+
+El servidor MCP expone herramientas del protocolo Clocktower para agentes de IA. Conecta cualquier cliente compatible con MCP a `mcp.clocktower.finance` (desarrollo local: `http://127.0.0.1:8787/mcp`).
+
+## Endpoint
+
+Producción:
+
+```
+https://mcp.clocktower.finance
+```
+
+Desarrollo local (Worker único — MCP se sirve en `/mcp`):
+
+```
+http://127.0.0.1:8787/mcp
+```
+
+## Requisitos
+
+- Cliente compatible con MCP
+- Soporte x402 para pagos en USDC en Base (todas las llamadas a herramientas son de pago)
+- Wallet para firmar transacciones preparadas
+
+Consulta [Pagos x402](/docs/developers/MCP/x402-payments) para precios y flujo de pago.
+
+## Listar y llamar herramientas
+
+Usando [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent):
+
+```bash
+cd clocktower-mcp && npm run dev   # iniciar el Worker localmente
+
+cd clocktower-agent
+npm start mcp list
+npm start mcp call get_protocol_state
+npm start mcp call search_subscriptions '{"first":10}'
+```
+
+## Ejemplo: leer suscripción
+
+```bash
+npm start mcp call get_subscription '{"id":"0x..."}'
+```
+
+## Ejemplo: preparar suscripción
+
+```bash
+npm start mcp call prepare_subscribe '{
+  "from": "0xYourAddress",
+  "subscription": { "id": "0x..." },
+  "readinessOnly": true
+}'
+```
+
+La preparación completa devuelve `unsignedTransactions`, `signingMode`, `instructions` y `requestId`. Firma y transmite desde tu wallet, luego:
+
+```bash
+npm start mcp call get_transaction_status '{"hash":"0x..."}'
+```
+
+## Flujo de escritura
+
+```
+check_*_readiness (opcional) → prepare_* → firmar → transmitir → get_transaction_status
+```
+
+Consulta el [flujo de escritura MCP](/docs/developers/MCP/write-workflow) y el [flujo de suscripción](/docs/developers/Workflows/subscribe).
+
+## Entorno
+
+| Variable | Propósito |
+|----------|---------|
+| `MCP_URL` | Endpoint MCP (producción: `https://mcp.clocktower.finance`; local: `http://127.0.0.1:8787/mcp`) |
+| `PRIVATE_KEY` | Pagos x402 + firma SIWE para autenticación builder |

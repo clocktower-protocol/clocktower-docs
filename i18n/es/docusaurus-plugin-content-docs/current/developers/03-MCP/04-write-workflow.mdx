@@ -1,0 +1,52 @@
+---
+id: write-workflow
+title: Flujo de Escritura
+sidebar_position: 4
+---
+
+# Flujo de Escritura MCP
+
+Todas las escrituras MCP siguen el modelo de solo preparación:
+
+```
+check_*_readiness (opcional) → prepare_* → firmar → transmitir → get_transaction_status
+```
+
+El servidor nunca retransmite transacciones firmadas.
+
+## Respuesta de preparación
+
+La preparación completa devuelve:
+
+- `requestId` — ID de correlación para soporte
+- `unsignedTransactions` — calldata para firmar
+- `signingMode` — `raw` o `eip5792` (lote approve + subscribe)
+- `instructions` — pasos ordenados de firma
+- `simulation` — resultados de simulación on-chain
+- `gasEstimates` / `gasSummary` — presupuesto de gas orientativo en Base
+- `preflight` — contexto específico de la operación
+- `warnings` — sugerencias no fatales
+
+## Modo solo preparación
+
+Pasa `readinessOnly: true` a cualquier herramienta `prepare_*`:
+
+- Devuelve `ready`, `errors`, `warnings`, `details`
+- Sin `unsignedTransactions` ni simulación
+- Facturado al nivel de preparación ($0.01; ruta remit $0.02)
+
+Herramientas dedicadas de preparación: `check_subscribe_readiness`, `check_remit_readiness`.
+
+## Después de transmitir
+
+Consulta `get_transaction_status` con el hash de la transacción. Incluye `requestId` al reportar problemas.
+
+## Remit
+
+```
+check_remit_readiness → prepare_remit → firmar → transmitir → repetir hasta ponerse al día
+```
+
+Un `remit()` liquida como máximo `maxRemits` pagos por transacción. Cuando el backlog necesita múltiples transmisiones, `preflight.expectedTransactions` y `gasSummary.backlogMultiplier` describen el presupuesto total de gas.
+
+Consulta el [flujo de caller de remit](/docs/developers/Workflows/remit-caller).

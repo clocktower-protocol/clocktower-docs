@@ -27,6 +27,10 @@
     "message": "Cómo Hacer",
     "description": "The label of footer link with label=HowTo linking to /docs/howto/howto/"
   },
+  "link.item.label.Developers": {
+    "message": "Desarrolladores",
+    "description": "The label of footer link with label=Developers linking to /docs/developers/"
+  },
   "link.item.label.Whitepaper": {
     "message": "Libro Blanco",
     "description": "The label of footer link with label=Whitepaper linking to /docs/whitepaper"

@@ -1,0 +1,49 @@
+---
+id: reads-and-writes
+title: Lecturas y Escrituras
+sidebar_position: 3
+---
+
+# Lecturas y Escrituras
+
+## Métodos de lectura
+
+| Método | Devuelve | Notas |
+|--------|---------|-------|
+| `getSubscription(id)` | `Subscription` | Lanza `SubscriptionNotFoundError` para id cero |
+| `getAccountSubscriptions(bySubscriber, address)` | `AccountSubscription[]` | `bySubscriber: true` lista suscripciones que la cuenta paga |
+| `getSubscribers(id)` | `Subscriber[]` | Saldos de comisiones formateados según decimales del token |
+| `getApprovedToken(token)` | `ApprovedToken` | Lanza `TokenNotApprovedError` si no está aprobado |
+| `getFeeBalance(id, subscriber)` | `FeeBalance` | Saldo de comisión prepagado |
+| `getAccount(address)` | `Account` | Vista on-chain parseada |
+| `getEnrichedAccount(address)` | `EnrichedAccount` | Saldos de comisiones en lote + `created` |
+| `getProtocolState()` | `ProtocolState` | Comisiones, `maxRemits`, fechas, `isRemitCaughtUp` |
+| `getSubscriptionsDue(day?)` | Resumen de cola de vencimientos | Anulación opcional de día |
+| `watchSubscription(id, onUpdate, options?)` | `() => void` | Consulta; llama la función devuelta para detener |
+| `waitForSubscription(id, options?)` | `Subscription` | Consulta hasta que exista (post-creación) |
+
+## Métodos de escritura (requieren `walletClient`)
+
+| Método | Devuelve | Notas |
+|--------|---------|-------|
+| `createSubscription(params, options?)` | `WriteResult` | Valida `dueDay`, metadatos, mínimo del token |
+| `subscribe(subscription, options?)` | `WriteResult` | Preflight: cancelada, pausada, allowance, saldo |
+| `subscribeWithApproval(subscription, account, options?)` | `{ approveHash?, hash }` | Aprueba si el allowance es bajo |
+| `unsubscribe(id, options?)` | `WriteResult` | Obtiene la suscripción y luego cancela la suscripción |
+| `cancelSubscription(id, options?)` | `WriteResult` | Cancelación por proveedor |
+| `editDetails(id, details, options?)` | `WriteResult` | Actualiza URL/descripción |
+| `editProviderDetails(details, options?)` | `WriteResult` | Campos del perfil de proveedor |
+| `remit(options?)` | `WriteResult` | Pago de caller sin permisos |
+
+Todas las escrituras lanzan `WalletRequiredError` cuando no hay `walletClient` con `account` configurado.
+
+## Rangos de día de vencimiento
+
+| `Frequency` | `dueDay` válido |
+|-------------|----------------|
+| `WEEKLY` (0) | 1–7 |
+| `MONTHLY` (1) | 1–28 |
+| `QUARTERLY` (2) | 1–90 |
+| `YEARLY` (3) | 1–365 |
+
+Para firmas de funciones on-chain, consulta la [Referencia Técnica del Contrato](/docs/contracts/Subscribe/subscribe_tech_reference).

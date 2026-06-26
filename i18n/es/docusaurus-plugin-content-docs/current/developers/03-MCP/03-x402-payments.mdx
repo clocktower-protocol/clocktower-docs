@@ -1,0 +1,43 @@
+---
+id: x402-payments
+title: Pagos x402
+sidebar_position: 3
+---
+
+# Pagos x402
+
+Todas las llamadas a herramientas MCP requieren pago vía el [protocolo x402](https://github.com/coinbase/x402) en USDC en Base.
+
+## Requisitos
+
+- Cliente MCP con soporte x402
+- Saldo de USDC en Base para micropagos
+- `PRIVATE_KEY` o wallet configurada en tu agente para firma de pagos
+
+REST `/api` **no** usa x402. Usa REST para acceso de nivel gratuito con límites de tasa.
+
+## Flujo de pago
+
+1. El cliente llama una herramienta MCP
+2. El servidor ejecuta preflight/simulación (para herramientas de preparación)
+3. En caso de éxito, el pago x402 se liquida en USDC
+4. Se devuelve la respuesta
+
+La simulación o validación fallida en herramientas de preparación lanza excepción **antes** de que se liquide el pago.
+
+## Precios
+
+Los precios por herramienta se listan en la [referencia de herramientas](/docs/developers/MCP/tools-reference). Las herramientas de historial y búsqueda usan precio base más recargos por fila.
+
+## Estimación de costos
+
+Usa las pruebas smoke de clocktower-agent para estimar costos MCP:
+
+```bash
+npm run smoke -- --list    # desglose de costos (REST gratuito, MCP USDC)
+npm run smoke -- --mcp-only --yes
+```
+
+## Destinatario
+
+El Worker recibe pagos en la dirección configurada mediante la variable de entorno `X402_RECIPIENT`.

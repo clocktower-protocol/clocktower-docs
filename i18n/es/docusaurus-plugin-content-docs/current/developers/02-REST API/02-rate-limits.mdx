@@ -1,0 +1,47 @@
+---
+id: rate-limits
+title: Límites de Tasa
+sidebar_position: 2
+---
+
+# Límites de Tasa
+
+Las rutas son relativas a `https://api.clocktower.finance` (producción) o `http://127.0.0.1:8787/api` (local).
+
+El acceso está dividido en niveles entre REST gratuito, REST Builder y MCP.
+
+## Límites predeterminados
+
+| Nivel | Superficie | Autenticación | Límites predeterminados |
+|------|---------|------|----------------|
+| **Gratuito** | `api.clocktower.finance` | Ninguna | 20 rpm/IP; rutas costosas 3 rpm; subgrafo 100/día/IP; escrituras 2 prepare/min/IP |
+| **Builder** | `api.clocktower.finance` | Sesión SIWE | 120 rpm/dirección; subgrafo 10k/día; escrituras 30/min; limitado a wallet |
+| **Agente** | `mcp.clocktower.finance` | x402 | 300 rpm/IP; escrituras 60/min/dirección |
+
+## Buckets de tasa
+
+- **Global** — aplica a la mayoría de endpoints de lectura
+- **Costoso** — endpoints con subgrafo pesado (historial, descubrimiento, lecturas entre cuentas)
+- **Subgrafo diario** — por IP (gratuito) o por dirección (builder)
+- **Escritura** — endpoints `prepare_*`, indexados por dirección `from`
+
+## Notas del nivel gratuito
+
+- Lecturas entre cuentas y de proveedores permitidas bajo el bucket costoso
+- Escrituras de proveedor (`cancel`, `unsubscribe_by_provider`, `edit_details`) usan el bucket de escritura; la autorización on-chain aún aplica en los manejadores de preparación
+- Las rutas `:me` devuelven 403 sin una sesión Builder
+
+## Catálogo legible por máquina
+
+`GET /catalog` devuelve el manifiesto completo de rutas y límites de nivel. Consulta [Catálogo](/docs/developers/REST%20API/catalog).
+
+## Protecciones en el edge
+
+Los despliegues de producción deben configurar reglas de edge de Cloudflare:
+
+| Regla | Configuración sugerida |
+|------|------------------|
+| Rate Limiting | Bloquear `>500 req / 5 min` por IP en `api.clocktower.finance` y `mcp.clocktower.finance` |
+| WAF | Bloquear `User-Agent` vacío; desafiar `/auth/*` a `>30/min/IP` |
+| DDoS | Mantener habilitado el ruleset gestionado de DDoS HTTP |
+| Bot Fight Mode | Habilitar en la zona para reducir abuso del nivel gratuito automatizado |

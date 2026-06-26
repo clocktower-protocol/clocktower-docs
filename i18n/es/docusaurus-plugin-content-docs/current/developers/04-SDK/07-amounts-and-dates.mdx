@@ -1,0 +1,33 @@
+---
+id: amounts-and-dates
+title: Montos y Fechas
+sidebar_position: 7
+---
+
+# Montos y Fechas
+
+## Montos legibles para humanos
+
+No necesitas manejar el almacenamiento de 18 decimales del protocolo para el uso normal del SDK.
+
+| Campo | Significado | Ejemplo 10 USDC |
+|-------|---------|-----------------|
+| `amount` | Cadena legible para humanos | `"10"` |
+| `amountRaw` | Wei nativo del token (`bigint`) | `10000000n` |
+| `tokenDecimals` | Precisión del token | `6` |
+
+- **Crear suscripciones:** pasa `amount: '10'` (unidades de token legibles para humanos)
+- **Leer suscripciones:** todos los métodos de lectura devuelven montos formateados
+- **Suscribirse / cancelar suscripción / cancelar:** pasa objetos de suscripción de `getSubscription`
+
+Los ayudantes de bajo nivel (`parseHumanAmount`, `formatHumanAmount`) se exportan para uso avanzado.
+
+## Fechas de progreso de remit
+
+El contrato rastrea el progreso de remit con un índice de día interno. El SDK lo convierte a marcas de tiempo gregorianas UTC:
+
+- `nextUncheckedDate` — día calendario que el contrato procesará a continuación
+- `currentDate` — día calendario del protocolo de hoy (UTC)
+- `isRemitCaughtUp` — `true` cuando remit está al día
+
+Usa `dayNumberToGregorian` desde la exportación principal para formatear otros números de día del protocolo.

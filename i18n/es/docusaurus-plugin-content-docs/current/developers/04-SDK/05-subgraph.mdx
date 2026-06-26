@@ -1,0 +1,40 @@
+---
+id: subgraph
+title: Subgrafo
+sidebar_position: 5
+---
+
+# Cliente de Subgrafo
+
+Consulta eventos indexados vía The Graph.
+
+```typescript
+import { createSubgraphClient, searchSubscriptions } from '@clocktower-protocol/sdk/subgraph'
+
+const subgraph = createSubgraphClient({
+  chainId: 84532,
+  subgraphUrl: process.env.GRAPH_BASE_SEPOLIA_URL!,
+  apiKey: process.env.GRAPH_API_KEY,
+})
+
+const history = await subgraph.getSubscriptionHistory('0x...')
+const activity = await subgraph.getAccountActivity('0x...')
+```
+
+## Métodos
+
+| Método | Descripción |
+|--------|-------------|
+| `getSubscriptionHistory(id, { first?, skip? })` | Registro de eventos de una suscripción |
+| `getSubscriptionDetails(id)` | URL/descripción más reciente |
+| `getSubscriptionDetailsHistory(id, options?)` | Cambios de detalles paginados |
+| `getAccountActivity(address, options?)` | Eventos fusionados de suscriptor + proveedor |
+| `getProviderProfile(address)` | Perfil de proveedor más reciente |
+| `searchSubscriptionCreates(options?)` | Filtrar por `provider`, `token` |
+| `searchSubscriptions(subgraph, client, options?)` | Descubrimiento + filtro on-chain |
+
+## Errores
+
+Los métodos del subgrafo lanzan `ClocktowerSubgraphError` en caso de fallo. `getAccountActivity` puede devolver `partial: true` con `warnings` cuando una rama de consulta falla.
+
+Los campos de monto usan la misma forma `amount` / `amountRaw` / `tokenDecimals` que las lecturas on-chain.

@@ -1,0 +1,49 @@
+---
+id: overview
+title: Resumen
+sidebar_position: 1
+---
+
+# Resumen para Desarrolladores
+
+Clocktower expone datos del protocolo y preparación de escrituras a través de un Cloudflare Worker (`clocktower-mcp`) y un SDK de TypeScript. Ambos apuntan a **Base mainnet** (chain ID 8453).
+
+:::warning Pre-lanzamiento
+Los endpoints de producción están planificados en `api.clocktower.finance` (REST) y `mcp.clocktower.finance` (MCP), pero aún no están en vivo. Usa un despliegue local (`wrangler dev` en el puerto 8787) hasta el lanzamiento.
+:::
+
+## Niveles de acceso
+
+| Nivel | Superficie | Autenticación | Límites predeterminados |
+|------|---------|------|----------------|
+| **Gratuito** | `api.clocktower.finance` | Ninguna | 20 rpm/IP; rutas costosas 3 rpm; subgrafo 100/día/IP; escrituras 2 prepare/min/IP |
+| **Builder** | `api.clocktower.finance` | Sesión SIWE (`Authorization: Bearer cts_…`) | 120 rpm/dirección; subgrafo 10k/día; escrituras 30/min; limitado a tu wallet |
+| **Agente** | `mcp.clocktower.finance` | x402 (USDC en Base) | 300 rpm/IP; escrituras 60/min/dirección |
+
+- **Nivel gratuito** — sin clave API. Mismos endpoints REST que Builder con límites de tasa más bajos. Lecturas entre cuentas permitidas (bucket costoso).
+- **Nivel Builder** — suscríbete a la suscripción on-chain de derecho Builder, luego completa la autenticación SIWE. Usa rutas `:me` para tu propia cuenta. Consulta el [flujo de autenticación Builder](/docs/developers/Workflows/builder-auth).
+- **MCP** — pago por llamada a herramienta vía x402. Límites de tasa más altos que los topes planos heredados.
+
+Consulta `GET /catalog` en `api.clocktower.finance` para el manifiesto de niveles legible por máquina. El desarrollo local usa `GET /api/catalog`.
+
+## Modelo de escritura (solo preparación)
+
+Ni REST ni MCP retransmiten transacciones firmadas. Cada escritura sigue:
+
+```
+verificar preparación (opcional) → preparar → firmar en wallet → transmitir → consultar estado (opcional)
+```
+
+El SDK puede transmitir directamente cuando está configurado con un `walletClient`.
+
+## Alojamiento del protocolo
+
+- **Cadena:** Base mainnet (`eip155:8453`)
+- **Worker:** Cloudflare Workers + Durable Objects
+- **Subgrafo:** The Graph (historial, descubrimiento, perfiles)
+
+## Próximos pasos
+
+- [Inicio rápido REST](/docs/developers/Getting%20Started/quickstart-rest)
+- [Inicio rápido MCP](/docs/developers/Getting%20Started/quickstart-mcp)
+- [Inicio rápido SDK](/docs/developers/Getting%20Started/quickstart-sdk)
