@@ -19,6 +19,10 @@
     "message": "Haz clic aquí si no eres redirigido automáticamente.",
     "description": "Fallback link when the whitepaper redirect does not happen automatically"
   },
+  "theme.NotFound.localeDevHint": {
+    "message": "El servidor de desarrollo solo ejecuta un idioma a la vez. Para ver el sitio en español, ejecuta {startEs} o prueba ambos idiomas con {preview}.",
+    "description": "Hint shown in dev when switching to another locale"
+  },
   "homepage.banner2.title": {
     "message": "Descentralizados",
     "description": "The second banner title about decentralized payments"

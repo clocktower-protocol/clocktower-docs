@@ -50,6 +50,18 @@ const config = {
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'es'],
+    localeConfigs: {
+      en: {
+        label: 'English',
+        direction: 'ltr',
+        htmlLang: 'en',
+      },
+      es: {
+        label: 'Español',
+        direction: 'ltr',
+        htmlLang: 'es',
+      },
+    },
   },
 
   //fonts
