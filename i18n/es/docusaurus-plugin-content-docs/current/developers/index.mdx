@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # Clocktower para Desarrolladores
 
-Integra con el Protocolo Clocktower en Base a través de tres superficies: una API REST gratuita en `api.clocktower.finance`, un servidor MCP para agentes de IA en `mcp.clocktower.finance`, y un SDK de TypeScript para acceso directo on-chain.
+Construye sobre pagos recurrentes y suscripciones en Base. Consulta datos del protocolo, prepara transacciones para que tus usuarios firmen, o deja que agentes de IA interactúen con Clocktower mediante MCP — además de un SDK de TypeScript cuando quieras ir directo on-chain.
 
 :::warning Pre-lanzamiento
 La API REST (`api.clocktower.finance`) y el servidor MCP (`mcp.clocktower.finance`) aún no están en producción. El SDK no está publicado en npm. Los endpoints, precios y APIs pueden cambiar antes del lanzamiento.
@@ -36,6 +36,6 @@ Para structs de contratos on-chain y firmas de funciones, consulta la [Referenci
 
 | Repo | Descripción |
 |------|-------------|
-| [clocktower-api](https://github.com/clocktower-protocol/api) | Cloudflare Worker — `api.clocktower.finance` y `mcp.clocktower.finance` |
+| [clocktower-api](https://github.com/clocktower-protocol/api) | Servidor REST y MCP — `api.clocktower.finance` y `mcp.clocktower.finance` |
 | [clocktower-sdk](https://github.com/clocktower-protocol/sdk) | Biblioteca TypeScript `@clocktower-protocol/sdk` |
 | [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) | CLI para probar REST y MCP localmente |

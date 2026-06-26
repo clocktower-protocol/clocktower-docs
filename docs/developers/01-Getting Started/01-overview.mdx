@@ -6,13 +6,31 @@ sidebar_position: 1
 
 # Developer Overview
 
-Clocktower exposes protocol data and write preparation through a Cloudflare Worker (`clocktower-mcp`) and a TypeScript SDK. Both target **Base mainnet** (chain ID 8453).
+Clocktower is a subscription protocol on **Base**. If you are building an app, backend, or AI agent that needs to work with recurring payments, subscriber accounts, or protocol data, you do not have to stitch everything together from raw contract calls alone.
+
+We provide two HTTP surfaces plus a TypeScript SDK:
+
+- **REST API** (`api.clocktower.finance`) — query subscriptions, accounts, and history; prepare transactions your users sign in their own wallet.
+- **MCP server** (`mcp.clocktower.finance`) — the same capabilities exposed as tools for AI agents and MCP clients, with per-call pricing.
+- **TypeScript SDK** — read and write on-chain directly when you already have a wallet and RPC.
+
+All three are ways to answer the same kinds of questions: *Who is subscribed to what? What is due next? What transaction should the user sign?*
 
 :::warning Pre-release
-Production endpoints are planned at `api.clocktower.finance` (REST) and `mcp.clocktower.finance` (MCP) but are not live yet. Use a local deployment (`wrangler dev` on port 8787) until launch.
+Production endpoints at `api.clocktower.finance` and `mcp.clocktower.finance` are not live yet. Use a local deployment until launch. See the quickstart guides for setup.
 :::
 
+## What you can build
+
+**With REST**, you can power dashboards, backends, and browser apps: look up providers and subscribers, inspect payment history, check whether a subscription is ready to process, and get back prepared calldata for creates, updates, cancels, and remits. Your app prepares; the user signs.
+
+**With MCP**, you can let an agent reason over live protocol state: discover subscriptions, inspect accounts, and request prepared writes through standard MCP tools. Each tool call is paid via x402 in USDC on Base — a good fit when the caller is an autonomous agent rather than your own server.
+
+**With the SDK**, you skip the API entirely and talk to Base through viem. Use it for bots, scripts, and dApps that already manage their own keys.
+
 ## Access tiers
+
+Getting started is free. Higher limits and wallet-scoped routes unlock when you hold an active **Clocktower subscription** to the Builder entitlement on-chain.
 
 | Lane | Surface | Auth | Default limits |
 |------|---------|------|----------------|
@@ -20,27 +38,21 @@ Production endpoints are planned at `api.clocktower.finance` (REST) and `mcp.clo
 | **Builder** | `api.clocktower.finance` | SIWE session (`Authorization: Bearer cts_…`) | 120 rpm/address; subgraph 10k/day; writes 30/min; scoped to your wallet |
 | **Agent** | `mcp.clocktower.finance` | x402 (USDC on Base) | 300 rpm/IP; writes 60/min/address |
 
-- **Free tier** — no API key. Same REST endpoints as Builder with lower rate limits. Cross-account reads allowed (expensive bucket).
-- **Builder tier** — subscribe to the on-chain Builder entitlement subscription, then complete SIWE auth. Use `:me` routes for your own account. See [Builder auth workflow](/docs/developers/Workflows/builder-auth).
-- **MCP** — paid per tool call via x402. Higher rate limits than legacy flat caps.
+- **Free tier** — no API key. Call any allowed endpoint directly with per-IP rate limits. Enough to explore, prototype, and serve public reads.
+- **Builder tier** — subscribe to the on-chain Builder entitlement, then sign in with your wallet (SIWE). Your session unlocks `:me` routes and higher limits tied to your address. See [Builder auth workflow](/docs/developers/Workflows/builder-auth).
+- **MCP (Agent lane)** — pay per tool call via x402. Designed for agents that need richer throughput without managing a Builder subscription.
 
 See `GET /catalog` on `api.clocktower.finance` for the machine-readable tier manifest. Local dev uses `GET /api/catalog`.
 
 ## Write model (prepare-only)
 
-Neither REST nor MCP relays signed transactions. Every write follows:
+Neither REST nor MCP sends transactions for you. Every write follows the same pattern:
 
 ```
 check readiness (optional) → prepare → sign in wallet → broadcast → poll status (optional)
 ```
 
-The SDK can broadcast directly when configured with a `walletClient`.
-
-## Protocol hosting
-
-- **Chain:** Base mainnet (`eip155:8453`)
-- **Worker:** Cloudflare Workers + Durable Objects
-- **Subgraph:** The Graph (history, discovery, profiles)
+The API returns the transaction to sign; your user or agent broadcasts it. The SDK can broadcast directly when configured with a `walletClient`.
 
 ## Next steps
 

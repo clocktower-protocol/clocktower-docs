@@ -6,13 +6,31 @@ sidebar_position: 1
 
 # Resumen para Desarrolladores
 
-Clocktower expone datos del protocolo y preparación de escrituras a través de un Cloudflare Worker (`clocktower-mcp`) y un SDK de TypeScript. Ambos apuntan a **Base mainnet** (chain ID 8453).
+Clocktower es un protocolo de suscripciones en **Base**. Si estás construyendo una app, un backend o un agente de IA que necesita trabajar con pagos recurrentes, cuentas de suscriptores o datos del protocolo, no tienes que armar todo desde cero solo con llamadas directas al contrato.
+
+Ofrecemos dos superficies HTTP más un SDK de TypeScript:
+
+- **API REST** (`api.clocktower.finance`) — consulta suscripciones, cuentas e historial; prepara transacciones que tus usuarios firman en su propia wallet.
+- **Servidor MCP** (`mcp.clocktower.finance`) — las mismas capacidades expuestas como herramientas para agentes de IA y clientes MCP, con precio por llamada.
+- **SDK de TypeScript** — lectura y escritura on-chain directa cuando ya tienes una wallet y un RPC.
+
+Las tres responden a las mismas preguntas: *¿Quién está suscrito a qué? ¿Qué vence después? ¿Qué transacción debe firmar el usuario?*
 
 :::warning Pre-lanzamiento
-Los endpoints de producción están planificados en `api.clocktower.finance` (REST) y `mcp.clocktower.finance` (MCP), pero aún no están en vivo. Usa un despliegue local (`wrangler dev` en el puerto 8787) hasta el lanzamiento.
+Los endpoints de producción en `api.clocktower.finance` y `mcp.clocktower.finance` aún no están en vivo. Usa un despliegue local hasta el lanzamiento. Consulta las guías de inicio rápido para la configuración.
 :::
 
+## Qué puedes construir
+
+**Con REST**, puedes alimentar dashboards, backends y apps de navegador: buscar proveedores y suscriptores, revisar historial de pagos, comprobar si una suscripción está lista para procesarse y obtener calldata preparada para crear, actualizar, cancelar y remitir. Tu app prepara; el usuario firma.
+
+**Con MCP**, puedes dejar que un agente razone sobre el estado vivo del protocolo: descubrir suscripciones, inspeccionar cuentas y solicitar escrituras preparadas mediante herramientas MCP estándar. Cada llamada se paga vía x402 en USDC en Base — ideal cuando quien llama es un agente autónomo y no tu propio servidor.
+
+**Con el SDK**, omites la API y hablas con Base a través de viem. Úsalo para bots, scripts y dApps que ya gestionan sus propias claves.
+
 ## Niveles de acceso
+
+Empezar es gratuito. Límites más altos y rutas acotadas a tu wallet se desbloquean cuando mantienes una **suscripción activa de Clocktower** al derecho Builder on-chain.
 
 | Nivel | Superficie | Autenticación | Límites predeterminados |
 |------|---------|------|----------------|
@@ -20,27 +38,21 @@ Los endpoints de producción están planificados en `api.clocktower.finance` (RE
 | **Builder** | `api.clocktower.finance` | Sesión SIWE (`Authorization: Bearer cts_…`) | 120 rpm/dirección; subgrafo 10k/día; escrituras 30/min; limitado a tu wallet |
 | **Agente** | `mcp.clocktower.finance` | x402 (USDC en Base) | 300 rpm/IP; escrituras 60/min/dirección |
 
-- **Nivel gratuito** — sin clave API. Mismos endpoints REST que Builder con límites de tasa más bajos. Lecturas entre cuentas permitidas (bucket costoso).
-- **Nivel Builder** — suscríbete a la suscripción on-chain de derecho Builder, luego completa la autenticación SIWE. Usa rutas `:me` para tu propia cuenta. Consulta el [flujo de autenticación Builder](/docs/developers/Workflows/builder-auth).
-- **MCP** — pago por llamada a herramienta vía x402. Límites de tasa más altos que los topes planos heredados.
+- **Nivel gratuito** — sin clave API. Llama cualquier endpoint permitido directamente con límites por IP. Suficiente para explorar, prototipar y servir lecturas públicas.
+- **Nivel Builder** — suscríbete al derecho Builder on-chain, luego inicia sesión con tu wallet (SIWE). Tu sesión desbloquea rutas `:me` y límites más altos vinculados a tu dirección. Consulta el [flujo de autenticación Builder](/docs/developers/Workflows/builder-auth).
+- **MCP (nivel Agente)** — pago por llamada a herramienta vía x402. Pensado para agentes que necesitan mayor throughput sin gestionar una suscripción Builder.
 
 Consulta `GET /catalog` en `api.clocktower.finance` para el manifiesto de niveles legible por máquina. El desarrollo local usa `GET /api/catalog`.
 
 ## Modelo de escritura (solo preparación)
 
-Ni REST ni MCP retransmiten transacciones firmadas. Cada escritura sigue:
+Ni REST ni MCP envían transacciones por ti. Cada escritura sigue el mismo patrón:
 
 ```
 verificar preparación (opcional) → preparar → firmar en wallet → transmitir → consultar estado (opcional)
 ```
 
-El SDK puede transmitir directamente cuando está configurado con un `walletClient`.
-
-## Alojamiento del protocolo
-
-- **Cadena:** Base mainnet (`eip155:8453`)
-- **Worker:** Cloudflare Workers + Durable Objects
-- **Subgrafo:** The Graph (historial, descubrimiento, perfiles)
+La API devuelve la transacción a firmar; tu usuario o agente la transmite. El SDK puede transmitir directamente cuando está configurado con un `walletClient`.
 
 ## Próximos pasos
 
