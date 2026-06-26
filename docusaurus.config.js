@@ -230,10 +230,6 @@ const config = {
                 label: 'Developers',
                 to: '/docs/developers/',
               },
-              {
-                label: 'Whitepaper',
-                to: '/whitepaper',
-              },
             ],
           },
           {
@@ -251,6 +247,10 @@ const config = {
               {
                 label: 'GitHub',
                 href: 'https://github.com/clocktower-protocol',
+              },
+              {
+                label: 'Whitepaper',
+                to: '/whitepaper',
               },
               // IPFS App link disabled until the deployment is stable.
               // {
