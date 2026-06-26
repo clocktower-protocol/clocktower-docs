@@ -29,6 +29,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250417.0",
     "@docusaurus/module-type-aliases": "^3.10.0",
+    "concurrently": "^10.0.3",
     "wrangler": "^4.59.1"
   },
   "overrides": {
