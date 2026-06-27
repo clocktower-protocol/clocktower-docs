@@ -49,6 +49,80 @@ const { hash } = await client.createSubscription({
 })
 ```
 
+## Subscribe
+
+Use `subscribe` when the subscriber has **already** approved the Clocktower contract to spend the payment token. The SDK checks allowance in preflight and throws if it is still too low.
+
+```typescript
+const subscription = await client.getSubscription(subscriptionId)
+
+const { hash } = await client.subscribe(subscription, {
+  waitForReceipt: true,
+})
+```
+
+## Subscribe with approval
+
+Use `subscribeWithApproval` when you want **one call** that handles both cases: if allowance is already sufficient, it subscribes only; if not, it sends `approve` first, then subscribes.
+
+```typescript
+const subscription = await client.getSubscription(subscriptionId)
+
+const { approveHash, hash } = await client.subscribeWithApproval(
+  subscription, // Subscription to join — from getSubscription
+  subscriberAddress, // Paying wallet; must hold the token and sign the transactions
+  { waitForReceipt: true }, // Wait for each tx receipt before returning
+)
+
+// approveHash is undefined when allowance was already set; hash is always the subscribe tx
+```
+
+## Approve, then subscribe
+
+Use two explicit steps when you want the subscriber to confirm the ERC-20 `approve` before you call `subscribe` yourself.
+
+```typescript
+import { maxUint256 } from 'viem'
+
+const usdcAbi = [
+  {
+    type: 'function',
+    name: 'approve',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'spender', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+    ],
+    outputs: [{ name: '', type: 'bool' }],
+  },
+] as const
+
+const subscription = await client.getSubscription(subscriptionId)
+
+// Standard ERC-20 approve — USDC uses the same interface as any ERC-20 token
+await walletClient.writeContract({
+  address: subscription.token,
+  abi: usdcAbi,
+  functionName: 'approve',
+  args: [client.contractAddress, maxUint256],
+})
+
+// Clocktower subscribe — enrolls the wallet and charges the prorated first payment
+const { hash } = await client.subscribe(subscription, {
+  waitForReceipt: true,
+})
+```
+
+## Unsubscribe
+
+Use `unsubscribe` when a subscriber wants to leave an active subscription. The connected wallet must be the subscriber. Remaining prepaid fees are refunded to the provider.
+
+```typescript
+const { hash } = await client.unsubscribe(subscriptionId, {
+  waitForReceipt: true,
+})
+```
+
 ## Read a subscription
 
 Fetch one subscription by its bytes32 id. Amounts are returned in human-readable form.
@@ -129,70 +203,6 @@ console.log(due.dueCount)           // subscriptions due in the current remit wi
 console.log(due.currentDate)      // today's protocol calendar day (UTC)
 console.log(due.nextUncheckedDate) // next day the contract will process
 console.log(due.isRemitCaughtUp)  // true when remit is up to date
-```
-
-## Subscribe
-
-Use `subscribe` when the subscriber has **already** approved the Clocktower contract to spend the payment token. The SDK checks allowance in preflight and throws if it is still too low.
-
-```typescript
-const subscription = await client.getSubscription(subscriptionId)
-
-const { hash } = await client.subscribe(subscription, {
-  waitForReceipt: true,
-})
-```
-
-## Subscribe with approval
-
-Use `subscribeWithApproval` when you want **one call** that handles both cases: if allowance is already sufficient, it subscribes only; if not, it sends `approve` first, then subscribes.
-
-```typescript
-const subscription = await client.getSubscription(subscriptionId)
-
-const { approveHash, hash } = await client.subscribeWithApproval(
-  subscription, // Subscription to join — from getSubscription
-  subscriberAddress, // Paying wallet; must hold the token and sign the transactions
-  { waitForReceipt: true }, // Wait for each tx receipt before returning
-)
-
-// approveHash is undefined when allowance was already set; hash is always the subscribe tx
-```
-
-## Approve, then subscribe
-
-Use two explicit steps when you want the subscriber to confirm the ERC-20 `approve` before you call `subscribe` yourself.
-
-```typescript
-import { maxUint256 } from 'viem'
-
-const usdcAbi = [
-  {
-    type: 'function',
-    name: 'approve',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: 'spender', type: 'address' },
-      { name: 'amount', type: 'uint256' },
-    ],
-    outputs: [{ name: '', type: 'bool' }],
-  },
-] as const
-
-const subscription = await client.getSubscription(subscriptionId)
-
-// Standard ERC-20 approve — USDC uses the same interface as any ERC-20 token
-await walletClient.writeContract({
-  address: subscription.token,
-  abi: usdcAbi,
-  functionName: 'approve',
-  args: [client.contractAddress, maxUint256],
-})
-
-// Clocktower subscribe — enrolls the wallet and charges the prorated first payment
-const { hash } = await client.subscribe(subscription, {
-  waitForReceipt: true,
-})
 ```
 
 ## Supported chains

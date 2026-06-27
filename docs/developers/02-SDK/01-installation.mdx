@@ -34,12 +34,3 @@ cd sdk
 npm install
 npm run build
 ```
-
-## Relationship to clocktower-api
-
-| Package | Use when |
-|---------|----------|
-| `@clocktower-protocol/sdk` | Typed on-chain methods in dApps, scripts, backends |
-| clocktower-api (REST/MCP) | HTTP/MCP access with rate limits or x402 payments |
-
-The SDK talks directly to the chain via viem. The API server adds subgraph history, prepare-only writes with simulation, and agent-facing MCP tools.
