@@ -17,8 +17,8 @@ sidebar_position: 3
 | `getFeeBalance(id, subscriber)` | `FeeBalance` | Saldo de comisión prepagado |
 | `getAccount(address)` | `Account` | Vista on-chain parseada |
 | `getEnrichedAccount(address)` | `EnrichedAccount` | Saldos de comisiones en lote + `created` |
-| `getProtocolState()` | `ProtocolState` | Comisiones, `maxRemits`, fechas, `isRemitCaughtUp` |
-| `getSubscriptionsDue(day?)` | Resumen de cola de vencimientos | Anulación opcional de día |
+| `getProtocolState()` | `ProtocolState` | Porcentajes de comisión caller y system, `maxRemits` |
+| `getSubscriptionsDue(day?)` | Resumen de cola de vencimientos | `dueCount`, `nextUncheckedDate`, `currentDate`, `isRemitCaughtUp`; anulación opcional de día |
 | `watchSubscription(id, onUpdate, options?)` | `() => void` | Consulta; llama la función devuelta para detener |
 | `waitForSubscription(id, options?)` | `Subscription` | Consulta hasta que exista (post-creación) |
 

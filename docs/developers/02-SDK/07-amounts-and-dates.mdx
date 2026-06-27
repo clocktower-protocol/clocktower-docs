@@ -24,10 +24,12 @@ Low-level helpers (`parseHumanAmount`, `formatHumanAmount`) are exported for adv
 
 ## Remit progress dates
 
-The contract tracks remit progress with an internal day index. The SDK converts it to UTC Gregorian timestamps:
+The contract tracks remit progress with an internal day index. The SDK converts it to UTC Gregorian timestamps on `getSubscriptionsDue()`:
 
 - `nextUncheckedDate` — calendar day the contract will process next
 - `currentDate` — today's protocol calendar day (UTC)
 - `isRemitCaughtUp` — `true` when remit is up to date
+
+`getProtocolState()` returns fee configuration only — not remit dates.
 
 Use `dayNumberToGregorian` from the main export to format other protocol day numbers.

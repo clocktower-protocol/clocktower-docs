@@ -17,8 +17,8 @@ sidebar_position: 3
 | `getFeeBalance(id, subscriber)` | `FeeBalance` | Prepaid fee balance |
 | `getAccount(address)` | `Account` | Parsed on-chain view |
 | `getEnrichedAccount(address)` | `EnrichedAccount` | Batched fee balances + `created` |
-| `getProtocolState()` | `ProtocolState` | Fees, `maxRemits`, dates, `isRemitCaughtUp` |
-| `getSubscriptionsDue(day?)` | Due-queue summary | Optional day override |
+| `getProtocolState()` | `ProtocolState` | Caller and system fee percentages, `maxRemits` |
+| `getSubscriptionsDue(day?)` | Due-queue summary | `dueCount`, `nextUncheckedDate`, `currentDate`, `isRemitCaughtUp`; optional day override |
 | `watchSubscription(id, onUpdate, options?)` | `() => void` | Poll; call returned function to stop |
 | `waitForSubscription(id, options?)` | `Subscription` | Poll until exists (post-create) |
 

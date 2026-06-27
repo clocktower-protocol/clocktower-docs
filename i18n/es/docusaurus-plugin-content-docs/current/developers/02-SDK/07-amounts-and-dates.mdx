@@ -24,10 +24,12 @@ Los ayudantes de bajo nivel (`parseHumanAmount`, `formatHumanAmount`) se exporta
 
 ## Fechas de progreso de remit
 
-El contrato rastrea el progreso de remit con un índice de día interno. El SDK lo convierte a marcas de tiempo gregorianas UTC:
+El contrato rastrea el progreso de remit con un índice de día interno. El SDK lo convierte a marcas de tiempo gregorianas UTC en `getSubscriptionsDue()`:
 
 - `nextUncheckedDate` — día calendario que el contrato procesará a continuación
 - `currentDate` — día calendario del protocolo de hoy (UTC)
 - `isRemitCaughtUp` — `true` cuando remit está al día
+
+`getProtocolState()` devuelve solo la configuración de comisiones — no fechas de remit.
 
 Usa `dayNumberToGregorian` desde la exportación principal para formatear otros números de día del protocolo.

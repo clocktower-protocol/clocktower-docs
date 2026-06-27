@@ -51,11 +51,84 @@ const { hash } = await client.createSubscription({
 
 ## Leer una suscripción
 
+Obtén una suscripción por su id bytes32. Los montos se devuelven en formato legible.
+
 ```typescript
 const sub = await client.getSubscription('0x...')
-console.log(sub.amount)        // "10" — legible para humanos
-console.log(sub.amountRaw)     // 10000000n — wei nativo del token
-console.log(sub.tokenDecimals) // 6
+
+console.log(sub.id)             // id bytes32 de la suscripción
+console.log(sub.provider)       // wallet que creó la oferta
+console.log(sub.amount)         // "10" — cargo recurrente legible
+console.log(sub.amountRaw)      // 10000000n — unidades nativas del token
+console.log(sub.tokenDecimals)  // 6 — decimales ERC-20 de este token
+console.log(sub.token)          // contrato ERC-20 usado para el pago
+console.log(sub.frequencyLabel) // "MONTHLY", "WEEKLY", etc.
+console.log(sub.dueDay)         // día de cobro dentro del intervalo de frecuencia
+console.log(sub.cancelled)      // true si el proveedor canceló
+```
+
+## Leer una cuenta
+
+Lista a qué se suscribe una wallet y qué creó como proveedor. `getEnrichedAccount` agrupa los saldos de comisiones en la vista de suscriptor.
+
+```typescript
+const address = '0x...'
+
+// Suscripciones que esta wallet paga
+const payingFor = await client.getAccountSubscriptions(true, address)
+console.log(payingFor[0]?.subscription.id, payingFor[0]?.statusLabel)
+
+// Suscripciones que esta wallet creó como proveedor
+const created = await client.getAccountSubscriptions(false, address)
+console.log(created[0]?.subscription.id, created[0]?.totalSubscribers)
+
+// Vista completa de cuenta — subscribedTo incluye saldo de comisiones prepagadas
+const account = await client.getEnrichedAccount(address)
+console.log(account.subscribedTo[0]?.feeBalance) // comisiones prepagadas restantes
+console.log(account.created.length)              // cantidad de ofertas como proveedor
+```
+
+## Leer suscriptores
+
+Lista cada suscriptor de una suscripción y su saldo de comisiones prepagadas.
+
+```typescript
+const subscribers = await client.getSubscribers('0x...')
+
+console.log(subscribers[0]?.subscriber)    // dirección wallet del suscriptor
+console.log(subscribers[0]?.feeBalance)    // comisiones prepagadas restantes (legible)
+console.log(subscribers[0]?.feeBalanceRaw) // unidades nativas del token
+```
+
+## Leer un token aprobado
+
+Comprueba si un token está habilitado en el protocolo y su monto mínimo de suscripción.
+
+```typescript
+const token = await client.getApprovedToken('0x036CbD53842c5426634e7929541eC2318f3dCF7e')
+
+console.log(token.decimals)  // decimales ERC-20
+console.log(token.minimum)   // monto mínimo de suscripción permitido (legible)
+console.log(token.paused)    // true cuando nuevas suscripciones con este token están bloqueadas
+```
+
+## Leer el estado del protocolo
+
+La configuración de comisiones viene de `getProtocolState()`. El calendario de remit y los conteos de vencimientos vienen de `getSubscriptionsDue()`.
+
+```typescript
+const state = await client.getProtocolState()
+
+console.log(state.callerFeePercent) // % de cada pago para callers de remit
+console.log(state.systemFeePercent) // % de la comisión caller retenido por el protocolo
+console.log(state.maxRemits)        // máx. suscripciones procesadas por lote de remit
+
+const due = await client.getSubscriptionsDue()
+
+console.log(due.dueCount)            // suscripciones vencidas en la ventana actual de remit
+console.log(due.currentDate)         // día calendario actual del protocolo (UTC)
+console.log(due.nextUncheckedDate)   // próximo día que procesará el contrato
+console.log(due.isRemitCaughtUp)   // true cuando remit está al día
 ```
 
 ## Suscribirse
@@ -120,22 +193,6 @@ await walletClient.writeContract({
 const { hash } = await client.subscribe(subscription, {
   waitForReceipt: true,
 })
-```
-
-## Leer el estado del protocolo
-
-```typescript
-import { createClocktowerClient } from '@clocktower-protocol/sdk'
-import { baseSepolia } from 'viem/chains'
-import { http } from 'viem'
-
-const client = createClocktowerClient({
-  chain: baseSepolia,
-  transport: http(process.env.RPC_URL!),
-})
-
-const state = await client.getProtocolState()
-console.log(state.nextUncheckedDate, state.isRemitCaughtUp)
 ```
 
 ## Cadenas compatibles

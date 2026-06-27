@@ -51,11 +51,84 @@ const { hash } = await client.createSubscription({
 
 ## Read a subscription
 
+Fetch one subscription by its bytes32 id. Amounts are returned in human-readable form.
+
 ```typescript
 const sub = await client.getSubscription('0x...')
-console.log(sub.amount)        // "10" — human-readable
-console.log(sub.amountRaw)     // 10000000n — token-native wei
-console.log(sub.tokenDecimals) // 6
+
+console.log(sub.id)             // bytes32 subscription id
+console.log(sub.provider)       // wallet that created the offering
+console.log(sub.amount)         // "10" — human-readable recurring charge
+console.log(sub.amountRaw)      // 10000000n — token-native units
+console.log(sub.tokenDecimals)  // 6 — ERC-20 decimals for this token
+console.log(sub.token)          // ERC-20 contract used for payment
+console.log(sub.frequencyLabel) // "MONTHLY", "WEEKLY", etc.
+console.log(sub.dueDay)         // billing day within the frequency window
+console.log(sub.cancelled)      // true if the provider cancelled
+```
+
+## Read an account
+
+List what a wallet subscribes to and what it created as a provider. `getEnrichedAccount` batches fee balances into the subscriber view.
+
+```typescript
+const address = '0x...'
+
+// Subscriptions this wallet pays into
+const payingFor = await client.getAccountSubscriptions(true, address)
+console.log(payingFor[0]?.subscription.id, payingFor[0]?.statusLabel)
+
+// Subscriptions this wallet created as provider
+const created = await client.getAccountSubscriptions(false, address)
+console.log(created[0]?.subscription.id, created[0]?.totalSubscribers)
+
+// Full account view — subscribedTo includes prepaid fee balance per subscription
+const account = await client.getEnrichedAccount(address)
+console.log(account.subscribedTo[0]?.feeBalance) // prepaid fees remaining
+console.log(account.created.length)              // count of provider offerings
+```
+
+## Read subscribers
+
+List every subscriber on a subscription and their prepaid fee balance.
+
+```typescript
+const subscribers = await client.getSubscribers('0x...')
+
+console.log(subscribers[0]?.subscriber)   // subscriber wallet address
+console.log(subscribers[0]?.feeBalance)   // prepaid fees remaining (human-readable)
+console.log(subscribers[0]?.feeBalanceRaw) // token-native units
+```
+
+## Read an approved token
+
+Check whether a token is enabled on the protocol and its minimum subscription amount.
+
+```typescript
+const token = await client.getApprovedToken('0x036CbD53842c5426634e7929541eC2318f3dCF7e')
+
+console.log(token.decimals)  // ERC-20 decimals
+console.log(token.minimum)   // smallest allowed subscription amount (human-readable)
+console.log(token.paused)    // true when new subscriptions using this token are blocked
+```
+
+## Read protocol state
+
+Fee configuration comes from `getProtocolState()`. Remit schedule and due counts come from `getSubscriptionsDue()`.
+
+```typescript
+const state = await client.getProtocolState()
+
+console.log(state.callerFeePercent) // % of each payment paid to remit callers
+console.log(state.systemFeePercent) // % of caller fee retained by the protocol
+console.log(state.maxRemits)        // max subscriptions processed per remit batch
+
+const due = await client.getSubscriptionsDue()
+
+console.log(due.dueCount)           // subscriptions due in the current remit window
+console.log(due.currentDate)      // today's protocol calendar day (UTC)
+console.log(due.nextUncheckedDate) // next day the contract will process
+console.log(due.isRemitCaughtUp)  // true when remit is up to date
 ```
 
 ## Subscribe
@@ -120,22 +193,6 @@ await walletClient.writeContract({
 const { hash } = await client.subscribe(subscription, {
   waitForReceipt: true,
 })
-```
-
-## Read protocol state
-
-```typescript
-import { createClocktowerClient } from '@clocktower-protocol/sdk'
-import { baseSepolia } from 'viem/chains'
-import { http } from 'viem'
-
-const client = createClocktowerClient({
-  chain: baseSepolia,
-  transport: http(process.env.RPC_URL!),
-})
-
-const state = await client.getProtocolState()
-console.log(state.nextUncheckedDate, state.isRemitCaughtUp)
 ```
 
 ## Supported chains
