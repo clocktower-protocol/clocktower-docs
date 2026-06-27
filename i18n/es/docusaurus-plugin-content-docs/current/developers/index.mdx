@@ -17,7 +17,7 @@ Ofrecemos dos superficies HTTP más un SDK de TypeScript:
 Las tres responden a las mismas preguntas: *¿Quién está suscrito a qué? ¿Qué vence después? ¿Qué transacción debe firmar el usuario?*
 
 :::warning Pre-lanzamiento
-Los endpoints de producción en `api.clocktower.finance` y `mcp.clocktower.finance` aún no están en vivo. Usa un despliegue local hasta el lanzamiento. Consulta las guías de inicio rápido para la configuración.
+Los endpoints de producción en `api.clocktower.finance` y `mcp.clocktower.finance` aún no están en vivo. Consulta las guías de inicio rápido para la configuración.
 :::
 
 ## Qué puedes construir
@@ -52,7 +52,7 @@ Empezar es gratuito. Límites más altos y rutas acotadas a tu wallet se desbloq
 - **Nivel Builder** — suscríbete al derecho Builder on-chain, luego inicia sesión con tu wallet (SIWE). Tu sesión desbloquea rutas `:me` y límites más altos vinculados a tu dirección. Consulta el [flujo de autenticación Builder](/docs/developers/Workflows/builder-auth).
 - **MCP (nivel Agente)** — pago por llamada a herramienta vía x402. Pensado para agentes que necesitan mayor throughput sin gestionar una suscripción Builder.
 
-Consulta `GET /catalog` en `api.clocktower.finance` para el manifiesto de niveles legible por máquina. El desarrollo local usa `GET /api/catalog`.
+Consulta `GET /catalog` en `api.clocktower.finance` para el manifiesto de niveles legible por máquina.
 
 ## Modelo de escritura (solo preparación)
 
@@ -77,4 +77,4 @@ La API devuelve la transacción a firmar; tu usuario o agente la transmite. El S
 |------|-------------|
 | [clocktower-api](https://github.com/clocktower-protocol/api) | Servidor REST y MCP — `api.clocktower.finance` y `mcp.clocktower.finance` |
 | [clocktower-sdk](https://github.com/clocktower-protocol/sdk) | Biblioteca TypeScript `@clocktower-protocol/sdk` |
-| [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) | CLI para probar REST y MCP localmente |
+| [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) | CLI para probar REST y MCP |

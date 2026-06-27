@@ -6,23 +6,15 @@ sidebar_position: 1
 
 # REST API Quickstart
 
-The REST API exposes the same capabilities as MCP over standard HTTP. **No x402 payment is required** — access is controlled by rate limits and optional Builder sessions.
+This is the fastest way to poke at Clocktower from any stack that speaks HTTP. You get reads and prepared writes without an MCP client or on-chain SDK — just `curl`, `fetch`, or whatever HTTP client you already use.
+
+The REST API exposes the same capabilities as MCP over standard HTTP. **No x402 payment is required** — access is controlled by rate limits and optional Builder sessions. If you are new here, start with the catalog and a subscription search below; you will have real protocol data in front of you in under a minute.
 
 ## Base URL
-
-Production:
 
 ```
 https://api.clocktower.finance
 ```
-
-Local development (single Worker — paths include an `/api` prefix):
-
-```
-http://127.0.0.1:8787/api
-```
-
-Examples below use production URLs (`/catalog`, not `/api/catalog`). When running `wrangler dev` locally, prepend `/api` to each path.
 
 ## Read protocol state
 

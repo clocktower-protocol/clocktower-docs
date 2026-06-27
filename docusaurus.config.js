@@ -25,6 +25,12 @@ const config = {
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
+  // Used by the swizzled locale dropdown in development.
+  customFields: {
+    i18nDualDev: process.env.DOCUSAURUS_I18N_DUAL_DEV === 'true',
+    i18nDevPorts: {en: 3000, es: 3001},
+  },
+
   staticDirectories: ['static'],
 
   // GitHub pages deployment config.

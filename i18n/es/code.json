@@ -20,7 +20,7 @@
     "description": "Fallback link when the whitepaper redirect does not happen automatically"
   },
   "theme.NotFound.localeDevHint": {
-    "message": "El servidor de desarrollo solo ejecuta un idioma a la vez. Para ver el sitio en español, ejecuta {startEs} o prueba ambos idiomas con {preview}.",
+    "message": "El servidor de desarrollo solo ejecuta un idioma a la vez. Para inglés, ejecuta {start} y abre URLs sin /es/. Solo español: {startEs}. Ambos idiomas con selector: {startI18n}. Vista previa de producción: {preview}.",
     "description": "Hint shown in dev when switching to another locale"
   },
   "homepage.banner2.title": {

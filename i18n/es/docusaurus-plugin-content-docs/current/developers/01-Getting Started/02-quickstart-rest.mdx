@@ -6,23 +6,15 @@ sidebar_position: 1
 
 # Inicio Rápido de la API REST
 
-La API REST expone las mismas capacidades que MCP sobre HTTP estándar. **No se requiere pago x402** — el acceso se controla mediante límites de tasa y sesiones Builder opcionales.
+Esta es la forma más rápida de probar Clocktower desde cualquier stack que hable HTTP. Obtienes lecturas y escrituras preparadas sin un cliente MCP ni un SDK on-chain — solo `curl`, `fetch` o el cliente HTTP que ya uses.
+
+La API REST expone las mismas capacidades que MCP sobre HTTP estándar. **No se requiere pago x402** — el acceso se controla mediante límites de tasa y sesiones Builder opcionales. Si es tu primera vez aquí, empieza con el catálogo y una búsqueda de suscripciones más abajo; tendrás datos reales del protocolo en menos de un minuto.
 
 ## URL base
-
-Producción:
 
 ```
 https://api.clocktower.finance
 ```
-
-Desarrollo local (Worker único — las rutas incluyen el prefijo `/api`):
-
-```
-http://127.0.0.1:8787/api
-```
-
-Los ejemplos a continuación usan URLs de producción (`/catalog`, no `/api/catalog`). Al ejecutar `wrangler dev` localmente, antepone `/api` a cada ruta.
 
 ## Leer el estado del protocolo
 

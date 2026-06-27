@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "start:es": "docusaurus start --locale es",
+    "start": "docusaurus start --locale en --port 3000",
+    "start:es": "docusaurus start --locale es --port 3001",
+    "start:i18n": "concurrently -k -n en,es -c blue,magenta \"DOCUSAURUS_I18N_DUAL_DEV=true npm run start\" \"DOCUSAURUS_I18N_DUAL_DEV=true npm run start:es\"",
     "preview": "docusaurus build && docusaurus serve",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",

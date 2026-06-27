@@ -17,7 +17,7 @@ We provide two HTTP surfaces plus a TypeScript SDK:
 All three are ways to answer the same kinds of questions: *Who is subscribed to what? What is due next? What transaction should the user sign?*
 
 :::warning Pre-release
-Production endpoints at `api.clocktower.finance` and `mcp.clocktower.finance` are not live yet. Use a local deployment until launch. See the quickstart guides for setup.
+Production endpoints at `api.clocktower.finance` and `mcp.clocktower.finance` are not live yet. See the quickstart guides for setup.
 :::
 
 ## What you can build
@@ -52,7 +52,7 @@ Getting started is free. Higher limits and wallet-scoped routes unlock when you 
 - **Builder tier** — subscribe to the on-chain Builder entitlement, then sign in with your wallet (SIWE). Your session unlocks `:me` routes and higher limits tied to your address. See [Builder auth workflow](/docs/developers/Workflows/builder-auth).
 - **MCP (Agent lane)** — pay per tool call via x402. Designed for agents that need richer throughput without managing a Builder subscription.
 
-See `GET /catalog` on `api.clocktower.finance` for the machine-readable tier manifest. Local dev uses `GET /api/catalog`.
+See `GET /catalog` on `api.clocktower.finance` for the machine-readable tier manifest.
 
 ## Write model (prepare-only)
 
@@ -77,4 +77,4 @@ The API returns the transaction to sign; your user or agent broadcasts it. The S
 |------|-------------|
 | [clocktower-api](https://github.com/clocktower-protocol/api) | REST and MCP server — `api.clocktower.finance` and `mcp.clocktower.finance` |
 | [clocktower-sdk](https://github.com/clocktower-protocol/sdk) | `@clocktower-protocol/sdk` TypeScript library |
-| [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) | CLI for testing REST and MCP locally |
+| [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) | CLI for testing REST and MCP |

@@ -10,27 +10,17 @@ El servidor MCP expone herramientas del protocolo Clocktower en `mcp.clocktower.
 
 ## Endpoint
 
-Producción:
-
 ```
 https://mcp.clocktower.finance
 ```
 
 El cliente MCP se conecta a la raíz del subdominio — sin sufijo de ruta `/mcp`.
 
-Desarrollo local (después de `npm run dev` en clocktower-api):
-
-```
-http://127.0.0.1:8787/mcp
-```
-
-En un Worker local único, el manejador MCP está montado en `/mcp`.
-
 ## Configuración del cliente
 
 Conéctate usando cualquier cliente compatible con MCP. Tu cliente debe admitir:
 
-1. Transporte MCP a `mcp.clocktower.finance` (o `/mcp` en desarrollo local)
+1. Transporte MCP a `mcp.clocktower.finance`
 2. Pagos x402 en USDC en Base para llamadas a herramientas
 3. Firma con wallet para transacciones preparadas
 
@@ -46,15 +36,12 @@ Conéctate usando cualquier cliente compatible con MCP. Tu cliente debe admitir:
 
 Consulta la [referencia de herramientas](/docs/developers/MCP/tools-reference) para la lista completa y precios.
 
-## Pruebas locales
+## CLI auxiliar
+
+El repositorio [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) proporciona un CLI en Node:
 
 ```bash
-# Terminal 1 — iniciar el Worker
-cd clocktower-api && npm run dev
-
-# Terminal 2 — usar el CLI del agente
 cd clocktower-agent
-export MCP_URL=http://127.0.0.1:8787/mcp
 npm start mcp list
 npm start mcp call get_protocol_state
 ```

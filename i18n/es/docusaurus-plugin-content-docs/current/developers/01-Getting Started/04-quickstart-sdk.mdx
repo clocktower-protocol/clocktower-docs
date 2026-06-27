@@ -6,10 +6,12 @@ sidebar_position: 3
 
 # Inicio Rápido SDK
 
-`@clocktower-protocol/sdk` es una biblioteca TypeScript para interacción on-chain vía [viem](https://viem.sh). Es una **biblioteca cliente** — no el servidor REST/MCP.
+Elige el SDK cuando quieras quedarte on-chain. Si ya ejecutas [viem](https://viem.sh) con tu propio RPC y wallet, puedes leer el estado del protocolo y transmitir escrituras sin pasar por `api.clocktower.finance` ni el servidor MCP.
+
+`@clocktower-protocol/sdk` es una biblioteca TypeScript para esa interacción on-chain. Es una **biblioteca cliente** — no el servidor REST/MCP — pero responde las mismas preguntas sobre suscripciones, cuentas y qué firmar después.
 
 :::warning Pre-lanzamiento
-El SDK aún no está publicado en npm. Clona [clocktower-sdk](https://github.com/clocktower-protocol/sdk) y compila localmente hasta que se anuncie un lanzamiento oficial.
+El SDK aún no está publicado en npm. Clona [clocktower-sdk](https://github.com/clocktower-protocol/sdk) y compila desde el código fuente hasta que se anuncie un lanzamiento oficial.
 :::
 
 ## Instalación
@@ -19,6 +21,92 @@ npm install @clocktower-protocol/sdk viem
 ```
 
 Dependencias peer para hooks de React: `react`, `wagmi` (^3.0.0), `@tanstack/react-query`.
+
+## Crear una suscripción
+
+Pasa montos en unidades de token legibles para humanos. Requiere un `walletClient` con `account` configurado — consulta [Configuración del cliente](/docs/developers/SDK/client-setup).
+
+```typescript
+import { createClocktowerClient, Frequency } from '@clocktower-protocol/sdk'
+import { baseSepolia } from 'viem/chains'
+import { http } from 'viem'
+
+const client = createClocktowerClient({
+  chain: baseSepolia,
+  transport: http(process.env.RPC_URL!),
+  walletClient, // requerido para escrituras
+})
+
+const { hash } = await client.createSubscription({
+  amount: '10', // Cargo recurrente en unidades legibles (p. ej. 10 USDC)
+  token: '0x036CbD53842c5426634e7929541eC2318f3dCF7e', // Dirección ERC-20; debe estar aprobada por el protocolo
+  details: {
+    url: 'https://example.com/', // URL del proveedor mostrada a los suscriptores
+    description: 'Premium', // Etiqueta breve de la oferta de suscripción
+  },
+  frequency: Frequency.MONTHLY, // Cadencia de cobro: WEEKLY | MONTHLY | QUARTERLY | YEARLY
+  dueDay: 15, // Día dentro del intervalo de frecuencia en que vence el pago (1–28 para MONTHLY)
+})
+```
+
+## Leer una suscripción
+
+```typescript
+const sub = await client.getSubscription('0x...')
+console.log(sub.amount)        // "10" — legible para humanos
+console.log(sub.amountRaw)     // 10000000n — wei nativo del token
+console.log(sub.tokenDecimals) // 6
+```
+
+## Suscribirse con aprobación
+
+Comprueba el allowance ERC-20 del suscriptor y envía una transacción `approve` primero si hace falta, luego suscribe.
+
+```typescript
+const subscription = await client.getSubscription(subscriptionId)
+
+const { approveHash, hash } = await client.subscribeWithApproval(
+  subscription, // Suscripción a la que unirse — de getSubscription
+  subscriberAddress, // Wallet que paga; debe tener el token y firmar las transacciones
+  { waitForReceipt: true }, // Esperar el recibo de cada tx antes de devolver
+)
+
+// approveHash solo se establece cuando hubo una tx approve primero; hash es siempre la tx subscribe
+```
+
+## Aprobar, luego suscribirse
+
+```typescript
+import { maxUint256 } from 'viem'
+
+const usdcAbi = [
+  {
+    type: 'function',
+    name: 'approve',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'spender', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+    ],
+    outputs: [{ name: '', type: 'bool' }],
+  },
+] as const
+
+const subscription = await client.getSubscription(subscriptionId)
+
+// Approve ERC-20 estándar — USDC usa la misma interfaz que cualquier token ERC-20
+await walletClient.writeContract({
+  address: subscription.token,
+  abi: usdcAbi,
+  functionName: 'approve',
+  args: [client.contractAddress, maxUint256],
+})
+
+// Subscribe de Clocktower — inscribe la wallet y cobra el primer pago prorrateado
+const { hash } = await client.subscribe(subscription, {
+  waitForReceipt: true,
+})
+```
 
 ## Leer el estado del protocolo
 
@@ -34,44 +122,6 @@ const client = createClocktowerClient({
 
 const state = await client.getProtocolState()
 console.log(state.nextUncheckedDate, state.isRemitCaughtUp)
-```
-
-## Leer una suscripción
-
-```typescript
-const sub = await client.getSubscription('0x...')
-console.log(sub.amount)        // "10" — legible para humanos
-console.log(sub.amountRaw)     // 10000000n — wei nativo del token
-console.log(sub.tokenDecimals) // 6
-```
-
-## Crear una suscripción (proveedor)
-
-Pasa montos en unidades de token legibles para humanos:
-
-```typescript
-import { Frequency } from '@clocktower-protocol/sdk'
-
-const { hash } = await client.createSubscription({
-  amount: '10',
-  token: '0x036CbD53842c5426634e7929541eC2318f3dCF7e',
-  details: { url: 'https://example.com/', description: 'Premium' },
-  frequency: Frequency.MONTHLY,
-  dueDay: 15,
-})
-```
-
-Requiere un `walletClient` con `account` configurado.
-
-## Suscribirse con aprobación
-
-```typescript
-const subscription = await client.getSubscription(subscriptionId)
-const { approveHash, hash } = await client.subscribeWithApproval(
-  subscription,
-  subscriberAddress,
-  { waitForReceipt: true },
-)
 ```
 
 ## Cadenas compatibles

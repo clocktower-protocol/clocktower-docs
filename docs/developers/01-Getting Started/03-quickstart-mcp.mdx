@@ -6,20 +6,14 @@ sidebar_position: 2
 
 # MCP Quickstart
 
-The MCP server exposes Clocktower protocol tools for AI agents. Connect any MCP-compatible client to `mcp.clocktower.finance` (local dev: `http://127.0.0.1:8787/mcp`).
+Use this path when the *caller* is an AI agent, not your own backend. The MCP server exposes Clocktower protocol tools so an agent can discover subscriptions, inspect accounts, and request prepared transactions through a standard tool interface.
+
+Connect any MCP-compatible client to `mcp.clocktower.finance`. Every tool call is paid via x402 in USDC on Base — see [x402 payments](/docs/developers/MCP/x402-payments) before you run your first call.
 
 ## Endpoint
 
-Production:
-
 ```
 https://mcp.clocktower.finance
-```
-
-Local development (single Worker — MCP is served at `/mcp`):
-
-```
-http://127.0.0.1:8787/mcp
 ```
 
 ## Requirements
@@ -35,8 +29,6 @@ See [x402 payments](/docs/developers/MCP/x402-payments) for pricing and payment 
 Using [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent):
 
 ```bash
-cd clocktower-mcp && npm run dev   # start the Worker locally
-
 cd clocktower-agent
 npm start mcp list
 npm start mcp call get_protocol_state
@@ -77,5 +69,5 @@ See [MCP write workflow](/docs/developers/MCP/write-workflow) and [Subscribe wor
 
 | Variable | Purpose |
 |----------|---------|
-| `MCP_URL` | MCP endpoint (production: `https://mcp.clocktower.finance`; local: `http://127.0.0.1:8787/mcp`) |
+| `MCP_URL` | MCP endpoint (`https://mcp.clocktower.finance`) |
 | `PRIVATE_KEY` | x402 payments + SIWE signing for builder auth |

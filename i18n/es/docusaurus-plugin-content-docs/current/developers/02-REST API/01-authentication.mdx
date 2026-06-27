@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # Autenticación REST
 
-URL base de producción: `https://api.clocktower.finance`. Las rutas a continuación son relativas a ese host (sin prefijo `/api`). El `wrangler dev` local usa las mismas rutas con prefijo `/api` en `http://127.0.0.1:8787`.
+URL base: `https://api.clocktower.finance`. Las rutas a continuación son relativas a ese host.
 
 La API REST admite tres modos de acceso. x402 **no** se usa en REST — solo en MCP.
 
@@ -47,7 +47,7 @@ Consulta el [flujo de autenticación Builder](/docs/developers/Workflows/builder
 
 ## Basic Auth opcional
 
-HTTP Basic Auth en `/api` se controla mediante `API_REQUIRE_BASIC_AUTH` (predeterminado `false`). Destinado solo para desarrollo local.
+HTTP Basic Auth se controla mediante `API_REQUIRE_BASIC_AUTH` (predeterminado `false`).
 
 ## CORS
 

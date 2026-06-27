@@ -43,11 +43,13 @@ export default function NotFoundContent({className}) {
                 id="theme.NotFound.localeDevHint"
                 description="Hint shown in dev when switching to another locale"
                 values={{
+                  start: <code>npm start</code>,
                   startEs: <code>npm run start:es</code>,
+                  startI18n: <code>npm run start:i18n</code>,
                   preview: <code>npm run preview</code>,
                 }}>
                 {
-                  'The development server only runs one locale at a time. To preview Spanish, run {startEs} or test both locales with {preview}.'
+                  'The development server only runs one locale at a time. For English, run {start} and open URLs without /es/. For Spanish only, run {startEs}. For both locales with a working language switcher, run {startI18n}. Production-like preview: {preview}.'
                 }
               </Translate>
             </p>
