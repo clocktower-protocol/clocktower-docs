@@ -1,7 +1,7 @@
 ---
 id: quickstart-sdk
 title: SDK Quickstart
-sidebar_position: 3
+sidebar_position: 1
 ---
 
 # SDK Quickstart
@@ -58,9 +58,21 @@ console.log(sub.amountRaw)     // 10000000n — token-native wei
 console.log(sub.tokenDecimals) // 6
 ```
 
+## Subscribe
+
+Use `subscribe` when the subscriber has **already** approved the Clocktower contract to spend the payment token. The SDK checks allowance in preflight and throws if it is still too low.
+
+```typescript
+const subscription = await client.getSubscription(subscriptionId)
+
+const { hash } = await client.subscribe(subscription, {
+  waitForReceipt: true,
+})
+```
+
 ## Subscribe with approval
 
-Checks ERC-20 allowance for the subscriber and sends an `approve` transaction first when needed, then subscribes.
+Use `subscribeWithApproval` when you want **one call** that handles both cases: if allowance is already sufficient, it subscribes only; if not, it sends `approve` first, then subscribes.
 
 ```typescript
 const subscription = await client.getSubscription(subscriptionId)
@@ -71,10 +83,12 @@ const { approveHash, hash } = await client.subscribeWithApproval(
   { waitForReceipt: true }, // Wait for each tx receipt before returning
 )
 
-// approveHash is set only when an approve tx ran first; hash is always the subscribe tx
+// approveHash is undefined when allowance was already set; hash is always the subscribe tx
 ```
 
 ## Approve, then subscribe
+
+Use two explicit steps when you want the subscriber to confirm the ERC-20 `approve` before you call `subscribe` yourself.
 
 ```typescript
 import { maxUint256 } from 'viem'
