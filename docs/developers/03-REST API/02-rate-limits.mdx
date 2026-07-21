@@ -8,40 +8,62 @@ sidebar_position: 2
 
 Paths are relative to `https://api.clocktower.finance`.
 
-Access is tiered across free REST, Builder REST, and MCP lanes.
+Limits are **per identity** (not one shared pool for all users):
 
-## Default limits
+| Lane | Identity |
+|------|----------|
+| Free | Client **IP** |
+| Developer | **API key** (`ctk_…`) |
+| Builder | Wallet **address** (session) |
+| MCP | **IP** (x402; separate surface) |
 
-| Lane | Surface | Auth | Default limits |
-|------|---------|------|----------------|
-| **Free** | `api.clocktower.finance` | None | 20 rpm/IP; expensive routes 3 rpm; subgraph 100/day/IP; writes 2 prepare/min/IP |
-| **Builder** | `api.clocktower.finance` | SIWE session | 120 rpm/address; subgraph 10k/day; writes 30/min; scoped to wallet |
-| **Agent** | `mcp.clocktower.finance` | x402 | 300 rpm/IP; writes 60/min/address |
+## Default limits (approx.)
+
+| Lane | Auth | Global | Expensive | Subgraph / day | Prepare / readiness | All requests / day |
+|------|------|--------|-----------|----------------|---------------------|--------------------|
+| **Free** | None | 20 rpm | 3 rpm | 100 | **2/min · 20/day** | **500** |
+| **Developer** | `Bearer ctk_…` | 80 rpm | 40 rpm | 3,000 | **5/min · 100/day** | **5,000** |
+| **Builder** | `Bearer cts_…` | 120 rpm | 120 rpm | 10,000 | 30/min | Unlimited (when enabled) |
+| **MCP** | x402 | 300 rpm | 300 rpm | — | 60/min | — |
+
+Canonical numbers: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `writeDaily`, `dailyTotalRequests`, …).
 
 ## Rate buckets
 
-- **Global** — applies to most read endpoints
-- **Expensive** — subgraph-heavy endpoints (history, discovery, cross-account reads)
-- **Subgraph daily** — per-IP (free) or per-address (builder)
-- **Write** — `prepare_*` endpoints, keyed on `from` address
+- **Global RPM** — most requests
+- **Expensive RPM** — subgraph-heavy / discovery-style GETs
+- **Subgraph daily** — expensive routes that hit The Graph
+- **Write RPM** — `POST /prepare/*` and readiness checks (`check_*_readiness*`)
+- **Write daily** — same prepare/readiness set, per UTC day (protects shared Alchemy simulation cost)
+- **Daily total** — every REST request that day for that identity
+
+A prepare call consumes **write RPM**, **write daily**, and **daily total**.
+
+## Why prepare is capped tightly
+
+Full prepare runs **on-chain simulation and gas estimation**. The server never relays the transaction, but the dry-run still costs shared RPC. Free and developer tiers are for exploration and **reads**; production write volume should use the **SDK with your own RPC**.
 
 ## Free tier notes
 
 - Cross-account and provider reads allowed under the expensive bucket
-- Provider writes (`cancel`, `unsubscribe_by_provider`, `edit_details`) use the write bucket; on-chain authorization still applies in prepare handlers
-- `:me` routes return 403 without a Builder session
+- Search: `first` ≤ 10; no `includeDetails=true`
+- `:me` routes require Builder (403 otherwise)
+
+## Developer tier notes
+
+- Higher read and discovery limits than free
+- Search: `first` ≤ 25; `includeDetails` allowed
+- Still no `:me` (keys are not wallet-bound)
+- Invalid/revoked keys → **401**, not free-tier fallback
+
+## Exceeding a limit
+
+HTTP **429** with `code: RATE_LIMITED`, `lane`, `Retry-After`, and an `upgradeHint`. Response header `X-Clocktower-Lane` shows the lane that was applied.
 
 ## Machine-readable catalog
 
-`GET /catalog` returns the full route manifest and tier limits. See [Catalog](/docs/developers/REST%20API/catalog).
+`GET /catalog` returns the full route manifest and live tier limits. See [Catalog](/docs/developers/REST%20API/catalog).
 
 ## Edge protections
 
-Production deployments should configure Cloudflare edge rules:
-
-| Rule | Suggested config |
-|------|------------------|
-| Rate Limiting | Block `>500 req / 5 min` per IP on `api.clocktower.finance` and `mcp.clocktower.finance` |
-| WAF | Block empty `User-Agent`; challenge `/auth/*` at `>30/min/IP` |
-| DDoS | Keep HTTP DDoS managed ruleset enabled |
-| Bot Fight Mode | Enable on zone to reduce scripted free-tier abuse |
+Production deployments may also use Cloudflare edge rules (rate limiting, WAF, bot management) on top of application buckets.

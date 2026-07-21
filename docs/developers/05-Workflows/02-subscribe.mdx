@@ -42,9 +42,9 @@ sequenceDiagram
   participant Wallet as Subscriber wallet
   participant Chain as Base
 
-  App->>API: 1. check_subscribe_readiness (optional)
+  App->>API: 1. check_subscribe_readiness_by_id (optional)
   API-->>App: allowance, balance, needsApproval
-  App->>API: 2. prepare_subscribe
+  App->>API: 2. prepare_subscribe_by_id
   API-->>App: unsignedTransactions, signingMode, requestId
   App->>Wallet: 3. sign transactions
   Wallet-->>App: signed txs
@@ -56,13 +56,17 @@ sequenceDiagram
 
 | Step | REST | MCP tool | SDK |
 |------|------|----------|-----|
-| 1. Readiness | `POST /check_subscribe_readiness` | `check_subscribe_readiness` | Built into `subscribe()` preflight |
-| 2. Prepare | `POST /prepare/subscribe` | `prepare_subscribe` | `subscribeWithApproval()` |
+| 1. Readiness | `POST /check_subscribe_readiness_by_id` (**preferred**) or object form | `check_subscribe_readiness_by_id` | Built into `subscribe()` preflight |
+| 2. Prepare | `POST /prepare/subscribe_by_id` (**preferred**) or object form | `prepare_subscribe_by_id` | `subscribeWithApproval()` / `subscribeById` |
 | 3–4. Sign & broadcast | Your wallet + RPC | Same | `walletClient` via viem |
 | 5. Confirm | `POST /transactions/status` | `get_transaction_status` | `waitForReceipt: true` |
 
+By-id routes need only `from` + subscription `id` (amount/token/provider loaded on-chain). Object form remains for callers that already hold a full subscription object.
+
 ## Tips
 
-**EIP-5792 batching** — when ERC-20 allowance is insufficient, prepare returns `signingMode: "eip5792"` with approve + subscribe in one batch.
+**EIP-5792 batching** — when ERC-20 allowance is insufficient, prepare returns `signingMode: "eip5792"` with approve + subscribe in one batch (amount-scoped approve by default; `infiniteApproval: true` for max).
 
-**Readiness-only** — pass `readinessOnly: true` to `prepare_subscribe` (or `POST /prepare/subscribe` on `api.clocktower.finance`) to validate without generating unsigned transactions.
+**Readiness-only** — pass `readinessOnly: true` on prepare to validate without generating unsigned transactions.
+
+**REST prepare limits** — free and developer keys have tight prepare/readiness caps. For production subscribe volume, prefer the SDK with your own RPC.

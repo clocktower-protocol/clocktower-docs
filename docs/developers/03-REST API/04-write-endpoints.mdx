@@ -8,7 +8,7 @@ sidebar_position: 4
 
 All paths are relative to `https://api.clocktower.finance`.
 
-All write endpoints use `POST`. The server returns unsigned transactions — you sign and broadcast from your wallet.
+All write endpoints use `POST`. The server returns unsigned transactions — you sign and broadcast from your wallet. The server **never relays** signed transactions.
 
 ## Prepare response format
 
@@ -29,25 +29,52 @@ Full prepare responses include:
 
 ### Optional request fields
 
-On any `prepare_*` endpoint:
+On prepare endpoints:
 
 - **`readinessOnly: true`** — preflight only; no unsigned transactions or gas estimates
 - **`simulateFromAddress`** — address for `eth_estimateGas` when signing wallet differs from broadcaster
+- **`infiniteApproval: true`** — on subscribe, request max ERC-20 allowance instead of amount-scoped approve
+
+## Preferred by-id routes
+
+When you already have a subscription id, prefer id-only endpoints (chain is source of truth for amount/token/provider):
+
+| Endpoint | Description |
+|----------|-------------|
+| `POST /check_subscribe_readiness_by_id` | Readiness with `from` + `id` |
+| `POST /prepare/subscribe_by_id` | Prepare subscribe with `from` + `id` |
+| `POST /prepare/cancel_subscription_by_id` | Provider cancel with `from` + `id` |
+| `POST /prepare/unsubscribe_by_id` | Subscriber unsubscribe with `from` + `id` |
+| `POST /prepare/unsubscribe_by_provider_by_id` | Provider remove with `from` + `id` + `subscriber` |
 
 ## Endpoints
 
-| Endpoint | Free tier | Description |
-|----------|-----------|-------------|
-| `POST /check_subscribe_readiness` | Allowed | Validate whether an account can subscribe |
-| `POST /prepare/create_subscription` | 2/min/IP | Prepare a new subscription |
-| `POST /prepare/subscribe` | 2/min/IP | Prepare subscribing (includes ERC-20 approve when needed) |
-| `POST /prepare/cancel_subscription` | 2/min/IP | Provider cancel |
-| `POST /prepare/unsubscribe` | 2/min/IP | Subscriber unsubscribe |
-| `POST /prepare/unsubscribe_by_provider` | 2/min/IP | Provider-initiated unsubscribe |
-| `POST /prepare/edit_details` | 2/min/IP | Provider metadata edit |
-| `POST /check_remit_readiness` | Allowed | Check whether `remit()` is callable |
-| `POST /prepare/remit` | 2/min/IP | Prepare permissionless `remit()` |
-| `POST /transactions/status` | Allowed | Poll confirmation status after broadcast |
+Prepare and readiness share the **write** rate bucket (RPM + **write daily**). Defaults:
+
+| Lane | Write RPM | Write / prepare daily |
+|------|-----------|------------------------|
+| Free | 2/min | **20/day** |
+| Developer | 5/min | **100/day** |
+
+| Endpoint | Description |
+|----------|-------------|
+| `POST /check_subscribe_readiness` | Validate whether an account can subscribe (object form) |
+| `POST /check_subscribe_readiness_by_id` | Same by id (**preferred** when id known) |
+| `POST /prepare/create_subscription` | Prepare a new subscription (`amount` = human token string, e.g. `"10"`) |
+| `POST /prepare/subscribe` | Prepare subscribe (object form; includes ERC-20 approve when needed) |
+| `POST /prepare/subscribe_by_id` | Prepare subscribe by id (**preferred**) |
+| `POST /prepare/cancel_subscription` | Provider cancel |
+| `POST /prepare/cancel_subscription_by_id` | Provider cancel by id (**preferred**) |
+| `POST /prepare/unsubscribe` | Subscriber unsubscribe |
+| `POST /prepare/unsubscribe_by_id` | Subscriber unsubscribe by id (**preferred**) |
+| `POST /prepare/unsubscribe_by_provider` | Provider-initiated unsubscribe |
+| `POST /prepare/unsubscribe_by_provider_by_id` | Provider-initiated by id (**preferred**) |
+| `POST /prepare/edit_details` | Provider metadata edit |
+| `POST /check_remit_readiness` | Multi-day scan before `remit()` |
+| `POST /prepare/remit` | Prepare permissionless `remit()` |
+| `POST /transactions/status` | Poll confirmation status after broadcast |
+
+See [Rate limits](/docs/developers/REST%20API/rate-limits). For production write volume, use the [SDK](/docs/developers/SDK/installation) with your own RPC.
 
 ## Remit flow
 

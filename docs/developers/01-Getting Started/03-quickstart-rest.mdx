@@ -8,13 +8,15 @@ sidebar_position: 2
 
 This is the fastest way to poke at Clocktower from any stack that speaks HTTP. You get reads and prepared writes without an MCP client or on-chain SDK — just `curl`, `fetch`, or whatever HTTP client you already use.
 
-The REST API exposes the same capabilities as MCP over standard HTTP. **No x402 payment is required** — access is controlled by rate limits and optional Builder sessions. If you are new here, start with the catalog and a subscription search below; you will have real protocol data in front of you in under a minute.
+The REST API exposes the same capabilities as MCP over standard HTTP. **No x402 payment is required** — access is controlled by free rate limits, optional **developer API keys** (`ctk_…`), and optional Builder SIWE sessions. Start with the catalog and a subscription search; you will have real protocol data in under a minute.
 
 ## Base URL
 
 ```
 https://api.clocktower.finance
 ```
+
+On this host, paths **omit** the `/api` prefix (e.g. `GET /catalog`). Legacy `*.workers.dev` URLs keep `/api`.
 
 ## Read protocol state
 
@@ -23,38 +25,38 @@ curl -s https://api.clocktower.finance/catalog | jq .
 curl -s https://api.clocktower.finance/protocol/state | jq .
 ```
 
+With a developer key (higher limits; check `X-Clocktower-Lane: developer`):
+
+```bash
+curl -s https://api.clocktower.finance/catalog \
+  -H "Authorization: Bearer <YOUR_API_KEY>" | jq .
+```
+
 ## Search subscriptions
 
 ```bash
 curl -s "https://api.clocktower.finance/subscriptions?first=10" | jq .
 ```
 
-## Prepare a subscribe (readiness only)
+Free tier: `first` max 10, no `includeDetails`. Developer: `first` max 25, `includeDetails` allowed.
 
-Check whether an account can subscribe without generating unsigned transactions:
+## Preferred: prepare subscribe by id
 
-```bash
-curl -s -X POST https://api.clocktower.finance/prepare/subscribe \
-  -H "Content-Type: application/json" \
-  -d '{
-    "from": "0xYourAddress",
-    "subscription": { "id": "0x..." },
-    "readinessOnly": true
-  }' | jq .
-```
-
-## Full prepare
-
-Omit `readinessOnly` to receive `unsignedTransactions`, simulation, and gas estimates:
+When you already know the subscription id, use **by-id** endpoints (amount, token, and provider are loaded on-chain):
 
 ```bash
-curl -s -X POST https://api.clocktower.finance/prepare/subscribe \
+curl -s -X POST https://api.clocktower.finance/check_subscribe_readiness_by_id \
   -H "Content-Type: application/json" \
-  -d '{
-    "from": "0xYourAddress",
-    "subscription": { "id": "0x..." }
-  }' | jq .
+  -d '{ "from": "0xYourAddress", "id": "0x..." }' | jq .
+
+curl -s -X POST https://api.clocktower.finance/prepare/subscribe_by_id \
+  -H "Content-Type: application/json" \
+  -d '{ "from": "0xYourAddress", "id": "0x..." }' | jq .
 ```
+
+Optional: `"readinessOnly": true` on prepare for preflight without unsigned transactions.
+
+Object-based `prepare/subscribe` still works when you already hold a full subscription object. Human-readable `subscription.amount` strings (e.g. `"10"`) are required when creating or passing amounts — not protocol wei.
 
 Sign `unsignedTransactions` in your wallet, broadcast to Base, then poll status:
 
@@ -64,9 +66,21 @@ curl -s -X POST https://api.clocktower.finance/transactions/status \
   -d '{ "hash": "0x..." }' | jq .
 ```
 
+Prepare/readiness is **rate-limited** (free: 2/min · 20/day; developer: 5/min · 100/day). For production write volume, use the [SDK](/docs/developers/SDK/installation) with your own RPC.
+
+## Developer API key (optional)
+
+Obtain a free `ctk_…` key from the developer portal (or admin mint). Send:
+
+```
+Authorization: Bearer <YOUR_API_KEY>
+```
+
+See [Authentication](/docs/developers/REST%20API/authentication) and [Rate limits](/docs/developers/REST%20API/rate-limits).
+
 ## Builder session (optional)
 
-For higher limits and `:me` routes:
+When Builder entitlement is configured on the server, SIWE unlocks higher limits and `:me` routes:
 
 ```bash
 # 1. Challenge
@@ -86,7 +100,7 @@ curl -s https://api.clocktower.finance/accounts/me/subscriptions \
   -H "Authorization: Bearer cts_..."
 ```
 
-See [Authentication](/docs/developers/REST%20API/authentication) and [Builder auth workflow](/docs/developers/Workflows/builder-auth).
+See [Builder auth workflow](/docs/developers/Workflows/builder-auth). Builder may be **disabled** when no entitlement IDs are set (`GET /catalog` → `builderAuthEnabled`).
 
 ## CLI helper
 
@@ -95,5 +109,5 @@ The [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) 
 ```bash
 npm start rest get /catalog
 npm start rest get /protocol/state
-npm start rest post /prepare/subscribe --body '{"from":"0x...","subscription":{...},"readinessOnly":true}'
+npm start rest post /prepare/subscribe_by_id --body '{"from":"0x...","id":"0x..."}'
 ```

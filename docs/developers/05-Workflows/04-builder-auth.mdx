@@ -10,17 +10,23 @@ sidebar_position: 4
 
 Obtain a **Builder session** so your REST calls get higher rate limits and access to `:me` routes scoped to your wallet.
 
+:::info Optional tier
+Builder is **optional**. Many integrators only need **free** or **developer API keys** (`ctk_…`) for reads. Check `GET /catalog` → `builderAuthEnabled`. When no entitlement IDs are configured, Builder is off.
+:::
+
+For free developer keys and rate limits, see [Authentication](/docs/developers/REST%20API/authentication) — that path does **not** require SIWE.
+
 ## Who is involved
 
 | Role | What they do |
 |------|----------------|
-| **Builder** | A wallet with an active on-chain subscription to the Builder entitlement (`BUILDER_SUB_ID`) |
+| **Builder** | A wallet with an active on-chain subscription to a configured Builder entitlement (`BUILDER_SUB_ID` / `BUILDER_SUB_IDS`) |
 | **Your app** | Requests a SIWE challenge, asks the wallet to sign, exchanges the signature for a session token |
 | **Clocktower API** | Issues a `cts_…` bearer token after verifying the signature and entitlement |
 
 ## Prerequisites
 
-1. An **ACTIVE** on-chain subscription to the server's Builder entitlement subscription.
+1. Server has at least one Builder entitlement ID configured and **ACTIVE** on-chain subscription for your wallet.
 2. A wallet to sign the SIWE message.
 
 ## Steps

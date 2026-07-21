@@ -6,30 +6,60 @@ sidebar_position: 1
 
 # REST Authentication
 
-Base URL: `https://api.clocktower.finance`. Paths below are relative to that host.
+Base URL: `https://api.clocktower.finance`. Paths below are relative to that host (no `/api` prefix on the production API host).
 
-The REST API supports three access modes. x402 is **not** used on REST — only on MCP.
+The REST API does **not** use x402. MCP uses x402 only.
 
 | Method | When |
 |--------|------|
-| None | Free tier — call any allowed endpoint directly |
-| `Authorization: Bearer <session>` | Builder tier — after SIWE verify |
+| None | **Free** tier — call endpoints with per-IP rate limits |
+| `Authorization: Bearer ctk_…` | **Developer** tier — free API key (higher read limits) |
+| `Authorization: Bearer cts_…` | **Builder** tier — SIWE session after on-chain entitlement (optional; may be disabled) |
 | x402 | **MCP only** — not used on REST |
+
+Successful REST responses include `X-Clocktower-Lane: free | developer | builder`.
 
 ## Free tier
 
-No API key required. Send requests directly to `/*`. Rate limits apply per IP.
+No credentials required. Send requests directly. Limits are per **IP**.
 
-## Builder tier (SIWE session)
+- Tight prepare/readiness budgets (simulation is expensive on shared RPC).
+- Search caps: `first` ≤ 10; `includeDetails=true` not allowed.
+- `:me` routes return 403 — use an explicit address.
 
-Builder access requires an **ACTIVE** on-chain subscription to the server's Builder entitlement subscription (`BUILDER_SUB_ID`).
+## Developer tier (API key)
+
+Free developer keys raise **read** limits (per **key**, not IP). Keys are issued by the Clocktower developer portal / admin mint path (hashed at rest; plaintext shown **once** on create).
+
+### Using a key
+
+```bash
+curl -s https://api.clocktower.finance/catalog \
+  -H "Authorization: Bearer <YOUR_API_KEY>"
+```
+
+Replace `<YOUR_API_KEY>` with the full secret (including the `ctk_` prefix).
+
+Invalid or revoked keys return **401** (they do **not** fall back to free tier).
+
+### Product guidance
+
+- Free and developer keys are for **exploration and reads**.
+- Prepare/readiness is intentionally limited (on-chain simulation/gas estimate even though the server never relays txs).
+- For **production write volume**, use the [SDK](/docs/developers/SDK/installation) with **your own RPC**.
+
+See [Rate limits](/docs/developers/REST%20API/rate-limits).
+
+## Builder tier (SIWE session, optional)
+
+Builder access requires an **ACTIVE** on-chain subscription to a configured Builder entitlement (`BUILDER_SUB_ID` / `BUILDER_SUB_IDS`). When no entitlement IDs are configured, Builder is **off** (`builderAuthEnabled: false` on `GET /catalog`).
 
 ### Flow
 
 1. `POST /auth/challenge` with `{ "address": "0x…" }` → receive `message` + `nonce`
 2. Wallet `personal_sign` on the message
-3. `POST /auth/verify` with `{ "message", "signature" }` → receive `token`
-4. Send `Authorization: Bearer <token>` on subsequent `/api` calls
+3. `POST /auth/verify` with `{ "message", "signature" }` → receive `token` (`cts_…`)
+4. Send `Authorization: Bearer cts_…` on subsequent calls
 
 ### Builder scope
 
@@ -37,11 +67,7 @@ Builder access requires an **ACTIVE** on-chain subscription to the server's Buil
 - Content subscriptions you subscribe to or created
 - Discovery and subscriber writes for your wallet
 
-Provider management and cross-account reads are **not** included in Builder scope. Use the free tier for public cross-account reads.
-
-### Session token
-
-The session token (`cts_…`) is not a pre-shared API key. It is obtained via SIWE and cached client-side.
+Use free or developer keys for public cross-account reads when Builder is off or out of scope.
 
 See [Builder auth workflow](/docs/developers/Workflows/builder-auth).
 
@@ -51,4 +77,4 @@ HTTP Basic Auth is controlled by `API_REQUIRE_BASIC_AUTH` (default `false`).
 
 ## CORS
 
-Browser cross-origin requests are disabled by default. Ops must whitelist origins via `API_CORS_ALLOWED_ORIGINS`. CORS is not granted by a Builder subscription.
+Browser cross-origin requests are disabled by default. Ops must whitelist origins via `API_CORS_ALLOWED_ORIGINS`. CORS is not authentication and is not granted by a key or Builder subscription.
