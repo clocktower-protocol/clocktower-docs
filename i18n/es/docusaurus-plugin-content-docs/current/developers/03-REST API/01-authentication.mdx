@@ -6,49 +6,75 @@ sidebar_position: 1
 
 # Autenticación REST
 
-URL base: `https://api.clocktower.finance`. Las rutas a continuación son relativas a ese host.
+URL base: `https://api.clocktower.finance`. Las rutas siguientes son relativas a ese host (sin prefijo `/api` en el host de producción de la API).
 
-La API REST admite tres modos de acceso. x402 **no** se usa en REST — solo en MCP.
+La API REST **no** usa x402. MCP usa x402 únicamente.
 
 | Método | Cuándo |
-|--------|------|
-| Ninguno | Nivel gratuito — llama directamente cualquier endpoint permitido |
-| `Authorization: Bearer <session>` | Nivel Builder — después de verificar SIWE |
+|--------|--------|
+| Ninguno | Nivel **gratis** — llama endpoints con límites por IP |
+| `Authorization: Bearer ctk_…` | Nivel **developer** — API key gratuita (más límites de lectura) |
+| `Authorization: Bearer cts_…` | Nivel **Builder** — sesión SIWE tras entitlement on-chain (opcional; puede estar desactivado) |
 | x402 | **Solo MCP** — no se usa en REST |
 
-## Nivel gratuito
+Las respuestas REST correctas incluyen `X-Clocktower-Lane: free | developer | builder`.
 
-No se requiere clave API. Envía solicitudes directamente a `/*`. Se aplican límites de tasa por IP.
+## Nivel gratis (free)
 
-## Nivel Builder (sesión SIWE)
+No se requieren credenciales. Envía las peticiones directamente. Los límites son por **IP**.
 
-El acceso Builder requiere una suscripción on-chain **ACTIVE** al derecho Builder del servidor (`BUILDER_SUB_ID`).
+- Presupuestos estrictos de prepare/readiness (la simulación es costosa en el RPC compartido).
+- Límites de búsqueda: `first` ≤ 10; `includeDetails=true` no permitido.
+- Las rutas `:me` devuelven 403 — usa una dirección explícita.
+
+## Nivel developer (API key)
+
+Las API keys de developer gratuitas suben los límites de **lectura** (por **clave**, no por IP). Las keys se emiten desde el portal de developers / mint de admin (hash en reposo; el secreto en claro se muestra **una sola vez** al crearlas).
+
+### Uso de una key
+
+```bash
+curl -s https://api.clocktower.finance/catalog \
+  -H "Authorization: Bearer <YOUR_API_KEY>"
+```
+
+Sustituye `<YOUR_API_KEY>` por el secreto completo (incluido el prefijo `ctk_`).
+
+Keys inválidas o revocadas devuelven **401** (no caen al nivel gratis).
+
+### Guía de producto
+
+- Las keys free y developer son para **exploración y lecturas**.
+- Prepare/readiness está limitado a propósito (simulación on-chain y estimación de gas aunque el servidor nunca retransmita txs).
+- Para **volumen de escrituras en producción**, usa el [SDK](/docs/developers/SDK/installation) con **tu propio RPC**.
+
+Ver [Límites de tasa](/docs/developers/REST%20API/rate-limits).
+
+## Nivel Builder (sesión SIWE, opcional)
+
+El acceso Builder requiere una suscripción on-chain **ACTIVE** a un entitlement de Builder configurado (`BUILDER_SUB_ID` / `BUILDER_SUB_IDS`). Si no hay IDs configurados, Builder está **desactivado** (`builderAuthEnabled: false` en `GET /catalog`).
 
 ### Flujo
 
 1. `POST /auth/challenge` con `{ "address": "0x…" }` → recibe `message` + `nonce`
-2. `personal_sign` de la wallet en el mensaje
-3. `POST /auth/verify` con `{ "message", "signature" }` → recibe `token`
-4. Envía `Authorization: Bearer <token>` en llamadas posteriores a `/api`
+2. Wallet `personal_sign` sobre el mensaje
+3. `POST /auth/verify` con `{ "message", "signature" }` → recibe `token` (`cts_…`)
+4. Envía `Authorization: Bearer cts_…` en las llamadas siguientes
 
 ### Alcance Builder
 
 - Cuenta propia (`/accounts/me`, …)
-- Suscripciones de contenido a las que te suscribes o que creaste
-- Escrituras de descubrimiento y suscriptores para tu wallet
+- Suscripciones de contenido a las que te suscribes o creaste
+- Discovery y escrituras de suscriptor para tu wallet
 
-La gestión de proveedores y las lecturas entre cuentas **no** están incluidas en el alcance Builder. Usa el nivel gratuito para lecturas públicas entre cuentas.
+Usa free o developer keys para lecturas públicas cross-account cuando Builder esté off o fuera de alcance.
 
-### Token de sesión
-
-El token de sesión (`cts_…`) no es una clave API precompartida. Se obtiene vía SIWE y se almacena en caché en el cliente.
-
-Consulta el [flujo de autenticación Builder](/docs/developers/Workflows/builder-auth).
+Ver [Flujo de auth Builder](/docs/developers/Workflows/builder-auth).
 
 ## Basic Auth opcional
 
-HTTP Basic Auth se controla mediante `API_REQUIRE_BASIC_AUTH` (predeterminado `false`).
+HTTP Basic Auth se controla con `API_REQUIRE_BASIC_AUTH` (por defecto `false`).
 
 ## CORS
 
-Las solicitudes cross-origin del navegador están deshabilitadas por defecto. Operaciones debe incluir orígenes en la lista blanca vía `API_CORS_ALLOWED_ORIGINS`. CORS no se concede por una suscripción Builder.
+Las peticiones cross-origin del navegador están desactivadas por defecto. Ops debe permitir orígenes con `API_CORS_ALLOWED_ORIGINS`. CORS no es autenticación y no se concede por una key ni por una suscripción Builder.

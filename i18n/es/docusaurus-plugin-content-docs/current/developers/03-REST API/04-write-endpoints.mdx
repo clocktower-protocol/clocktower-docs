@@ -1,60 +1,87 @@
 ---
 id: write-endpoints
-title: Endpoints de Escritura
+title: Endpoints de escritura
 sidebar_position: 4
 ---
 
-# Endpoints de Escritura
+# Endpoints de escritura
 
 Todas las rutas son relativas a `https://api.clocktower.finance`.
 
-Todos los endpoints de escritura usan `POST`. El servidor devuelve transacciones sin firmar — tú firmas y transmites desde tu wallet.
+Todos los endpoints de escritura usan `POST`. El servidor devuelve transacciones sin firmar — firmas y broadcast desde tu wallet. El servidor **nunca retransmite** transacciones firmadas.
 
-## Formato de respuesta de preparación
+## Formato de respuesta prepare
 
-Las respuestas de preparación completa incluyen:
+Las respuestas de prepare completo incluyen:
 
 | Campo | Descripción |
 |-------|-------------|
-| `requestId` | UUID de correlación para soporte (no se almacena en el servidor) |
-| `instructions` | Pasos ordenados para firmar y transmitir |
-| `warnings` | Sugerencias no fatales (p. ej., remit puede necesitar múltiples txs) |
+| `requestId` | UUID de correlación para soporte (no se almacena en servidor) |
+| `instructions` | Pasos ordenados para firmar y hacer broadcast |
+| `warnings` | Avisos no fatales (p. ej. remit puede necesitar varias txs) |
 | `unsignedTransactions` | Calldata: `to`, `data`, `value`, `chainId`, `from` |
-| `signingMode` | `raw` (tx única) o `eip5792` (lote multi-tx) |
+| `signingMode` | `raw` (una tx) o `eip5792` (lote multi-tx) |
 | `eip5792` | Descriptor de lote cuando `signingMode` es `eip5792` |
-| `simulation` | Simulación on-chain (debe tener éxito antes de que se liquide el pago MCP) |
+| `simulation` | Simulación on-chain (debe tener éxito antes de liquidar pago MCP) |
 | `gasEstimates` | Presupuesto de gas por tx en Base |
-| `gasSummary` | Totales agregados; los backlogs de remit incluyen `backlogMultiplier` |
+| `gasSummary` | Totales agregados; backlogs de remit incluyen `backlogMultiplier` |
 | `preflight` | Contexto específico de la operación |
 
-### Campos opcionales de solicitud
+### Campos de request opcionales
 
-En cualquier endpoint `prepare_*`:
+En endpoints prepare:
 
-- **`readinessOnly: true`** — solo preflight; sin transacciones sin firmar ni estimaciones de gas
-- **`simulateFromAddress`** — dirección para `eth_estimateGas` cuando la wallet que firma difiere del transmisor
+- **`readinessOnly: true`** — solo preflight; sin transacciones sin firmar ni gas estimates
+- **`simulateFromAddress`** — dirección para `eth_estimateGas` si el firmante difiere del broadcaster
+- **`infiniteApproval: true`** — en subscribe, allowance ERC-20 máxima en lugar de approve acotado al amount
+
+## Rutas by-id preferidas
+
+Si ya tienes el id de suscripción, prefiere endpoints solo por id (la cadena es la fuente de amount/token/provider):
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `POST /check_subscribe_readiness_by_id` | Readiness con `from` + `id` |
+| `POST /prepare/subscribe_by_id` | Prepare subscribe con `from` + `id` |
+| `POST /prepare/cancel_subscription_by_id` | Cancel de provider con `from` + `id` |
+| `POST /prepare/unsubscribe_by_id` | Unsubscribe de suscriptor con `from` + `id` |
+| `POST /prepare/unsubscribe_by_provider_by_id` | Baja por provider con `from` + `id` + `subscriber` |
 
 ## Endpoints
 
-| Endpoint | Nivel gratuito | Descripción |
-|----------|-----------|-------------|
-| `POST /check_subscribe_readiness` | Permitido | Validar si una cuenta puede suscribirse |
-| `POST /prepare/create_subscription` | 2/min/IP | Preparar una nueva suscripción |
-| `POST /prepare/subscribe` | 2/min/IP | Preparar suscripción (incluye approve ERC-20 cuando sea necesario) |
-| `POST /prepare/cancel_subscription` | 2/min/IP | Cancelación por proveedor |
-| `POST /prepare/unsubscribe` | 2/min/IP | Cancelación de suscripción por suscriptor |
-| `POST /prepare/unsubscribe_by_provider` | 2/min/IP | Cancelación iniciada por proveedor |
-| `POST /prepare/edit_details` | 2/min/IP | Edición de metadatos por proveedor |
-| `POST /check_remit_readiness` | Permitido | Verificar si `remit()` es invocable |
-| `POST /prepare/remit` | 2/min/IP | Preparar `remit()` sin permisos |
-| `POST /transactions/status` | Permitido | Consultar estado de confirmación después de transmitir |
+Prepare y readiness comparten el bucket **write** (RPM + **write diario**). Por defecto:
+
+| Lane | Write RPM | Write / prepare diario |
+|------|-----------|------------------------|
+| Free | 2/min | **20/día** |
+| Developer | 5/min | **100/día** |
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `POST /check_subscribe_readiness` | Validar si una cuenta puede suscribirse (forma objeto) |
+| `POST /check_subscribe_readiness_by_id` | Igual por id (**preferido** si conoces el id) |
+| `POST /prepare/create_subscription` | Prepare nueva suscripción (`amount` = string humano, p. ej. `"10"`) |
+| `POST /prepare/subscribe` | Prepare subscribe (forma objeto; incluye approve ERC-20 si hace falta) |
+| `POST /prepare/subscribe_by_id` | Prepare subscribe por id (**preferido**) |
+| `POST /prepare/cancel_subscription` | Cancel de provider |
+| `POST /prepare/cancel_subscription_by_id` | Cancel de provider por id (**preferido**) |
+| `POST /prepare/unsubscribe` | Unsubscribe de suscriptor |
+| `POST /prepare/unsubscribe_by_id` | Unsubscribe por id (**preferido**) |
+| `POST /prepare/unsubscribe_by_provider` | Unsubscribe iniciado por provider |
+| `POST /prepare/unsubscribe_by_provider_by_id` | Por id (**preferido**) |
+| `POST /prepare/edit_details` | Edición de metadata del provider |
+| `POST /check_remit_readiness` | Escaneo multi-día antes de `remit()` |
+| `POST /prepare/remit` | Prepare `remit()` permissionless |
+| `POST /transactions/status` | Poll de confirmación tras broadcast |
+
+Ver [Límites de tasa](/docs/developers/REST%20API/rate-limits). Para volumen de escrituras en producción, usa el [SDK](/docs/developers/SDK/installation) con tu propio RPC.
 
 ## Flujo de remit
 
 ```
-check_remit_readiness → prepare_remit → firmar → transmitir → repetir hasta ponerse al día
+check_remit_readiness → prepare_remit → firmar → broadcast → repetir hasta ponerse al día
 ```
 
-Un `remit()` liquida como máximo `maxRemits` pagos por transacción. Usa `get_subscriptions_due` para una lectura ligera de un solo día; usa `check_remit_readiness` antes de preparar remit.
+Un `remit()` liquida como máximo `maxRemits` pagos por transacción. Usa `get_subscriptions_due` para una lectura ligera de un día; usa `check_remit_readiness` antes de preparar remit.
 
-Consulta el [flujo de caller de remit](/docs/developers/Workflows/remit-caller).
+Ver [Flujo remit caller](/docs/developers/Workflows/remit-caller).

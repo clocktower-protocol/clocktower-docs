@@ -1,47 +1,69 @@
 ---
 id: rate-limits
-title: Límites de Tasa
+title: Límites de tasa
 sidebar_position: 2
 ---
 
-# Límites de Tasa
+# Límites de tasa
 
-Las rutas son relativas a `https://api.clocktower.finance`.
+Rutas relativas a `https://api.clocktower.finance`.
 
-El acceso está dividido en niveles entre REST gratuito, REST Builder y MCP.
+Los límites son **por identidad** (no un único cupo compartido para todos los usuarios):
 
-## Límites predeterminados
+| Lane | Identidad |
+|------|-----------|
+| Free | **IP** del cliente |
+| Developer | **API key** (`ctk_…`) |
+| Builder | **Dirección** de wallet (sesión) |
+| MCP | **IP** (x402; superficie aparte) |
 
-| Nivel | Superficie | Autenticación | Límites predeterminados |
-|------|---------|------|----------------|
-| **Gratuito** | `api.clocktower.finance` | Ninguna | 20 rpm/IP; rutas costosas 3 rpm; subgrafo 100/día/IP; escrituras 2 prepare/min/IP |
-| **Builder** | `api.clocktower.finance` | Sesión SIWE | 120 rpm/dirección; subgrafo 10k/día; escrituras 30/min; limitado a wallet |
-| **Agente** | `mcp.clocktower.finance` | x402 | 300 rpm/IP; escrituras 60/min/dirección |
+## Límites por defecto (aprox.)
+
+| Lane | Auth | Global | Expensive | Subgraph / día | Prepare / readiness | Todas las peticiones / día |
+|------|------|--------|-----------|----------------|---------------------|----------------------------|
+| **Free** | Ninguno | 20 rpm | 3 rpm | 100 | **2/min · 20/día** | **500** |
+| **Developer** | `Bearer ctk_…` | 80 rpm | 40 rpm | 3.000 | **5/min · 100/día** | **5.000** |
+| **Builder** | `Bearer cts_…` | 120 rpm | 120 rpm | 10.000 | 30/min | Ilimitado (cuando está activo) |
+| **MCP** | x402 | 300 rpm | 300 rpm | — | 60/min | — |
+
+Números canónicos: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `writeDaily`, `dailyTotalRequests`, …).
 
 ## Buckets de tasa
 
-- **Global** — aplica a la mayoría de endpoints de lectura
-- **Costoso** — endpoints con subgrafo pesado (historial, descubrimiento, lecturas entre cuentas)
-- **Subgrafo diario** — por IP (gratuito) o por dirección (builder)
-- **Escritura** — endpoints `prepare_*`, indexados por dirección `from`
+- **Global RPM** — la mayoría de las peticiones
+- **Expensive RPM** — GETs pesados de subgraph / discovery
+- **Subgraph diario** — rutas expensive que pegan a The Graph
+- **Write RPM** — `POST /prepare/*` y checks de readiness (`check_*_readiness*`)
+- **Write diario** — el mismo conjunto prepare/readiness, por día UTC (protege el coste de simulación en Alchemy)
+- **Total diario** — cada petición REST ese día para esa identidad
 
-## Notas del nivel gratuito
+Una llamada prepare consume **write RPM**, **write diario** y **total diario**.
 
-- Lecturas entre cuentas y de proveedores permitidas bajo el bucket costoso
-- Escrituras de proveedor (`cancel`, `unsubscribe_by_provider`, `edit_details`) usan el bucket de escritura; la autorización on-chain aún aplica en los manejadores de preparación
-- Las rutas `:me` devuelven 403 sin una sesión Builder
+## Por qué prepare está tan limitado
+
+El prepare completo hace **simulación on-chain y estimación de gas**. El servidor nunca retransmite la transacción, pero el dry-run sigue costando RPC compartido. Los niveles free y developer son para exploración y **lecturas**; el volumen de escrituras en producción debe usar el **SDK con tu propio RPC**.
+
+## Notas del nivel free
+
+- Lecturas cross-account y de provider permitidas bajo el bucket expensive
+- Búsqueda: `first` ≤ 10; sin `includeDetails=true`
+- Las rutas `:me` requieren Builder (403 en caso contrario)
+
+## Notas del nivel developer
+
+- Más límites de lectura y discovery que free
+- Búsqueda: `first` ≤ 25; `includeDetails` permitido
+- Sigue sin `:me` (las keys no van ligadas a wallet)
+- Keys inválidas/revocadas → **401**, no fallback a free
+
+## Al superar un límite
+
+HTTP **429** con `code: RATE_LIMITED`, `lane`, `Retry-After` y un `upgradeHint`. La cabecera `X-Clocktower-Lane` indica el lane aplicado.
 
 ## Catálogo legible por máquina
 
-`GET /catalog` devuelve el manifiesto completo de rutas y límites de nivel. Consulta [Catálogo](/docs/developers/REST%20API/catalog).
+`GET /catalog` devuelve el manifiesto de rutas y límites en vivo. Ver [Catálogo](/docs/developers/REST%20API/catalog).
 
 ## Protecciones en el edge
 
-Los despliegues de producción deben configurar reglas de edge de Cloudflare:
-
-| Regla | Configuración sugerida |
-|------|------------------|
-| Rate Limiting | Bloquear `>500 req / 5 min` por IP en `api.clocktower.finance` y `mcp.clocktower.finance` |
-| WAF | Bloquear `User-Agent` vacío; desafiar `/auth/*` a `>30/min/IP` |
-| DDoS | Mantener habilitado el ruleset gestionado de DDoS HTTP |
-| Bot Fight Mode | Habilitar en la zona para reducir abuso del nivel gratuito automatizado |
+Los despliegues de producción también pueden usar reglas de Cloudflare (rate limiting, WAF, bots) encima de los buckets de aplicación.

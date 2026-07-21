@@ -8,28 +8,56 @@ sidebar_position: 6
 
 `GET /catalog` en `api.clocktower.finance` devuelve el manifiesto legible por máquina de rutas, niveles de acceso y límites.
 
-## Ejemplo de solicitud
+## Ejemplo de petición
 
 ```bash
 curl -s https://api.clocktower.finance/catalog | jq .
+
+# Con key de developer
+curl -s https://api.clocktower.finance/catalog \
+  -H "Authorization: Bearer <YOUR_API_KEY>" | jq .
 ```
 
-## Estructura de respuesta
+## Forma de la respuesta (v3)
 
 ```json
 {
-  "version": "2",
+  "version": "3",
   "chainId": 8453,
   "access": {
     "rest": {
       "free": {
         "auth": "none",
-        "limits": { "...": "..." },
-        "note": "Cross-account and provider reads allowed under expensive bucket"
+        "limits": {
+          "globalRpm": 20,
+          "expensiveRpm": 3,
+          "subgraphDaily": 100,
+          "writeRpm": 2,
+          "writeDaily": 20,
+          "dailyTotalRequests": 500
+        }
+      },
+      "developer": {
+        "auth": "API key (Authorization: Bearer ctk_…)",
+        "enabled": true,
+        "limits": {
+          "globalRpm": 80,
+          "expensiveRpm": 40,
+          "subgraphDaily": 3000,
+          "writeRpm": 5,
+          "writeDaily": 100,
+          "dailyTotalRequests": 5000
+        },
+        "management": {
+          "create": "https://api.clocktower.finance/developer/keys",
+          "list": "https://api.clocktower.finance/developer/keys?subjectId=",
+          "revoke": "https://api.clocktower.finance/developer/keys/:id",
+          "adminAuth": "Bearer <DEVELOPER_KEYS_ADMIN_SECRET> or X-Clocktower-Admin-Key"
+        }
       },
       "builder": {
-        "auth": "SIWE session (Bearer token)",
-        "enabled": "BUILDER_SUB_ID configured",
+        "auth": "SIWE session (Bearer cts_…)",
+        "enabled": false,
         "limits": { "...": "..." },
         "authEndpoints": ["/auth/challenge", "/auth/verify"]
       }
@@ -39,11 +67,13 @@ curl -s https://api.clocktower.finance/catalog | jq .
       "limits": { "...": "..." }
     }
   },
-  "builderAuthEnabled": true,
+  "apiEnabled": true,
+  "developerKeysEnabled": true,
+  "builderAuthEnabled": false,
   "routes": [
-    { "method": "GET", "path": "/protocol/state", "description": "..." }
+    { "method": "GET", "path": "/api/catalog", "description": "..." }
   ]
 }
 ```
 
-Usa el catálogo para descubrir endpoints disponibles de forma programática y verificar qué modo de autenticación y límites aplican en tiempo de ejecución.
+Usa el catálogo para descubrir endpoints y comprobar qué modos de auth y límites aplican en runtime. Los campos de límite incluyen `writeRpm`, `writeDaily` y `dailyTotalRequests`.

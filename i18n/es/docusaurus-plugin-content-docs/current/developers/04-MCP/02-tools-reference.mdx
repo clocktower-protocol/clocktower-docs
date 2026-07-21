@@ -63,14 +63,19 @@ Respaldadas por subgrafo. Máx. 200 registros por llamada; incluye `hasMore` par
 | Herramienta | Descripción |
 |------|-------------|
 | `check_subscribe_readiness` | Validar allowance, saldo, reglas del protocolo |
-| `prepare_create_subscription` | Preparar `createSubscription` sin firmar |
-| `prepare_subscribe` | Preparar `subscribe` (incluye approve cuando sea necesario) |
+| `check_subscribe_readiness_by_id` | **Preferido** — readiness con `from` + `id` |
+| `prepare_create_subscription` | Preparar `createSubscription` sin firmar (`amount` humano) |
+| `prepare_subscribe` | Preparar `subscribe` (forma objeto; incluye approve cuando sea necesario) |
+| `prepare_subscribe_by_id` | **Preferido** — prepare subscribe con `from` + `id` |
 | `prepare_cancel_subscription` | Cancelación por proveedor |
+| `prepare_cancel_subscription_by_id` | **Preferido** — cancel con `from` + `id` |
 | `prepare_unsubscribe` | Cancelación de suscripción por suscriptor |
+| `prepare_unsubscribe_by_id` | **Preferido** — unsubscribe con `from` + `id` |
 | `prepare_unsubscribe_by_provider` | Cancelación iniciada por proveedor |
+| `prepare_unsubscribe_by_provider_by_id` | **Preferido** — baja por provider con `from` + `id` + `subscriber` |
 | `prepare_edit_details` | Edición de metadatos por proveedor |
 | `check_remit_readiness` | Escaneo multi-día de vencimientos antes de `remit()` |
 | `prepare_remit` | Preparar `remit()` sin permisos |
 | `get_transaction_status` | Consultar confirmación de tx después de transmitir |
 
-La preparación completa ejecuta simulación on-chain antes de que se liquide el pago x402. Una simulación fallida lanza excepción — no se te cobra.
+La preparación completa ejecuta simulación on-chain antes de que se liquide el pago x402. Una simulación fallida lanza excepción — no se te cobra. Prefiere tools `*_by_id` cuando ya conozcas el id de suscripción.

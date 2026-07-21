@@ -42,9 +42,9 @@ sequenceDiagram
   participant Wallet as Wallet del suscriptor
   participant Chain as Base
 
-  App->>API: 1. check_subscribe_readiness (opcional)
+  App->>API: 1. check_subscribe_readiness_by_id (opcional)
   API-->>App: allowance, balance, needsApproval
-  App->>API: 2. prepare_subscribe
+  App->>API: 2. prepare_subscribe_by_id
   API-->>App: unsignedTransactions, signingMode, requestId
   App->>Wallet: 3. firmar transacciones
   Wallet-->>App: txs firmadas
@@ -56,13 +56,17 @@ sequenceDiagram
 
 | Paso | REST | Herramienta MCP | SDK |
 |------|------|----------|-----|
-| 1. Preparación | `POST /check_subscribe_readiness` | `check_subscribe_readiness` | Integrado en preflight de `subscribe()` |
-| 2. Preparar | `POST /prepare/subscribe` | `prepare_subscribe` | `subscribeWithApproval()` |
+| 1. Preparación | `POST /check_subscribe_readiness_by_id` (**preferido**) o forma objeto | `check_subscribe_readiness_by_id` | Integrado en preflight de `subscribe()` |
+| 2. Preparar | `POST /prepare/subscribe_by_id` (**preferido**) o forma objeto | `prepare_subscribe_by_id` | `subscribeWithApproval()` / `subscribeById` |
 | 3–4. Firmar y transmitir | Tu wallet + RPC | Igual | `walletClient` vía viem |
 | 5. Confirmar | `POST /transactions/status` | `get_transaction_status` | `waitForReceipt: true` |
 
+Las rutas by-id solo necesitan `from` + `id` de suscripción (amount/token/provider se cargan on-chain). La forma por objeto sigue disponible si ya tienes el objeto completo.
+
 ## Consejos
 
-**Loteo EIP-5792** — cuando el allowance de ERC-20 es insuficiente, la preparación devuelve `signingMode: "eip5792"` con approve + subscribe en un solo lote.
+**Loteo EIP-5792** — cuando el allowance de ERC-20 es insuficiente, la preparación devuelve `signingMode: "eip5792"` con approve + subscribe en un solo lote (approve acotado al amount por defecto; `infiniteApproval: true` para máximo).
 
-**Solo preparación** — pasa `readinessOnly: true` a `prepare_subscribe` (o `POST /prepare/subscribe` en `api.clocktower.finance`) para validar sin generar transacciones sin firmar.
+**Solo preparación** — pasa `readinessOnly: true` en prepare para validar sin generar transacciones sin firmar.
+
+**Límites REST de prepare** — free y developer keys tienen cupos bajos de prepare/readiness. Para volumen de suscripciones en producción, prefiere el SDK con tu propio RPC.

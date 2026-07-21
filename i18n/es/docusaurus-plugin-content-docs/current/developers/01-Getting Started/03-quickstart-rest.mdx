@@ -1,20 +1,22 @@
 ---
 id: quickstart-rest
-title: Inicio Rápido REST
+title: Inicio rápido REST
 sidebar_position: 2
 ---
 
-# Inicio Rápido de la API REST
+# Inicio rápido de la API REST
 
-Esta es la forma más rápida de probar Clocktower desde cualquier stack que hable HTTP. Obtienes lecturas y escrituras preparadas sin un cliente MCP ni un SDK on-chain — solo `curl`, `fetch` o el cliente HTTP que ya uses.
+Es la forma más rápida de probar Clocktower desde cualquier stack que hable HTTP. Obtienes lecturas y escrituras preparadas sin cliente MCP ni SDK on-chain — solo `curl`, `fetch` o el cliente HTTP que ya uses.
 
-La API REST expone las mismas capacidades que MCP sobre HTTP estándar. **No se requiere pago x402** — el acceso se controla mediante límites de tasa y sesiones Builder opcionales. Si es tu primera vez aquí, empieza con el catálogo y una búsqueda de suscripciones más abajo; tendrás datos reales del protocolo en menos de un minuto.
+La API REST expone las mismas capacidades que MCP por HTTP estándar. **No se requiere pago x402** — el acceso se controla con límites free, **API keys de developer** opcionales (`ctk_…`) y sesiones Builder SIWE opcionales. Empieza por el catálogo y una búsqueda de suscripciones; tendrás datos reales del protocolo en menos de un minuto.
 
 ## URL base
 
 ```
 https://api.clocktower.finance
 ```
+
+En este host, las rutas **omiten** el prefijo `/api` (p. ej. `GET /catalog`). Las URLs legacy `*.workers.dev` mantienen `/api`.
 
 ## Leer el estado del protocolo
 
@@ -23,40 +25,40 @@ curl -s https://api.clocktower.finance/catalog | jq .
 curl -s https://api.clocktower.finance/protocol/state | jq .
 ```
 
+Con una key de developer (más límites; comprueba `X-Clocktower-Lane: developer`):
+
+```bash
+curl -s https://api.clocktower.finance/catalog \
+  -H "Authorization: Bearer <YOUR_API_KEY>" | jq .
+```
+
 ## Buscar suscripciones
 
 ```bash
 curl -s "https://api.clocktower.finance/subscriptions?first=10" | jq .
 ```
 
-## Preparar una suscripción (solo preparación)
+Nivel free: `first` máx. 10, sin `includeDetails`. Developer: `first` máx. 25, `includeDetails` permitido.
 
-Verifica si una cuenta puede suscribirse sin generar transacciones sin firmar:
+## Preferido: prepare subscribe por id
 
-```bash
-curl -s -X POST https://api.clocktower.finance/prepare/subscribe \
-  -H "Content-Type: application/json" \
-  -d '{
-    "from": "0xYourAddress",
-    "subscription": { "id": "0x..." },
-    "readinessOnly": true
-  }' | jq .
-```
-
-## Preparación completa
-
-Omite `readinessOnly` para recibir `unsignedTransactions`, simulación y estimaciones de gas:
+Si ya conoces el id de la suscripción, usa endpoints **by-id** (amount, token y provider se cargan on-chain):
 
 ```bash
-curl -s -X POST https://api.clocktower.finance/prepare/subscribe \
+curl -s -X POST https://api.clocktower.finance/check_subscribe_readiness_by_id \
   -H "Content-Type: application/json" \
-  -d '{
-    "from": "0xYourAddress",
-    "subscription": { "id": "0x..." }
-  }' | jq .
+  -d '{ "from": "0xYourAddress", "id": "0x..." }' | jq .
+
+curl -s -X POST https://api.clocktower.finance/prepare/subscribe_by_id \
+  -H "Content-Type: application/json" \
+  -d '{ "from": "0xYourAddress", "id": "0x..." }' | jq .
 ```
 
-Firma `unsignedTransactions` en tu wallet, transmite a Base y luego consulta el estado:
+Opcional: `"readinessOnly": true` en prepare para preflight sin transacciones sin firmar.
+
+La forma por objeto `prepare/subscribe` sigue valiendo cuando ya tienes el objeto completo. Al crear o pasar amounts se requieren strings **human-readable** (p. ej. `"10"`), no wei del protocolo.
+
+Firma `unsignedTransactions` en tu wallet, haz broadcast a Base y consulta el estado:
 
 ```bash
 curl -s -X POST https://api.clocktower.finance/transactions/status \
@@ -64,19 +66,31 @@ curl -s -X POST https://api.clocktower.finance/transactions/status \
   -d '{ "hash": "0x..." }' | jq .
 ```
 
+Prepare/readiness tiene **límites de tasa** (free: 2/min · 20/día; developer: 5/min · 100/día). Para volumen de escrituras en producción, usa el [SDK](/docs/developers/SDK/installation) con tu propio RPC.
+
+## API key de developer (opcional)
+
+Obtén una key gratuita `ctk_…` en el portal de developers (o mint de admin). Envía:
+
+```
+Authorization: Bearer <YOUR_API_KEY>
+```
+
+Ver [Autenticación](/docs/developers/REST%20API/authentication) y [Límites de tasa](/docs/developers/REST%20API/rate-limits).
+
 ## Sesión Builder (opcional)
 
-Para límites más altos y rutas `:me`:
+Cuando el entitlement Builder está configurado en el servidor, SIWE desbloquea más límites y rutas `:me`:
 
 ```bash
-# 1. Desafío
+# 1. Challenge
 curl -s -X POST https://api.clocktower.finance/auth/challenge \
   -H "Content-Type: application/json" \
   -d '{ "address": "0xYourAddress" }'
 
 # 2. Firma el mensaje devuelto con tu wallet (personal_sign)
 
-# 3. Verificar
+# 3. Verify
 curl -s -X POST https://api.clocktower.finance/auth/verify \
   -H "Content-Type: application/json" \
   -d '{ "message": "...", "signature": "0x..." }'
@@ -86,14 +100,14 @@ curl -s https://api.clocktower.finance/accounts/me/subscriptions \
   -H "Authorization: Bearer cts_..."
 ```
 
-Consulta [Autenticación](/docs/developers/REST%20API/authentication) y el [flujo de autenticación Builder](/docs/developers/Workflows/builder-auth).
+Ver [Flujo de auth Builder](/docs/developers/Workflows/builder-auth). Builder puede estar **desactivado** si no hay IDs de entitlement (`GET /catalog` → `builderAuthEnabled`).
 
-## Ayudante CLI
+## CLI de ayuda
 
-El repositorio [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) proporciona un CLI de Node:
+El repo [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) ofrece un CLI en Node:
 
 ```bash
 npm start rest get /catalog
 npm start rest get /protocol/state
-npm start rest post /prepare/subscribe --body '{"from":"0x...","subscription":{...},"readinessOnly":true}'
+npm start rest post /prepare/subscribe_by_id --body '{"from":"0x...","id":"0x..."}'
 ```

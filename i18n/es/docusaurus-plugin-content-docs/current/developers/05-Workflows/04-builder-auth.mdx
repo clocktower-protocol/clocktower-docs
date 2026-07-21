@@ -10,17 +10,23 @@ sidebar_position: 4
 
 Obtener una **sesión Builder** para que tus llamadas REST tengan límites de tasa más altos y acceso a rutas `:me` limitadas a tu wallet.
 
+:::info Nivel opcional
+Builder es **opcional**. Muchos integradores solo necesitan **free** o **API keys de developer** (`ctk_…`) para lecturas. Consulta `GET /catalog` → `builderAuthEnabled`. Si no hay IDs de entitlement configurados, Builder está desactivado.
+:::
+
+Para keys de developer gratuitas y límites de tasa, ver [Autenticación](/docs/developers/REST%20API/authentication) — ese camino **no** requiere SIWE.
+
 ## Quién participa
 
 | Rol | Qué hace |
 |------|----------------|
-| **Builder** | Una wallet con una suscripción on-chain activa al derecho Builder (`BUILDER_SUB_ID`) |
+| **Builder** | Una wallet con una suscripción on-chain activa a un entitlement Builder configurado (`BUILDER_SUB_ID` / `BUILDER_SUB_IDS`) |
 | **Tu app** | Solicita un desafío SIWE, pide a la wallet que firme, intercambia la firma por un token de sesión |
 | **API Clocktower** | Emite un token bearer `cts_…` después de verificar la firma y el derecho |
 
 ## Requisitos previos
 
-1. Una suscripción on-chain **ACTIVE** al derecho Builder del servidor.
+1. El servidor tiene al menos un ID de entitlement Builder configurado y una suscripción on-chain **ACTIVE** para tu wallet.
 2. Una wallet para firmar el mensaje SIWE.
 
 ## Pasos
