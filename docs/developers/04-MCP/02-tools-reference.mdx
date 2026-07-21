@@ -63,14 +63,19 @@ Subgraph-backed. Max 200 records per call; includes `hasMore` for pagination.
 | Tool | Description |
 |------|-------------|
 | `check_subscribe_readiness` | Validate allowance, balance, protocol rules |
-| `prepare_create_subscription` | Prepare unsigned `createSubscription` |
-| `prepare_subscribe` | Prepare `subscribe` (includes approve when needed) |
+| `check_subscribe_readiness_by_id` | **Preferred** — readiness with `from` + `id` |
+| `prepare_create_subscription` | Prepare unsigned `createSubscription` (human `amount` string) |
+| `prepare_subscribe` | Prepare `subscribe` (object form; includes approve when needed) |
+| `prepare_subscribe_by_id` | **Preferred** — prepare subscribe with `from` + `id` |
 | `prepare_cancel_subscription` | Provider cancel |
+| `prepare_cancel_subscription_by_id` | **Preferred** — cancel with `from` + `id` |
 | `prepare_unsubscribe` | Subscriber unsubscribe |
+| `prepare_unsubscribe_by_id` | **Preferred** — unsubscribe with `from` + `id` |
 | `prepare_unsubscribe_by_provider` | Provider-initiated unsubscribe |
+| `prepare_unsubscribe_by_provider_by_id` | **Preferred** — provider remove with `from` + `id` + `subscriber` |
 | `prepare_edit_details` | Provider metadata edit |
 | `check_remit_readiness` | Multi-day due scan before `remit()` |
 | `prepare_remit` | Prepare permissionless `remit()` |
 | `get_transaction_status` | Poll tx confirmation after broadcast |
 
-Full prepare runs on-chain simulation before x402 payment settles. Failed simulation throws — you are not charged.
+Full prepare runs on-chain simulation before x402 payment settles. Failed simulation throws — you are not charged. Prefer `*_by_id` tools when the subscription id is known.
