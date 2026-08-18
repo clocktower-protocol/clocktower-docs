@@ -1,7 +1,7 @@
 ---
 id: read-endpoints
 title: Read Endpoints
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Read Endpoints
@@ -10,19 +10,21 @@ All paths are relative to `https://api.clocktower.finance`.
 
 All read endpoints use `GET` unless noted.
 
+Protocol reads accept optional `?chainId=` (decimal or CAIP-2). Omitted uses the REST default (Base `8453`). See [Chain selection](/docs/developers/REST%20API/chain-selection).
+
 ## Protocol and catalog
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /catalog` | Machine-readable route catalog and tier limits |
-| `GET /protocol/state` | Current protocol fee configuration |
+| `GET /catalog` | Machine-readable route catalog, tier limits, and `chains[]` registry (not filtered by `chainId`) |
+| `GET /protocol/state` | Current protocol fee configuration (`?chainId=` optional) |
 | `GET /status` | Lightweight health check |
 
 ## Subscriptions
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /subscriptions` | Search/discover subscriptions. Query: `provider`, `token`, `frequency`, `cancelled` (default `false`), `includeDetails`, `first` (max 50), `skip` |
+| `GET /subscriptions` | Search/discover subscriptions. Query: `provider`, `token`, `frequency`, `cancelled` (default `false`), `includeDetails`, `first` (max 50), `skip`, plus optional `chainId` |
 | `GET /subscriptions/due` | Subscriptions due on a given day/frequency |
 | `GET /subscriptions/:id` | Single subscription by ID |
 | `GET /subscriptions/:id/subscribers` | Subscribers for a subscription |

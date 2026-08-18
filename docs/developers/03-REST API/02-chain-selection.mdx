@@ -1,0 +1,88 @@
+---
+id: chain-selection
+title: Chain Selection
+sidebar_position: 2
+---
+
+# Chain Selection
+
+REST protocol routes are chain-aware. Pass optional `?chainId=` to read or prepare against a protocol chain. **MCP, x402, SIWE, and Builder entitlement stay on Base** (chainId `8453`).
+
+## Query parameter
+
+Use `?chainId=` on protocol reads, prepares, history, discovery, approved tokens, and transaction status.
+
+| Format | Example |
+|--------|---------|
+| Decimal | `?chainId=8453` |
+| CAIP-2 | `?chainId=eip155:8453` |
+
+Omitted `chainId` uses `DEFAULT_REST_CHAIN_ID` (shipped as `8453`). Unknown, malformed, or REST-disabled values return **400** with `code: "VALIDATION_ERROR"`.
+
+```bash
+curl -s "https://api.clocktower.finance/protocol/state?chainId=8453" | jq .
+curl -s "https://api.clocktower.finance/protocol/state?chainId=eip155:8453" | jq .
+```
+
+POST prepares take the same query parameter (not a JSON body field):
+
+```bash
+curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=8453" \
+  -H "Content-Type: application/json" \
+  -d '{ "from": "0xYourAddress", "id": "0x..." }'
+```
+
+## Which routes are chain-scoped
+
+| Accept `?chainId=` | Not chain-scoped |
+|--------------------|------------------|
+| Protocol state, subscriptions, accounts, approved tokens | `GET /catalog` (still lists `chains`) |
+| Discovery, history, profiles | `GET /status`, `/` |
+| Prepare, readiness, `POST /transactions/status` | Auth (`/auth/*`), developer keys |
+
+`GET /catalog` is not filtered by chain. It reports the REST default as `chainId` and the full registry as `chains[]`. Passing an unsupported `chainId` on any REST path still returns 400 because the worker validates the query before routing.
+
+## Discover live chains
+
+`GET /catalog` → `chains[]` is the source of truth for which chains the hosted API currently serves:
+
+```json
+{
+  "chainId": 8453,
+  "chains": [
+    {
+      "chainId": 8453,
+      "caip2": "eip155:8453",
+      "name": "base",
+      "rest": true,
+      "mcp": true,
+      "default": true
+    }
+  ]
+}
+```
+
+| Field | Meaning |
+|-------|---------|
+| `chainId` (top-level) | REST default when the client omits `?chainId=` |
+| `chains[].rest` | Protocol routes may target this chain |
+| `chains[].mcp` | MCP tools run here (Base only) |
+| `chains[].default` | This row is `DEFAULT_REST_CHAIN_ID` |
+
+The registry currently ships **Base mainnet** as the only REST-enabled chain. Additional EVM chains can be enabled without changing the request shape — keep using `?chainId=` and read `chains[]` at runtime.
+
+## MCP, SIWE, and Builder
+
+These stay on Base even when REST `?chainId=` selects another protocol chain:
+
+- **MCP** — no `chainId` argument; tools and x402 USDC payments are Base-only
+- **SIWE** — challenge/verify use Base chain ID `8453`
+- **Builder entitlement** — `BUILDER_SUB_ID` / `BUILDER_SUB_IDS` is always checked on Base
+
+Changing `DEFAULT_REST_CHAIN_ID` does not move MCP, SIWE, or Builder.
+
+## Writes
+
+Prepare responses include `chainId` on the payload, `unsignedTransactions`, `gasEstimates`, and `gasSummary`. Connect the wallet to that chain before signing, then broadcast there. Simulation and gas estimation run on the selected REST chain.
+
+See [Write endpoints](/docs/developers/REST%20API/write-endpoints) and [Errors](/docs/developers/REST%20API/errors).

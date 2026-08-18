@@ -1,7 +1,7 @@
 ---
 id: read-endpoints
 title: Endpoints de Lectura
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # Endpoints de Lectura
@@ -10,19 +10,21 @@ Todas las rutas son relativas a `https://api.clocktower.finance`.
 
 Todos los endpoints de lectura usan `GET` salvo que se indique lo contrario.
 
+Las lecturas de protocolo aceptan `?chainId=` opcional (decimal o CAIP-2). Si se omite, se usa el default REST (Base `8453`). Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
+
 ## Protocolo y catálogo
 
 | Endpoint | Descripción |
 |----------|-------------|
-| `GET /catalog` | Catálogo de rutas legible por máquina y límites de nivel |
-| `GET /protocol/state` | Configuración actual de comisiones del protocolo |
+| `GET /catalog` | Catálogo de rutas, límites de nivel y registro `chains[]` (no filtrado por `chainId`) |
+| `GET /protocol/state` | Configuración actual de comisiones del protocolo (`?chainId=` opcional) |
 | `GET /status` | Verificación de salud ligera |
 
 ## Suscripciones
 
 | Endpoint | Descripción |
 |----------|-------------|
-| `GET /subscriptions` | Buscar/descubrir suscripciones. Query: `provider`, `token`, `frequency`, `cancelled` (predeterminado `false`), `includeDetails`, `first` (máx. 50), `skip` |
+| `GET /subscriptions` | Buscar/descubrir suscripciones. Query: `provider`, `token`, `frequency`, `cancelled` (predeterminado `false`), `includeDetails`, `first` (máx. 50), `skip`, más `chainId` opcional |
 | `GET /subscriptions/due` | Suscripciones vencidas en un día/frecuencia dado |
 | `GET /subscriptions/:id` | Suscripción individual por ID |
 | `GET /subscriptions/:id/subscribers` | Suscriptores de una suscripción |

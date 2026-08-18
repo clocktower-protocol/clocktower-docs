@@ -26,8 +26,8 @@ Para keys de developer gratuitas y límites de tasa, ver [Autenticación](/docs/
 
 ## Requisitos previos
 
-1. El servidor tiene al menos un ID de entitlement Builder configurado y una suscripción on-chain **ACTIVE** para tu wallet.
-2. Una wallet para firmar el mensaje SIWE.
+1. El servidor tiene al menos un ID de entitlement Builder configurado y una suscripción on-chain **ACTIVE** para tu wallet **en Base**. El entitlement se comprueba siempre en Base, aunque REST `?chainId=` apunte a otra cadena de protocolo.
+2. Una wallet para firmar el mensaje SIWE (el chain ID de SIWE es `8453`).
 
 ## Pasos
 

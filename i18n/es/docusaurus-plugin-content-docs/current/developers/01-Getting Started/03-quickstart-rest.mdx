@@ -18,11 +18,14 @@ https://api.clocktower.finance
 
 En este host, las rutas **omiten** el prefijo `/api` (p. ej. `GET /catalog`). Las URLs legacy `*.workers.dev` mantienen `/api`.
 
+Las rutas de protocolo aceptan `?chainId=` opcional (decimal o CAIP-2, p. ej. `8453` o `eip155:8453`). Si se omite, se usa Base (`8453`). Consulta `GET /catalog` → `chains[]` para ver qué cadenas están activas. MCP no admite `chainId`. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
+
 ## Leer el estado del protocolo
 
 ```bash
 curl -s https://api.clocktower.finance/catalog | jq .
 curl -s https://api.clocktower.finance/protocol/state | jq .
+curl -s "https://api.clocktower.finance/protocol/state?chainId=8453" | jq .
 ```
 
 Con una key de developer (más límites; comprueba `X-Clocktower-Lane: developer`):
@@ -45,11 +48,11 @@ Nivel free: `first` máx. 10, sin `includeDetails`. Developer: `first` máx. 25,
 Si ya conoces el id de la suscripción, usa endpoints **by-id** (amount, token y provider se cargan on-chain):
 
 ```bash
-curl -s -X POST https://api.clocktower.finance/check_subscribe_readiness_by_id \
+curl -s -X POST "https://api.clocktower.finance/check_subscribe_readiness_by_id?chainId=8453" \
   -H "Content-Type: application/json" \
   -d '{ "from": "0xYourAddress", "id": "0x..." }' | jq .
 
-curl -s -X POST https://api.clocktower.finance/prepare/subscribe_by_id \
+curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=8453" \
   -H "Content-Type: application/json" \
   -d '{ "from": "0xYourAddress", "id": "0x..." }' | jq .
 ```
@@ -58,10 +61,10 @@ Opcional: `"readinessOnly": true` en prepare para preflight sin transacciones si
 
 La forma por objeto `prepare/subscribe` sigue valiendo cuando ya tienes el objeto completo. Al crear o pasar amounts se requieren strings **human-readable** (p. ej. `"10"`), no wei del protocolo.
 
-Firma `unsignedTransactions` en tu wallet, haz broadcast a Base y consulta el estado:
+Firma `unsignedTransactions` en tu wallet, haz broadcast a la cadena en `unsignedTransactions[].chainId` y consulta el estado (pasa el mismo `?chainId=`):
 
 ```bash
-curl -s -X POST https://api.clocktower.finance/transactions/status \
+curl -s -X POST "https://api.clocktower.finance/transactions/status?chainId=8453" \
   -H "Content-Type: application/json" \
   -d '{ "hash": "0x..." }' | jq .
 ```

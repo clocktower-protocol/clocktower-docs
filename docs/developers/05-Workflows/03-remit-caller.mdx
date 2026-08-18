@@ -22,7 +22,7 @@ A **caller** runs the permissionless `remit()` function to process due subscript
 
 1. **Check remit readiness** — scan how many subscriptions are due and whether `remit()` can run now.
 2. **Prepare remit** — get unsigned `remit()` calldata plus gas estimates.
-3. **Sign & broadcast** — caller wallet signs and your bot sends to Base.
+3. **Sign & broadcast** — caller wallet signs and your bot sends to the chain in `unsignedTransactions[].chainId` (MCP: Base).
 4. **Repeat** — one `remit()` clears at most `maxRemits` payments; loop until the backlog is caught up.
 
 The caller pays gas for every broadcast (unlike the protocol's operator cron).
@@ -34,7 +34,7 @@ sequenceDiagram
   participant Bot as Your bot
   participant API as Clocktower API
   participant Wallet as Caller wallet
-  participant Chain as Base
+  participant Chain as Chain
 
   Bot->>API: 1. check_remit_readiness
   API-->>Bot: ready, expectedTransactions, warnings
@@ -59,3 +59,4 @@ sequenceDiagram
 
 - Large backlogs may need multiple broadcasts — check `gasSummary.backlogMultiplier` in prepare responses.
 - Use `get_subscriptions_due` / `getSubscriptionsDue()` for a lightweight single-day read without preparing a transaction.
+- On REST, pass `?chainId=` so readiness, prepare, and status poll the same chain. MCP remit is Base-only.

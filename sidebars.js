@@ -52,6 +52,7 @@ const sidebars = {
       collapsed: true,
       items: [
         'developers/REST API/authentication',
+        'developers/REST API/chain-selection',
         'developers/REST API/rate-limits',
         'developers/REST API/read-endpoints',
         'developers/REST API/write-endpoints',

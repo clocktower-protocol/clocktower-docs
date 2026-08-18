@@ -17,13 +17,13 @@ A **provider** publishes a new subscription on-chain so others can subscribe to 
 | **Provider** | The wallet address passed as `from` — creates and owns the subscription |
 | **Your app** | Builds the subscription params and requests unsigned `createSubscription` calldata |
 | **Clocktower API** | Simulates and returns unsigned transactions |
-| **Wallet** | Signs and broadcasts to Base |
+| **Wallet** | Signs and broadcasts to the selected chain (REST `?chainId=`; MCP always Base) |
 
 ## Steps
 
 1. **Prepare create** — send amount, token, frequency, due day, and metadata; receive unsigned `createSubscription` calldata.
 2. **Sign** — provider wallet signs the transaction.
-3. **Broadcast** — your app sends it to Base mainnet.
+3. **Broadcast** — your app sends it to the chain in `unsignedTransactions[].chainId` (MCP: Base mainnet).
 4. **Confirm** (optional) — poll transaction status.
 5. **Fetch new ID** — after mining, read the subscription by ID or poll until it appears on-chain.
 
@@ -34,7 +34,7 @@ sequenceDiagram
   participant App as Your app
   participant API as Clocktower API
   participant Wallet as Provider wallet
-  participant Chain as Base
+  participant Chain as Chain
 
   App->>API: 1. prepare_create_subscription
   API-->>App: unsignedTransactions, requestId
@@ -69,3 +69,5 @@ sequenceDiagram
 ```
 
 The SDK accepts human-readable `amount` strings and `Frequency` enum values. See [Due day ranges](/docs/developers/SDK/reads-and-writes) for valid `dueDay` per frequency.
+
+On REST, pass `?chainId=` on prepare and on the follow-up `GET /subscriptions/:id` so you stay on the same chain. MCP create is Base-only.

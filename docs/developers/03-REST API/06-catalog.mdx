@@ -1,12 +1,12 @@
 ---
 id: catalog
 title: Catalog
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 # API Catalog
 
-`GET /catalog` on `api.clocktower.finance` returns the machine-readable manifest of routes, access tiers, and limits.
+`GET /catalog` on `api.clocktower.finance` returns the machine-readable manifest of routes, access tiers, limits, and the chain registry.
 
 ## Example request
 
@@ -24,6 +24,17 @@ curl -s https://api.clocktower.finance/catalog \
 {
   "version": "3",
   "chainId": 8453,
+  "chains": [
+    {
+      "chainId": 8453,
+      "caip2": "eip155:8453",
+      "name": "base",
+      "rest": true,
+      "mcp": true,
+      "default": true
+    }
+  ],
+  "pathNote": "On api host, omit the /api prefix (e.g. GET /catalog). Legacy workers.dev URLs keep /api. Protocol routes accept optional ?chainId= (decimal or CAIP-2 eip155:<id>); omitted uses DEFAULT_REST_CHAIN_ID.",
   "access": {
     "rest": {
       "free": {
@@ -76,4 +87,10 @@ curl -s https://api.clocktower.finance/catalog \
 }
 ```
 
+- Top-level `chainId` is the REST default when `?chainId=` is omitted.
+- `chains[]` lists registered chains (`rest`, `mcp`, `default`). Read this at runtime rather than hard-coding supported IDs.
+- Catalog itself is not filtered by chain, but an unsupported `?chainId=` on the request still returns 400.
+
 Use the catalog to discover endpoints and to verify which auth modes and limits apply at runtime. Limit fields include `writeRpm`, `writeDaily`, and `dailyTotalRequests`.
+
+See [Chain selection](/docs/developers/REST%20API/chain-selection).

@@ -17,13 +17,13 @@ Un **proveedor** publica una nueva suscripción on-chain para que otros puedan s
 | **Proveedor** | La dirección de wallet pasada como `from` — crea y posee la suscripción |
 | **Tu app** | Construye los parámetros de la suscripción y solicita calldata `createSubscription` sin firmar |
 | **API Clocktower** | Simula y devuelve transacciones sin firmar |
-| **Wallet** | Firma y transmite a Base |
+| **Wallet** | Firma y transmite a la cadena seleccionada (REST `?chainId=`; MCP siempre Base) |
 
 ## Pasos
 
 1. **Preparar creación** — envía monto, token, frecuencia, día de vencimiento y metadatos; recibe calldata `createSubscription` sin firmar.
 2. **Firmar** — la wallet del proveedor firma la transacción.
-3. **Transmitir** — tu app la envía a Base mainnet.
+3. **Transmitir** — tu app la envía a la cadena en `unsignedTransactions[].chainId` (MCP: Base mainnet).
 4. **Confirmar** (opcional) — consulta el estado de la transacción.
 5. **Obtener nuevo ID** — después de minar, lee la suscripción por ID o consulta hasta que aparezca on-chain.
 
@@ -34,7 +34,7 @@ sequenceDiagram
   participant App as Tu app
   participant API as API Clocktower
   participant Wallet as Wallet del proveedor
-  participant Chain as Base
+  participant Chain as Cadena
 
   App->>API: 1. prepare_create_subscription
   API-->>App: unsignedTransactions, requestId
@@ -69,3 +69,5 @@ sequenceDiagram
 ```
 
 El SDK acepta cadenas `amount` legibles para humanos y valores del enum `Frequency`. Consulta [Rangos de día de vencimiento](/docs/developers/SDK/reads-and-writes) para `dueDay` válido por frecuencia.
+
+En REST, pasa `?chainId=` en prepare y en el `GET /subscriptions/:id` posterior para quedarte en la misma cadena. Create en MCP es solo Base.

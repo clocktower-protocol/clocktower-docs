@@ -17,7 +17,7 @@ A **subscriber** starts paying into an **existing** subscription created by a pr
 | **Subscriber** | The wallet address passed as `from` — must hold enough ERC-20 and approve the Clocktower contract |
 | **Your app** | Calls the API/MCP or SDK, then asks the wallet to sign |
 | **Clocktower API** | Validates readiness and returns unsigned transactions (never broadcasts for you) |
-| **Wallet** | Signs transactions; your app broadcasts them to Base |
+| **Wallet** | Signs transactions; your app broadcasts them to the selected chain (REST `?chainId=`; MCP always Base) |
 
 :::info SDK path
 The SDK skips the prepare step and talks to the chain directly via viem when you call `subscribeWithApproval()`.
@@ -28,7 +28,7 @@ The SDK skips the prepare step and talks to the chain directly via viem when you
 1. **Check readiness** (optional) — confirm allowance, balance, and protocol rules before preparing a transaction.
 2. **Prepare subscribe** — request unsigned `subscribe` calldata (and an `approve` tx if allowance is low).
 3. **Sign** — subscriber wallet signs `unsignedTransactions`. If two txs are needed, signing mode is `eip5792` (approve + subscribe batch).
-4. **Broadcast** — your app sends the signed transaction(s) to Base mainnet.
+4. **Broadcast** — your app sends the signed transaction(s) to the chain in `unsignedTransactions[].chainId` (MCP: Base mainnet).
 5. **Confirm** (optional) — poll transaction status or wait for an on-chain receipt.
 
 The server never holds your keys and never relays signed transactions.
@@ -40,7 +40,7 @@ sequenceDiagram
   participant App as Your app
   participant API as Clocktower API
   participant Wallet as Subscriber wallet
-  participant Chain as Base
+  participant Chain as Chain
 
   App->>API: 1. check_subscribe_readiness_by_id (optional)
   API-->>App: allowance, balance, needsApproval
@@ -62,6 +62,8 @@ sequenceDiagram
 | 5. Confirm | `POST /transactions/status` | `get_transaction_status` | `waitForReceipt: true` |
 
 By-id routes need only `from` + subscription `id` (amount/token/provider loaded on-chain). Object form remains for callers that already hold a full subscription object.
+
+On REST, pass the same `?chainId=` on readiness, prepare, and `POST /transactions/status`. MCP subscribe is Base-only. See [Chain selection](/docs/developers/REST%20API/chain-selection).
 
 ## Tips
 

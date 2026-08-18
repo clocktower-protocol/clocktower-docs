@@ -1,0 +1,88 @@
+---
+id: chain-selection
+title: Selección de cadena
+sidebar_position: 2
+---
+
+# Selección de cadena
+
+Las rutas de protocolo REST son conscientes de la cadena. Pasa `?chainId=` opcional para leer o preparar contra una cadena del protocolo. **MCP, x402, SIWE y el entitlement Builder permanecen en Base** (chainId `8453`).
+
+## Parámetro de query
+
+Usa `?chainId=` en lecturas de protocolo, prepares, historial, discovery, tokens aprobados y estado de transacciones.
+
+| Formato | Ejemplo |
+|---------|---------|
+| Decimal | `?chainId=8453` |
+| CAIP-2 | `?chainId=eip155:8453` |
+
+Si omites `chainId` se usa `DEFAULT_REST_CHAIN_ID` (enviado como `8453`). Valores desconocidos, malformados o no habilitados para REST devuelven **400** con `code: "VALIDATION_ERROR"`.
+
+```bash
+curl -s "https://api.clocktower.finance/protocol/state?chainId=8453" | jq .
+curl -s "https://api.clocktower.finance/protocol/state?chainId=eip155:8453" | jq .
+```
+
+Los POST de prepare usan el mismo query (no un campo del cuerpo JSON):
+
+```bash
+curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=8453" \
+  -H "Content-Type: application/json" \
+  -d '{ "from": "0xYourAddress", "id": "0x..." }'
+```
+
+## Qué rutas están acotadas por cadena
+
+| Aceptan `?chainId=` | No acotadas por cadena |
+|---------------------|------------------------|
+| Estado del protocolo, suscripciones, cuentas, tokens aprobados | `GET /catalog` (igual lista `chains`) |
+| Discovery, historial, perfiles | `GET /status`, `/` |
+| Prepare, readiness, `POST /transactions/status` | Auth (`/auth/*`), developer keys |
+
+`GET /catalog` no se filtra por cadena. Reporta el default REST como `chainId` y el registro completo como `chains[]`. Pasar un `chainId` no soportado en cualquier ruta REST igual devuelve 400 porque el worker valida el query antes de enrutar.
+
+## Descubrir cadenas activas
+
+`GET /catalog` → `chains[]` es la fuente de verdad de qué cadenas sirve la API hospedada:
+
+```json
+{
+  "chainId": 8453,
+  "chains": [
+    {
+      "chainId": 8453,
+      "caip2": "eip155:8453",
+      "name": "base",
+      "rest": true,
+      "mcp": true,
+      "default": true
+    }
+  ]
+}
+```
+
+| Campo | Significado |
+|-------|-------------|
+| `chainId` (nivel superior) | Default REST cuando el cliente omite `?chainId=` |
+| `chains[].rest` | Las rutas de protocolo pueden apuntar a esta cadena |
+| `chains[].mcp` | Las tools MCP corren aquí (solo Base) |
+| `chains[].default` | Esta fila es `DEFAULT_REST_CHAIN_ID` |
+
+El registro actualmente envía **Base mainnet** como la única cadena habilitada para REST. Se pueden activar más cadenas EVM sin cambiar la forma de la petición — sigue usando `?chainId=` y lee `chains[]` en runtime.
+
+## MCP, SIWE y Builder
+
+Estos permanecen en Base aunque REST `?chainId=` seleccione otra cadena de protocolo:
+
+- **MCP** — no hay argumento `chainId`; tools y pagos x402 USDC son solo Base
+- **SIWE** — challenge/verify usan chain ID de Base `8453`
+- **Entitlement Builder** — `BUILDER_SUB_ID` / `BUILDER_SUB_IDS` se comprueba siempre en Base
+
+Cambiar `DEFAULT_REST_CHAIN_ID` no mueve MCP, SIWE ni Builder.
+
+## Escrituras
+
+Las respuestas de prepare incluyen `chainId` en el payload, `unsignedTransactions`, `gasEstimates` y `gasSummary`. Conecta la wallet a esa cadena antes de firmar y haz broadcast ahí. La simulación y la estimación de gas corren en la cadena REST seleccionada.
+
+Ver [Endpoints de escritura](/docs/developers/REST%20API/write-endpoints) y [Errores](/docs/developers/REST%20API/errors).

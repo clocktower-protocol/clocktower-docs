@@ -6,12 +6,14 @@ sidebar_position: 1
 
 # Visión general para desarrolladores
 
-Clocktower es un protocolo de suscripciones en **Base**. Si construyes una app, backend o agente de IA que necesita pagos recurrentes, cuentas de suscriptores o datos del protocolo, no tienes que montarlo todo solo con llamadas crudas al contrato.
+Clocktower es un protocolo de suscripciones en cadenas EVM. REST usa **Base** por defecto (chainId 8453) y acepta `?chainId=` opcional en rutas de protocolo. **MCP, x402, SIWE y el entitlement Builder permanecen en Base.**
+
+Si construyes una app, backend o agente de IA que necesita pagos recurrentes, cuentas de suscriptores o datos del protocolo, no tienes que montarlo todo solo con llamadas crudas al contrato.
 
 Ofrecemos dos superficies HTTP más un SDK TypeScript:
 
-- **API REST** (`api.clocktower.finance`) — consulta suscripciones, cuentas e historial; prepara transacciones que el usuario firma en su wallet.
-- **Servidor MCP** (`mcp.clocktower.finance`) — las mismas capacidades como tools para agentes y clientes MCP, con precios x402 por llamada.
+- **API REST** (`api.clocktower.finance`) — consulta suscripciones, cuentas e historial en una cadena de protocolo seleccionada; prepara transacciones que el usuario firma en su wallet.
+- **Servidor MCP** (`mcp.clocktower.finance`) — las mismas capacidades como tools para agentes y clientes MCP, con precios x402 por llamada en Base.
 - **SDK TypeScript** — lectura y escritura on-chain directa cuando ya tienes wallet y RPC.
 
 Los tres responden a las mismas preguntas: *¿Quién está suscrito a qué? ¿Qué vence después? ¿Qué transacción debe firmar el usuario?*
@@ -52,7 +54,7 @@ Para structs y firmas de funciones del contrato, ver la [referencia técnica del
 - **Builder** — entitlement on-chain opcional + SIWE para rutas ligadas a wallet. Ver [auth Builder](/docs/developers/Workflows/builder-auth).
 - **MCP** — pago por tool; no envíes keys `ctk_` a MCP.
 
-Consulta `GET /catalog` en `api.clocktower.finance` para el manifiesto en vivo (`writeRpm`, `writeDaily`, `dailyTotalRequests`, `developerKeysEnabled`, `builderAuthEnabled`).
+Consulta `GET /catalog` en `api.clocktower.finance` para el manifiesto en vivo (`writeRpm`, `writeDaily`, `dailyTotalRequests`, `developerKeysEnabled`, `builderAuthEnabled`) y el registro `chains[]`. Selección de cadena REST: [Selección de cadena](/docs/developers/REST%20API/chain-selection).
 
 ## Modelo de escritura (solo prepare)
 

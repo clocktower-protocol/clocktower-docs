@@ -17,7 +17,7 @@ Un **suscriptor** comienza a pagar en una suscripción **existente** creada por 
 | **Suscriptor** | La dirección de wallet pasada como `from` — debe tener suficiente ERC-20 y aprobar el contrato Clocktower |
 | **Tu app** | Llama a la API/MCP o SDK, luego pide a la wallet que firme |
 | **API Clocktower** | Valida la preparación y devuelve transacciones sin firmar (nunca transmite por ti) |
-| **Wallet** | Firma transacciones; tu app las transmite a Base |
+| **Wallet** | Firma transacciones; tu app las transmite a la cadena seleccionada (REST `?chainId=`; MCP siempre Base) |
 
 :::info Ruta SDK
 El SDK omite el paso de preparación y habla con la cadena directamente vía viem cuando llamas `subscribeWithApproval()`.
@@ -28,7 +28,7 @@ El SDK omite el paso de preparación y habla con la cadena directamente vía vie
 1. **Verificar preparación** (opcional) — confirma allowance, saldo y reglas del protocolo antes de preparar una transacción.
 2. **Preparar suscripción** — solicita calldata `subscribe` sin firmar (y una tx `approve` si el allowance es bajo).
 3. **Firmar** — la wallet del suscriptor firma `unsignedTransactions`. Si se necesitan dos txs, el modo de firma es `eip5792` (lote approve + subscribe).
-4. **Transmitir** — tu app envía la(s) transacción(es) firmada(s) a Base mainnet.
+4. **Transmitir** — tu app envía la(s) transacción(es) firmada(s) a la cadena en `unsignedTransactions[].chainId` (MCP: Base mainnet).
 5. **Confirmar** (opcional) — consulta el estado de la transacción o espera un recibo on-chain.
 
 El servidor nunca guarda tus claves ni retransmite transacciones firmadas.
@@ -40,7 +40,7 @@ sequenceDiagram
   participant App as Tu app
   participant API as API Clocktower
   participant Wallet as Wallet del suscriptor
-  participant Chain as Base
+  participant Chain as Cadena
 
   App->>API: 1. check_subscribe_readiness_by_id (opcional)
   API-->>App: allowance, balance, needsApproval
@@ -62,6 +62,8 @@ sequenceDiagram
 | 5. Confirmar | `POST /transactions/status` | `get_transaction_status` | `waitForReceipt: true` |
 
 Las rutas by-id solo necesitan `from` + `id` de suscripción (amount/token/provider se cargan on-chain). La forma por objeto sigue disponible si ya tienes el objeto completo.
+
+En REST, pasa el mismo `?chainId=` en readiness, prepare y `POST /transactions/status`. Subscribe en MCP es solo Base. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
 
 ## Consejos
 

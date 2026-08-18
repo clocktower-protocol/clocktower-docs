@@ -10,6 +10,8 @@ URL base: `https://api.clocktower.finance`. Las rutas siguientes son relativas a
 
 La API REST **no** usa x402. MCP usa x402 únicamente.
 
+La selección de cadena (`?chainId=`) es independiente de la autenticación. SIWE y el entitlement Builder se evalúan siempre en **Base** (8453), aunque una llamada de protocolo apunte a otra cadena. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
+
 | Método | Cuándo |
 |--------|--------|
 | Ninguno | Nivel **gratis** — llama endpoints con límites por IP |
@@ -52,7 +54,7 @@ Ver [Límites de tasa](/docs/developers/REST%20API/rate-limits).
 
 ## Nivel Builder (sesión SIWE, opcional)
 
-El acceso Builder requiere una suscripción on-chain **ACTIVE** a un entitlement de Builder configurado (`BUILDER_SUB_ID` / `BUILDER_SUB_IDS`). Si no hay IDs configurados, Builder está **desactivado** (`builderAuthEnabled: false` en `GET /catalog`).
+El acceso Builder requiere una suscripción on-chain **ACTIVE** en **Base** a un entitlement de Builder configurado (`BUILDER_SUB_ID` / `BUILDER_SUB_IDS`). El entitlement se comprueba siempre en Base, aunque la llamada REST use otro `?chainId=`. Si no hay IDs configurados, Builder está **desactivado** (`builderAuthEnabled: false` en `GET /catalog`). Challenge/verify SIWE usan chain ID `8453`.
 
 ### Flujo
 

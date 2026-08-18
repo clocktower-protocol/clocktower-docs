@@ -26,8 +26,8 @@ For free developer keys and rate limits, see [Authentication](/docs/developers/R
 
 ## Prerequisites
 
-1. Server has at least one Builder entitlement ID configured and **ACTIVE** on-chain subscription for your wallet.
-2. A wallet to sign the SIWE message.
+1. Server has at least one Builder entitlement ID configured and **ACTIVE** on-chain subscription for your wallet **on Base**. Entitlement is always checked on Base, even when REST `?chainId=` targets another protocol chain.
+2. A wallet to sign the SIWE message (SIWE chain ID is `8453`).
 
 ## Steps
 

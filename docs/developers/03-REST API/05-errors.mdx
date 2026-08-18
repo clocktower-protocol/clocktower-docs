@@ -1,7 +1,7 @@
 ---
 id: errors
 title: Errors
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Error Format
@@ -20,11 +20,13 @@ All errors return a consistent JSON shape:
 
 | Code | Description |
 |------|-------------|
-| `VALIDATION_ERROR` | Invalid request body or parameters |
+| `VALIDATION_ERROR` | Invalid request body or parameters, including unknown or malformed `chainId` |
 | `NOT_FOUND` | Resource does not exist |
 | `UPSTREAM_ERROR` | RPC or subgraph failure |
 | `RATE_LIMITED` | Tier rate limit exceeded |
 | `PREPARE_FAILURE` | MCP/REST prepare layer failure (may include `requestId`) |
+
+Unsupported REST `?chainId=` (for example `1` or `not-a-chain`) returns **400** with `code: "VALIDATION_ERROR"` and a message such as `Unsupported chainId 1`. See [Chain selection](/docs/developers/REST%20API/chain-selection).
 
 ## Validation errors
 

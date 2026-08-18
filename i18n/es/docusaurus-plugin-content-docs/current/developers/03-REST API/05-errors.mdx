@@ -1,7 +1,7 @@
 ---
 id: errors
 title: Errores
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Formato de Errores
@@ -20,11 +20,13 @@ Todos los errores devuelven una estructura JSON consistente:
 
 | Código | Descripción |
 |------|-------------|
-| `VALIDATION_ERROR` | Cuerpo de solicitud o parámetros inválidos |
+| `VALIDATION_ERROR` | Cuerpo de solicitud o parámetros inválidos, incluido un `chainId` desconocido o malformado |
 | `NOT_FOUND` | El recurso no existe |
 | `UPSTREAM_ERROR` | Fallo de RPC o subgrafo |
 | `RATE_LIMITED` | Límite de tasa del nivel excedido |
 | `PREPARE_FAILURE` | Fallo de la capa de preparación MCP/REST (puede incluir `requestId`) |
+
+Un `?chainId=` REST no soportado (por ejemplo `1` o `not-a-chain`) devuelve **400** con `code: "VALIDATION_ERROR"` y un mensaje como `Unsupported chainId 1`. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
 
 ## Errores de validación
 

@@ -1,7 +1,7 @@
 ---
 id: write-endpoints
 title: Endpoints de escritura
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # Endpoints de escritura
@@ -9,6 +9,8 @@ sidebar_position: 4
 Todas las rutas son relativas a `https://api.clocktower.finance`.
 
 Todos los endpoints de escritura usan `POST`. El servidor devuelve transacciones sin firmar — firmas y broadcast desde tu wallet. El servidor **nunca retransmite** transacciones firmadas.
+
+Prepare, readiness y `POST /transactions/status` aceptan `?chainId=` opcional (query string, no cuerpo JSON). La simulación y la estimación de gas corren en la cadena seleccionada. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
 
 ## Formato de respuesta prepare
 
@@ -23,7 +25,8 @@ Las respuestas de prepare completo incluyen:
 | `signingMode` | `raw` (una tx) o `eip5792` (lote multi-tx) |
 | `eip5792` | Descriptor de lote cuando `signingMode` es `eip5792` |
 | `simulation` | Simulación on-chain (debe tener éxito antes de liquidar pago MCP) |
-| `gasEstimates` | Presupuesto de gas por tx en Base |
+| `chainId` | Cadena REST seleccionada (default 8453) |
+| `gasEstimates` | Presupuesto de gas por tx en la cadena seleccionada |
 | `gasSummary` | Totales agregados; backlogs de remit incluyen `backlogMultiplier` |
 | `preflight` | Contexto específico de la operación |
 

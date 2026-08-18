@@ -48,6 +48,8 @@ npm start mcp call get_protocol_state
 
 ## Protocolo
 
-- **Cadena:** Base mainnet (chainId 8453)
+- **Cadena:** Base mainnet (chainId 8453). MCP **no** admite `chainId`; las tools siempre corren en Base.
 - **Pagos:** micropagos x402 en USDC por llamada a herramienta
 - **Escrituras:** solo preparación — el servidor nunca retransmite transacciones firmadas
+
+REST puede seleccionar una cadena de protocolo con `?chainId=`. Eso no aplica a MCP. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
