@@ -43,12 +43,24 @@ function App() {
 
 ## Hooks de mutación
 
-| Hook | Descripción |
-|------|-------------|
-| `useCreateSubscription` | Crear una nueva suscripción |
-| `useSubscribe` | Suscribirse a una suscripción existente |
-| `useSubscribeWithApproval` | Suscribirse con approve opcional |
-| `useUnsubscribe` | Cancelar suscripción |
-| `useCancelSubscription` | Cancelación por proveedor |
+Las mutaciones toman ids, no objetos de suscripción.
+
+| Hook | Argumento de `mutate` |
+|------|-------------------|
+| `useCreateSubscription` | `CreateSubscriptionParams` |
+| `useSubscribe` | `id` (`0x…`) |
+| `useSubscribeWithApproval` | `{ id, account }` |
+| `useSubscribeWithApprovalAuto` | `{ id, account, writeOptions? }` |
+| `useUnsubscribe` | `id` |
+| `useCancelSubscription` | `id` |
+| `useEditDetails` | `{ id, details }` |
+| `useEditProviderDetails` | `ProviderDetails` |
+
+```tsx
+import { useSubscribeWithApproval } from '@clocktower-protocol/sdk/react'
+
+const subscribe = useSubscribeWithApproval()
+subscribe.mutate({ id: subscriptionId, account })
+```
 
 Las claves de consulta están limitadas por `chainId`. Las mutaciones invalidan consultas relacionadas al tener éxito.

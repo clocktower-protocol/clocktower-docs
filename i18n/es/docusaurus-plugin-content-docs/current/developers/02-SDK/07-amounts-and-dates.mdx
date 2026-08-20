@@ -18,18 +18,18 @@ No necesitas manejar el almacenamiento de 18 decimales del protocolo para el uso
 
 - **Crear suscripciones:** pasa `amount: '10'` (unidades de token legibles para humanos)
 - **Leer suscripciones:** todos los métodos de lectura devuelven montos formateados
-- **Suscribirse / cancelar suscripción / cancelar:** pasa objetos de suscripción de `getSubscription`
+- **Suscribirse / cancelar suscripción / cancelar:** usa `subscribeById(id)` / `subscribeWithApprovalById(id, account)`. Los montos vienen de la cadena.
 
 Los ayudantes de bajo nivel (`parseHumanAmount`, `formatHumanAmount`) se exportan para uso avanzado.
 
 ## Fechas de progreso de remit
 
-El contrato rastrea el progreso de remit con un índice de día interno. El SDK lo convierte a marcas de tiempo gregorianas UTC en `getSubscriptionsDue()`:
+El contrato rastrea el progreso de remit con un índice de día interno. El SDK lo convierte a marcas de tiempo gregorianas UTC en `getProtocolState()` y en `getSubscriptionsDue()`:
 
 - `nextUncheckedDate` — día calendario que el contrato procesará a continuación
 - `currentDate` — día calendario del protocolo de hoy (UTC)
 - `isRemitCaughtUp` — `true` cuando remit está al día
 
-`getProtocolState()` devuelve solo la configuración de comisiones — no fechas de remit.
+`getSubscriptionsDue()` también devuelve `dueCount`. `getProtocolState()` añade la configuración de comisiones (`callerFeePercent`, `systemFeePercent`, `maxRemits`).
 
 Usa `dayNumberToGregorian` desde la exportación principal para formatear otros números de día del protocolo.

@@ -10,30 +10,36 @@ sidebar_position: 3
 
 | Método | Devuelve | Notas |
 |--------|---------|-------|
-| `getSubscription(id)` | `Subscription` | Lanza `SubscriptionNotFoundError` para id cero |
+| `getSubscription(id)` | `Subscription` | Incluye `chainId`. Lanza `SubscriptionNotFoundError` para id cero |
 | `getAccountSubscriptions(bySubscriber, address)` | `AccountSubscription[]` | `bySubscriber: true` lista suscripciones que la cuenta paga |
 | `getSubscribers(id)` | `Subscriber[]` | Saldos de comisiones formateados según decimales del token |
 | `getApprovedToken(token)` | `ApprovedToken` | Lanza `TokenNotApprovedError` si no está aprobado |
+| `listApprovedTokens()` | `ListApprovedTokensResult` | Tokens conocidos de la config de cadena + `minimum` / `paused` on-chain |
+| `checkSubscribeReadiness({ subscriptionId, account })` | `SubscribeReadinessResult` | No lanza; `ready` = sin bloqueos duros; `needsApproval` = allowance por debajo del amount |
 | `getFeeBalance(id, subscriber)` | `FeeBalance` | Saldo de comisión prepagado |
 | `getAccount(address)` | `Account` | Vista on-chain parseada |
 | `getEnrichedAccount(address)` | `EnrichedAccount` | Saldos de comisiones en lote + `created` |
-| `getProtocolState()` | `ProtocolState` | Porcentajes de comisión caller y system, `maxRemits` |
+| `getProtocolState()` | `ProtocolState` | Comisiones, `maxRemits`, fechas de remit |
 | `getSubscriptionsDue(day?)` | Resumen de cola de vencimientos | `dueCount`, `nextUncheckedDate`, `currentDate`, `isRemitCaughtUp`; anulación opcional de día |
-| `watchSubscription(id, onUpdate, options?)` | `() => void` | Consulta; llama la función devuelta para detener |
-| `waitForSubscription(id, options?)` | `Subscription` | Consulta hasta que exista (post-creación) |
+| `watchSubscription(id, onUpdate, options?)` | `() => void` | Método del cliente; llama la función devuelta para detener |
+| `waitForSubscription(id, options?)` | `Subscription` | Método del cliente; consulta hasta que exista (post-creación) |
+
+Las escrituras de subscribe toman un **id** de suscripción, no un objeto guardado en el cliente. Amount, token y provider se cargan on-chain.
 
 ## Métodos de escritura (requieren `walletClient`)
 
 | Método | Devuelve | Notas |
 |--------|---------|-------|
 | `createSubscription(params, options?)` | `WriteResult` | Valida `dueDay`, metadatos, mínimo del token |
-| `subscribe(subscription, options?)` | `WriteResult` | Preflight: cancelada, pausada, allowance, saldo |
-| `subscribeWithApproval(subscription, account, options?)` | `{ approveHash?, hash }` | Aprueba si el allowance es bajo |
-| `unsubscribe(id, options?)` | `WriteResult` | Obtiene la suscripción y luego cancela la suscripción |
+| `subscribeById(id, options?)` | `WriteResult` | Carga la sub on-chain; requiere allowance ≥ amount |
+| `subscribeWithApprovalById(id, account, options?)` | `{ approveHash?, hash }` | Aprueba si hace falta y luego suscribe. `account` debe coincidir con la wallet |
+| `subscribeWithApprovalAutoById(id, account, options?)` | `SubscribeWithApprovalResult` | Lote EIP-5792 si está soportado; si no, secuencial |
+| `unsubscribe(id, options?)` | `WriteResult` | El suscriptor se da de baja |
+| `unsubscribeByProviderById(id, subscriber, options?)` | `WriteResult` | El proveedor elimina a un suscriptor |
 | `cancelSubscription(id, options?)` | `WriteResult` | Cancelación por proveedor |
 | `editDetails(id, details, options?)` | `WriteResult` | Actualiza URL/descripción |
 | `editProviderDetails(details, options?)` | `WriteResult` | Campos del perfil de proveedor |
-| `remit(options?)` | `WriteResult` | Pago de caller sin permisos |
+| `remit(options?)` | `WriteResult` | Un pago permissionless; los bots hacen bucle con `@clocktower-protocol/sdk/caller` |
 
 Todas las escrituras lanzan `WalletRequiredError` cuando no hay `walletClient` con `account` configurado.
 

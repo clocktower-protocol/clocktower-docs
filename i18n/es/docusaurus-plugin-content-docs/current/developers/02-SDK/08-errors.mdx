@@ -24,6 +24,9 @@ Todos los errores del SDK extienden `ClocktowerError`. Captura por `instanceof` 
 | `WalletRequiredError` | Escritura sin `walletClient.account` |
 | `InsufficientBalanceError` | Saldo del suscriptor demasiado bajo |
 | `InsufficientAllowanceError` | Allowance del token demasiado bajo |
+| `WalletAccountMismatchError` | El argumento `account` no coincide con la wallet conectada |
+| `WalletChainMismatchError` | El chain id de la wallet ≠ el del cliente |
+| `MulticallItemError` | Lectura en lote falló tras reintentar (p. ej. saldo de comisión) |
 | `ClocktowerContractError` | Simulación o transmisión de escritura revertida |
 | `ClocktowerSubgraphError` | Fallo HTTP/GraphQL del subgrafo |
 
@@ -37,7 +40,7 @@ import {
 } from '@clocktower-protocol/sdk'
 
 try {
-  await client.subscribe(subscription)
+  await client.subscribeById(id)
 } catch (err) {
   if (err instanceof WalletRequiredError) {
     // conectar wallet
@@ -50,4 +53,4 @@ try {
 }
 ```
 
-Exporta ayudantes para preflight de UI: `validateAddress`, `validateSubscriptionId`, `validateDueDay`, `validateDetails`, `assertSubscriptionWritable`.
+Exporta ayudantes para preflight de UI: `validateAddress`, `validateSubscriptionId`, `validateDueDay`. Usa `client.checkSubscribeReadiness` para el preflight de subscribe.

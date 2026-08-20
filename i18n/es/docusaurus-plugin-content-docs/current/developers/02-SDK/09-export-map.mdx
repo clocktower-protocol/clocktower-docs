@@ -8,7 +8,7 @@ sidebar_position: 9
 
 | Importación | Descripción |
 |--------|-------------|
-| `@clocktower-protocol/sdk` | Cliente principal, utilidades, errores, re-exportaciones de caller |
+| `@clocktower-protocol/sdk` | `ClocktowerClient`, ayudantes (montos, calendario, proxy transport), errores |
 | `@clocktower-protocol/sdk/types` | Exportaciones solo de tipos |
 | `@clocktower-protocol/sdk/react` | Hooks de wagmi + React Query |
 | `@clocktower-protocol/sdk/subgraph` | Historial y descubrimiento GraphQL |
@@ -27,8 +27,8 @@ Importa desde `@clocktower-protocol/sdk` o `@clocktower-protocol/sdk/types`.
 
 | Tipo | Campos clave |
 |------|------------|
-| `Subscription` | `id`, `amount`, `amountRaw`, `tokenDecimals`, `provider`, `token`, `cancelled`, `frequency`, `dueDay` |
+| `Subscription` | `id`, `chainId`, `amount`, `amountRaw`, `tokenDecimals`, `provider`, `token`, `cancelled`, `frequency`, `dueDay` |
 | `EnrichedAccount` | `chainId`, `accountAddress`, `subscribedTo`, `created` |
-| `ProtocolState` | `callerFeePercent`, `systemFeePercent`, `maxRemits` |
+| `ProtocolState` | `callerFeePercent`, `systemFeePercent`, `maxRemits`, `nextUncheckedDate`, `currentDate`, `isRemitCaughtUp` |
 | `CreateSubscriptionParams` | `amount`, `token`, `details`, `frequency`, `dueDay` |
 | `WriteResult` | `hash` |

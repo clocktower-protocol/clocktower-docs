@@ -51,66 +51,56 @@ const { hash } = await client.createSubscription({
 
 ## Suscribirse
 
-Usa `subscribe` cuando el suscriptor **ya** aprobó al contrato Clocktower para gastar el token de pago. El SDK comprueba el allowance en el preflight y lanza un error si sigue siendo insuficiente.
+Pasa un **id** de suscripción. El cliente carga amount, token y provider desde la cadena. Usa `subscribeById` cuando el suscriptor **ya** aprobó al contrato Clocktower para gastar el token de pago.
 
 ```typescript
-const subscription = await client.getSubscription(subscriptionId)
+const readiness = await client.checkSubscribeReadiness({
+  subscriptionId,
+  account: subscriberAddress,
+})
+if (!readiness.ready) {
+  console.log(readiness.errors)
+  return
+}
 
-const { hash } = await client.subscribe(subscription, {
+const { hash } = await client.subscribeById(subscriptionId, {
   waitForReceipt: true,
 })
 ```
 
+`checkSubscribeReadiness` no lanza. `ready` significa que no hay bloqueos duros; `needsApproval` es true cuando el allowance está por debajo del monto on-chain.
+
 ## Suscribirse con aprobación
 
-Usa `subscribeWithApproval` cuando quieras **una sola llamada** que cubra ambos casos: si el allowance ya es suficiente, solo suscribe; si no, envía `approve` primero y luego suscribe.
+Usa `subscribeWithApprovalById` para **una sola llamada** que cubre ambos casos: si el allowance ya es suficiente, solo suscribe; si no, envía `approve` primero y luego suscribe. `account` debe coincidir con la wallet conectada.
 
 ```typescript
-const subscription = await client.getSubscription(subscriptionId)
-
-const { approveHash, hash } = await client.subscribeWithApproval(
-  subscription, // Suscripción a la que unirse — de getSubscription
-  subscriberAddress, // Wallet que paga; debe tener el token y firmar las transacciones
-  { waitForReceipt: true }, // Esperar el recibo de cada tx antes de devolver
+const { approveHash, hash } = await client.subscribeWithApprovalById(
+  subscriptionId,
+  subscriberAddress, // Wallet que paga; debe tener el token y firmar
+  {
+    waitForReceipt: true,
+    // infiniteApproval: true, // por defecto el approve es acotado al amount
+  },
 )
 
 // approveHash es undefined cuando el allowance ya estaba configurado; hash es siempre la tx subscribe
 ```
 
-## Aprobar, luego suscribirse
+## Lote approve + subscribe (EIP-5792)
 
-Usa dos pasos explícitos cuando quieras que el suscriptor confirme el `approve` ERC-20 antes de llamar tú mismo a `subscribe`.
+Usa `subscribeWithApprovalAutoById` cuando la wallet pueda soportar `wallet_sendCalls` atómico. Si no, hace fallback a approve + subscribe secuencial.
 
 ```typescript
-import { maxUint256 } from 'viem'
-
-const usdcAbi = [
-  {
-    type: 'function',
-    name: 'approve',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: 'spender', type: 'address' },
-      { name: 'amount', type: 'uint256' },
-    ],
-    outputs: [{ name: '', type: 'bool' }],
-  },
-] as const
-
-const subscription = await client.getSubscription(subscriptionId)
-
-// Approve ERC-20 estándar — USDC usa la misma interfaz que cualquier token ERC-20
-await walletClient.writeContract({
-  address: subscription.token,
-  abi: usdcAbi,
-  functionName: 'approve',
-  args: [client.contractAddress, maxUint256],
-})
-
-// Subscribe de Clocktower — inscribe la wallet y cobra el primer pago prorrateado
-const { hash } = await client.subscribe(subscription, {
-  waitForReceipt: true,
-})
+const batchResult = await client.subscribeWithApprovalAutoById(
+  subscriptionId,
+  subscriberAddress,
+)
+if (batchResult.mode === 'eip5792') {
+  console.log('Batch id:', batchResult.batchId)
+} else {
+  console.log(batchResult.hash)
+}
 ```
 
 ## Darse de baja
@@ -135,6 +125,7 @@ console.log(sub.provider)       // wallet que creó la oferta
 console.log(sub.amount)         // "10" — cargo recurrente legible
 console.log(sub.amountRaw)      // 10000000n — unidades nativas del token
 console.log(sub.tokenDecimals)  // 6 — decimales ERC-20 de este token
+console.log(sub.chainId)        // 84532 — cadena desde la que se leyó este objeto
 console.log(sub.token)          // contrato ERC-20 usado para el pago
 console.log(sub.frequencyLabel) // "MONTHLY", "WEEKLY", etc.
 console.log(sub.dueDay)         // día de cobro dentro del intervalo de frecuencia

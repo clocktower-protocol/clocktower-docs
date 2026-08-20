@@ -20,7 +20,7 @@ Un **suscriptor** comienza a pagar en una suscripción **existente** creada por 
 | **Wallet** | Firma transacciones; tu app las transmite a la cadena seleccionada (REST `?chainId=`; MCP siempre Base) |
 
 :::info Ruta SDK
-El SDK omite el paso de preparación y habla con la cadena directamente vía viem cuando llamas `subscribeWithApproval()`.
+El SDK omite el paso de preparación y habla con la cadena directamente vía viem cuando llamas `subscribeWithApprovalById()`.
 :::
 
 ## Pasos
@@ -56,12 +56,12 @@ sequenceDiagram
 
 | Paso | REST | Herramienta MCP | SDK |
 |------|------|----------|-----|
-| 1. Preparación | `POST /check_subscribe_readiness_by_id` (**preferido**) o forma objeto | `check_subscribe_readiness_by_id` | Integrado en preflight de `subscribe()` |
-| 2. Preparar | `POST /prepare/subscribe_by_id` (**preferido**) o forma objeto | `prepare_subscribe_by_id` | `subscribeWithApproval()` / `subscribeById` |
+| 1. Preparación | `POST /check_subscribe_readiness_by_id` (**preferido**) o forma objeto | `check_subscribe_readiness_by_id` | `checkSubscribeReadiness({ subscriptionId, account })` |
+| 2. Preparar | `POST /prepare/subscribe_by_id` (**preferido**) o forma objeto | `prepare_subscribe_by_id` | `subscribeWithApprovalById()` / `subscribeById()` |
 | 3–4. Firmar y transmitir | Tu wallet + RPC | Igual | `walletClient` vía viem |
 | 5. Confirmar | `POST /transactions/status` | `get_transaction_status` | `waitForReceipt: true` |
 
-Las rutas by-id solo necesitan `from` + `id` de suscripción (amount/token/provider se cargan on-chain). La forma por objeto sigue disponible si ya tienes el objeto completo.
+Las rutas REST by-id solo necesitan `from` + `id` de suscripción (amount/token/provider se cargan on-chain). La forma por objeto sigue en REST/MCP si ya tienes el objeto completo. La superficie de subscribe del SDK es **solo por id**.
 
 En REST, pasa el mismo `?chainId=` en readiness, prepare y `POST /transactions/status`. Subscribe en MCP es solo Base. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
 
