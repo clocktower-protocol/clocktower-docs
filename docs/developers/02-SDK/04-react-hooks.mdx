@@ -43,12 +43,24 @@ function App() {
 
 ## Mutation hooks
 
-| Hook | Description |
-|------|-------------|
-| `useCreateSubscription` | Create a new subscription |
-| `useSubscribe` | Subscribe to existing subscription |
-| `useSubscribeWithApproval` | Subscribe with optional approve |
-| `useUnsubscribe` | Unsubscribe |
-| `useCancelSubscription` | Provider cancel |
+Mutations take ids, not subscription objects.
+
+| Hook | `mutate` argument |
+|------|-------------------|
+| `useCreateSubscription` | `CreateSubscriptionParams` |
+| `useSubscribe` | `id` (`0x…`) |
+| `useSubscribeWithApproval` | `{ id, account }` |
+| `useSubscribeWithApprovalAuto` | `{ id, account, writeOptions? }` |
+| `useUnsubscribe` | `id` |
+| `useCancelSubscription` | `id` |
+| `useEditDetails` | `{ id, details }` |
+| `useEditProviderDetails` | `ProviderDetails` |
+
+```tsx
+import { useSubscribeWithApproval } from '@clocktower-protocol/sdk/react'
+
+const subscribe = useSubscribeWithApproval()
+subscribe.mutate({ id: subscriptionId, account })
+```
 
 Query keys are scoped by `chainId`. Mutations invalidate related queries on success.

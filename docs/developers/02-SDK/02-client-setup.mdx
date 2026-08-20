@@ -41,7 +41,9 @@ const client = createClocktowerClientFromViem({ publicClient, walletClient })
 | Base | 8453 | `0xFaF5fc2f77b21BC188f492b827D366B03a07c61f` |
 | Base Sepolia | 84532 | `0x6A0791Cd884f2199dC8F372f6715f675D2950922` |
 
-`createClocktowerClient` throws `UnsupportedChainError` for other chain IDs.
+`createClocktowerClient` throws `UnsupportedChainError` for other chain IDs. The wallet chain must match the client (`WalletChainMismatchError`). `account` passed to approve helpers must match the connected wallet (`WalletAccountMismatchError`).
+
+Reads stamp `chainId` on `Subscription` objects so they cannot be reused across chains.
 
 ## Write options
 

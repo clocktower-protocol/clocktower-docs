@@ -18,18 +18,18 @@ You do not need to handle protocol 18-decimal storage for normal SDK usage.
 
 - **Creating subscriptions:** pass `amount: '10'` (human-readable token units)
 - **Reading subscriptions:** all read methods return formatted amounts
-- **Subscribe / unsubscribe / cancel:** pass subscription objects from `getSubscription`
+- **Subscribe / unsubscribe / cancel:** use `subscribeById(id)` / `subscribeWithApprovalById(id, account)`. Amounts come from chain.
 
 Low-level helpers (`parseHumanAmount`, `formatHumanAmount`) are exported for advanced use.
 
 ## Remit progress dates
 
-The contract tracks remit progress with an internal day index. The SDK converts it to UTC Gregorian timestamps on `getSubscriptionsDue()`:
+The contract tracks remit progress with an internal day index. The SDK converts it to UTC Gregorian timestamps on both `getProtocolState()` and `getSubscriptionsDue()`:
 
 - `nextUncheckedDate` — calendar day the contract will process next
 - `currentDate` — today's protocol calendar day (UTC)
 - `isRemitCaughtUp` — `true` when remit is up to date
 
-`getProtocolState()` returns fee configuration only — not remit dates.
+`getSubscriptionsDue()` also returns `dueCount`. `getProtocolState()` adds fee configuration (`callerFeePercent`, `systemFeePercent`, `maxRemits`).
 
 Use `dayNumberToGregorian` from the main export to format other protocol day numbers.

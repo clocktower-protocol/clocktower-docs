@@ -29,6 +29,7 @@ console.log(result.status, result.transactions)
 | `checkRemitReadiness(client, { from? })` | `RemitReadinessResult` with `ready`, `errors`, `warnings`, queue size |
 | `runRemitUntilCaughtUp(client, options?)` | Loops `remit()` until caught up or `maxIterations` |
 | `scanDueSubscriptionIds`, `listDueSubscriptionIds` | Low-level Multicall3 scan helpers |
+| `buildDayFrequencyProbes`, `buildGetIdByTimeCalls`, `multicallGetIdByTime` | Probe/call builders for custom callers |
 
 ## Result types
 

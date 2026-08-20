@@ -20,7 +20,7 @@ A **subscriber** starts paying into an **existing** subscription created by a pr
 | **Wallet** | Signs transactions; your app broadcasts them to the selected chain (REST `?chainId=`; MCP always Base) |
 
 :::info SDK path
-The SDK skips the prepare step and talks to the chain directly via viem when you call `subscribeWithApproval()`.
+The SDK skips the prepare step and talks to the chain directly via viem when you call `subscribeWithApprovalById()`.
 :::
 
 ## Steps
@@ -56,12 +56,12 @@ sequenceDiagram
 
 | Step | REST | MCP tool | SDK |
 |------|------|----------|-----|
-| 1. Readiness | `POST /check_subscribe_readiness_by_id` (**preferred**) or object form | `check_subscribe_readiness_by_id` | Built into `subscribe()` preflight |
-| 2. Prepare | `POST /prepare/subscribe_by_id` (**preferred**) or object form | `prepare_subscribe_by_id` | `subscribeWithApproval()` / `subscribeById` |
+| 1. Readiness | `POST /check_subscribe_readiness_by_id` (**preferred**) or object form | `check_subscribe_readiness_by_id` | `checkSubscribeReadiness({ subscriptionId, account })` |
+| 2. Prepare | `POST /prepare/subscribe_by_id` (**preferred**) or object form | `prepare_subscribe_by_id` | `subscribeWithApprovalById()` / `subscribeById()` |
 | 3–4. Sign & broadcast | Your wallet + RPC | Same | `walletClient` via viem |
 | 5. Confirm | `POST /transactions/status` | `get_transaction_status` | `waitForReceipt: true` |
 
-By-id routes need only `from` + subscription `id` (amount/token/provider loaded on-chain). Object form remains for callers that already hold a full subscription object.
+REST by-id routes need only `from` + subscription `id` (amount/token/provider loaded on-chain). Object form remains on REST/MCP for callers that already hold a full subscription object. The SDK subscribe surface is **id-only**.
 
 On REST, pass the same `?chainId=` on readiness, prepare, and `POST /transactions/status`. MCP subscribe is Base-only. See [Chain selection](/docs/developers/REST%20API/chain-selection).
 

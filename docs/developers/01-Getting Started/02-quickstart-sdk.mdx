@@ -51,66 +51,56 @@ const { hash } = await client.createSubscription({
 
 ## Subscribe
 
-Use `subscribe` when the subscriber has **already** approved the Clocktower contract to spend the payment token. The SDK checks allowance in preflight and throws if it is still too low.
+Pass a subscription **id**. The client loads amount, token, and provider from chain. Use `subscribeById` when the subscriber has **already** approved the Clocktower contract to spend the payment token.
 
 ```typescript
-const subscription = await client.getSubscription(subscriptionId)
+const readiness = await client.checkSubscribeReadiness({
+  subscriptionId,
+  account: subscriberAddress,
+})
+if (!readiness.ready) {
+  console.log(readiness.errors)
+  return
+}
 
-const { hash } = await client.subscribe(subscription, {
+const { hash } = await client.subscribeById(subscriptionId, {
   waitForReceipt: true,
 })
 ```
 
+`checkSubscribeReadiness` is non-throwing. `ready` means there are no hard blockers; `needsApproval` is true when allowance is below the on-chain amount.
+
 ## Subscribe with approval
 
-Use `subscribeWithApproval` when you want **one call** that handles both cases: if allowance is already sufficient, it subscribes only; if not, it sends `approve` first, then subscribes.
+Use `subscribeWithApprovalById` for **one call** that handles both cases: if allowance is already sufficient, it subscribes only; if not, it sends `approve` first, then subscribes. `account` must match the connected wallet.
 
 ```typescript
-const subscription = await client.getSubscription(subscriptionId)
-
-const { approveHash, hash } = await client.subscribeWithApproval(
-  subscription, // Subscription to join — from getSubscription
-  subscriberAddress, // Paying wallet; must hold the token and sign the transactions
-  { waitForReceipt: true }, // Wait for each tx receipt before returning
+const { approveHash, hash } = await client.subscribeWithApprovalById(
+  subscriptionId,
+  subscriberAddress, // Paying wallet; must hold the token and sign
+  {
+    waitForReceipt: true,
+    // infiniteApproval: true, // default is amount-scoped approve
+  },
 )
 
 // approveHash is undefined when allowance was already set; hash is always the subscribe tx
 ```
 
-## Approve, then subscribe
+## Batch approve + subscribe (EIP-5792)
 
-Use two explicit steps when you want the subscriber to confirm the ERC-20 `approve` before you call `subscribe` yourself.
+Use `subscribeWithApprovalAutoById` when the wallet may support atomic `wallet_sendCalls`. It falls back to sequential approve + subscribe.
 
 ```typescript
-import { maxUint256 } from 'viem'
-
-const usdcAbi = [
-  {
-    type: 'function',
-    name: 'approve',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: 'spender', type: 'address' },
-      { name: 'amount', type: 'uint256' },
-    ],
-    outputs: [{ name: '', type: 'bool' }],
-  },
-] as const
-
-const subscription = await client.getSubscription(subscriptionId)
-
-// Standard ERC-20 approve — USDC uses the same interface as any ERC-20 token
-await walletClient.writeContract({
-  address: subscription.token,
-  abi: usdcAbi,
-  functionName: 'approve',
-  args: [client.contractAddress, maxUint256],
-})
-
-// Clocktower subscribe — enrolls the wallet and charges the prorated first payment
-const { hash } = await client.subscribe(subscription, {
-  waitForReceipt: true,
-})
+const batchResult = await client.subscribeWithApprovalAutoById(
+  subscriptionId,
+  subscriberAddress,
+)
+if (batchResult.mode === 'eip5792') {
+  console.log('Batch id:', batchResult.batchId)
+} else {
+  console.log(batchResult.hash)
+}
 ```
 
 ## Unsubscribe
@@ -135,6 +125,7 @@ console.log(sub.provider)       // wallet that created the offering
 console.log(sub.amount)         // "10" — human-readable recurring charge
 console.log(sub.amountRaw)      // 10000000n — token-native units
 console.log(sub.tokenDecimals)  // 6 — ERC-20 decimals for this token
+console.log(sub.chainId)        // 84532 — chain this object was read from
 console.log(sub.token)          // ERC-20 contract used for payment
 console.log(sub.frequencyLabel) // "MONTHLY", "WEEKLY", etc.
 console.log(sub.dueDay)         // billing day within the frequency window
