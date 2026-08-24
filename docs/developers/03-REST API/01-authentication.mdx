@@ -41,7 +41,7 @@ Chain selection (`?chainId=`) is independent of auth.<IfFeature name="builder"> 
 </tbody>
 </table>
 
-Successful REST responses include `X-Clocktower-Lane: free | developer<IfFeature name="builder"> | builder</IfFeature>`.
+Successful REST responses include an `X-Clocktower-Lane` header of `free` or `developer`<IfFeature name="builder">, or `builder`</IfFeature>.
 
 ## Free tier
 
