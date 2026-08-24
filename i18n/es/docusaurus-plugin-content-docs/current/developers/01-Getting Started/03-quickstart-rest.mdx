@@ -69,7 +69,10 @@ curl -s -X POST "https://api.clocktower.finance/transactions/status?chainId=8453
   -d '{ "hash": "0x..." }' | jq .
 ```
 
-Prepare/readiness tiene **límites de tasa** (free: 2/min · 20/día; developer: 5/min · 100/día). Para volumen de escrituras en producción, usa el [SDK](/docs/developers/SDK/installation) con tu propio RPC.
+Prepare/readiness tiene **límites de tasa** (free: 2/min · 20/día; developer: 5/min · 100/día).
+<IfFeature name="sdk">
+Para volumen de escrituras en producción, usa el [SDK](/docs/developers/SDK/installation) con tu propio RPC.
+</IfFeature>
 
 ## API key de developer (opcional)
 

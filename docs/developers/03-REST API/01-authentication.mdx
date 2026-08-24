@@ -48,7 +48,9 @@ Invalid or revoked keys return **401** (they do **not** fall back to free tier).
 
 - Free and developer keys are for **exploration and reads**.
 - Prepare/readiness is intentionally limited (on-chain simulation/gas estimate even though the server never relays txs).
+<IfFeature name="sdk">
 - For **production write volume**, use the [SDK](/docs/developers/SDK/installation) with **your own RPC**.
+</IfFeature>
 
 See [Rate limits](/docs/developers/REST%20API/rate-limits).
 

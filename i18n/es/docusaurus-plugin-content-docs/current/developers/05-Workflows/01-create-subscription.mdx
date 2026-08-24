@@ -68,6 +68,8 @@ sequenceDiagram
 }
 ```
 
+<IfFeature name="sdk">
 El SDK acepta cadenas `amount` legibles para humanos y valores del enum `Frequency`. Consulta [Rangos de día de vencimiento](/docs/developers/SDK/reads-and-writes) para `dueDay` válido por frecuencia.
+</IfFeature>
 
 En REST, pasa `?chainId=` en prepare y en el `GET /subscriptions/:id` posterior para quedarte en la misma cadena. Create en MCP es solo Base.

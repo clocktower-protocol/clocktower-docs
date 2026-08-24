@@ -4,6 +4,9 @@
 //import { useLocation } from '@docusaurus/router';
 import {themes as prismThemes} from 'prism-react-renderer';
 
+const siteFlags = require('./src/siteFlags');
+const remarkIfFeature = require('./plugins/remark-if-feature');
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   future: {
@@ -29,6 +32,10 @@ const config = {
   customFields: {
     i18nDualDev: process.env.DOCUSAURUS_I18N_DUAL_DEV === 'true',
     i18nDevPorts: {en: 3000, es: 3001},
+    features: {
+      sdk: siteFlags.sdk,
+      i18n: siteFlags.i18n,
+    },
   },
 
   staticDirectories: ['static'],
@@ -55,7 +62,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'es'],
+    locales: siteFlags.i18n ? ['en', 'es'] : ['en'],
     localeConfigs: {
       en: {
         label: 'English',
@@ -88,6 +95,19 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
+          beforeDefaultRemarkPlugins: [remarkIfFeature],
+          exclude: [
+            '**/_*.{js,jsx,ts,tsx,md,mdx}',
+            '**/_*/**',
+            '**/*.test.{js,jsx,ts,tsx}',
+            '**/__tests__/**',
+            ...(siteFlags.sdk
+              ? []
+              : [
+                  '**/02-SDK/**',
+                  '**/01-Getting Started/02-quickstart-sdk.mdx',
+                ]),
+          ],
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
@@ -168,10 +188,14 @@ const config = {
             position: 'right',
             label: 'Documentation'
           },
-          {
-            type: 'localeDropdown',
-            position: 'right',
-          },
+          ...(siteFlags.i18n
+            ? [
+                {
+                  type: 'localeDropdown',
+                  position: 'right',
+                },
+              ]
+            : []),
           {
             to: 'https://app.clocktower.finance', // The path you want to link to
             label: 'App', // The text on the button

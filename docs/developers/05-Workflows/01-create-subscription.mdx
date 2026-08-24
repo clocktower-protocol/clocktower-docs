@@ -68,6 +68,8 @@ sequenceDiagram
 }
 ```
 
+<IfFeature name="sdk">
 The SDK accepts human-readable `amount` strings and `Frequency` enum values. See [Due day ranges](/docs/developers/SDK/reads-and-writes) for valid `dueDay` per frequency.
+</IfFeature>
 
 On REST, pass `?chainId=` on prepare and on the follow-up `GET /subscriptions/:id` so you stay on the same chain. MCP create is Base-only.

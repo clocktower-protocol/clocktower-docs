@@ -10,13 +10,15 @@ Clocktower is a subscription protocol on EVM chains. REST defaults to **Base** (
 
 If you are building an app, backend, or AI agent that needs to work with recurring payments, subscriber accounts, or protocol data, you do not have to stitch everything together from raw contract calls alone.
 
-We provide two HTTP surfaces plus a TypeScript SDK:
+We provide two HTTP surfaces<IfFeature name="sdk"> plus a TypeScript SDK</IfFeature>:
 
 - **REST API** (`api.clocktower.finance`) — query subscriptions, accounts, and history on a selected protocol chain; prepare transactions your users sign in their own wallet.
 - **MCP server** (`mcp.clocktower.finance`) — the same capabilities exposed as tools for AI agents and MCP clients, with per-call x402 pricing on Base.
+<IfFeature name="sdk">
 - **TypeScript SDK** — read and write on-chain directly when you already have a wallet and RPC.
+</IfFeature>
 
-All three answer the same kinds of questions: *Who is subscribed to what? What is due next? What transaction should the user sign?*
+These surfaces answer the same kinds of questions: *Who is subscribed to what? What is due next? What transaction should the user sign?*
 
 :::warning Pre-release
 Production endpoints at `api.clocktower.finance` and `mcp.clocktower.finance` may still be pre-release. Check `GET /catalog` and the quickstarts for current status.
@@ -28,15 +30,44 @@ Production endpoints at `api.clocktower.finance` and `mcp.clocktower.finance` ma
 
 **With MCP**, you can let an agent reason over live protocol state: discover subscriptions, inspect accounts, and request prepared writes through standard MCP tools. Each tool call is paid via x402 in USDC on Base — a good fit when the caller is an autonomous agent rather than your own server.
 
+<IfFeature name="sdk">
 **With the SDK**, you skip the API for writes and talk to Base or Base Sepolia through viem. Use it for bots, scripts, and dApps that already manage their own keys and RPC (recommended for production write volume). Subscribe and provider-unsubscribe take a subscription **id** — the client loads the rest from chain.
+</IfFeature>
 
 ## Choose your integration path
 
-| Surface | Best for | Auth | Writes |
-|---------|----------|------|--------|
-| [REST API](/docs/developers/REST%20API/authentication) | Backends, scripts, browser apps (with CORS) | Free (IP), developer API key (`ctk_…`), or optional Builder SIWE (`cts_…`) | Prepare-only — sign in wallet; tight prepare caps |
-| [MCP Server](/docs/developers/MCP/connection) | AI agents and MCP clients | x402 USDC micropayments on Base | Prepare-only — sign in wallet |
-| [TypeScript SDK](/docs/developers/SDK/installation) | dApps, Node scripts, bots | Your RPC + wallet (viem) | Direct on-chain via `walletClient` |
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Best for</th>
+<th>Auth</th>
+<th>Writes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/docs/developers/REST%20API/authentication">REST API</a></td>
+<td>Backends, scripts, browser apps (with CORS)</td>
+<td>Free (IP), developer API key (<code>ctk_…</code>), or optional Builder SIWE (<code>cts_…</code>)</td>
+<td>Prepare-only — sign in wallet; tight prepare caps</td>
+</tr>
+<tr>
+<td><a href="/docs/developers/MCP/connection">MCP Server</a></td>
+<td>AI agents and MCP clients</td>
+<td>x402 USDC micropayments on Base</td>
+<td>Prepare-only — sign in wallet</td>
+</tr>
+<IfFeature name="sdk">
+<tr>
+<td><a href="/docs/developers/SDK/installation">TypeScript SDK</a></td>
+<td>dApps, Node scripts, bots</td>
+<td>Your RPC + wallet (viem)</td>
+<td>Direct on-chain via <code>walletClient</code></td>
+</tr>
+</IfFeature>
+</tbody>
+</table>
 
 For raw on-chain contract structs and function signatures, see the [Contract Technical Reference](/docs/contracts/Subscribe/subscribe_tech_reference).
 
@@ -64,11 +95,16 @@ Neither REST nor MCP sends transactions for you. Every write follows:
 check readiness (optional) → prepare → sign in wallet → broadcast → poll status (optional)
 ```
 
-Prefer **by-id** prepare/readiness routes when you already have a subscription id (`prepare/subscribe_by_id`, etc.). For high-volume production writes, use the **SDK with your own RPC** instead of maxing REST prepare quotas.
+Prefer **by-id** prepare/readiness routes when you already have a subscription id (`prepare/subscribe_by_id`, etc.).
+<IfFeature name="sdk">
+For high-volume production writes, use the **SDK with your own RPC** instead of maxing REST prepare quotas.
+</IfFeature>
 
 ## Next steps
 
+<IfFeature name="sdk">
 - [SDK quickstart](/docs/developers/Getting%20Started/quickstart-sdk)
+</IfFeature>
 - [REST quickstart](/docs/developers/Getting%20Started/quickstart-rest)
 - [MCP quickstart](/docs/developers/Getting%20Started/quickstart-mcp)
 - [Integrator workflows](/docs/developers/Workflows/subscribe)

@@ -69,7 +69,10 @@ curl -s -X POST "https://api.clocktower.finance/transactions/status?chainId=8453
   -d '{ "hash": "0x..." }' | jq .
 ```
 
-Prepare/readiness is **rate-limited** (free: 2/min · 20/day; developer: 5/min · 100/day). For production write volume, use the [SDK](/docs/developers/SDK/installation) with your own RPC.
+Prepare/readiness is **rate-limited** (free: 2/min · 20/day; developer: 5/min · 100/day).
+<IfFeature name="sdk">
+For production write volume, use the [SDK](/docs/developers/SDK/installation) with your own RPC.
+</IfFeature>
 
 ## Developer API key (optional)
 

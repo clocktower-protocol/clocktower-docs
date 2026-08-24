@@ -48,7 +48,9 @@ Keys inválidas o revocadas devuelven **401** (no caen al nivel gratis).
 
 - Las keys free y developer son para **exploración y lecturas**.
 - Prepare/readiness está limitado a propósito (simulación on-chain y estimación de gas aunque el servidor nunca retransmita txs).
+<IfFeature name="sdk">
 - Para **volumen de escrituras en producción**, usa el [SDK](/docs/developers/SDK/installation) con **tu propio RPC**.
+</IfFeature>
 
 Ver [Límites de tasa](/docs/developers/REST%20API/rate-limits).
 

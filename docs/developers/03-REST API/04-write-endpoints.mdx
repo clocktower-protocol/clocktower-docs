@@ -77,7 +77,10 @@ Prepare and readiness share the **write** rate bucket (RPM + **write daily**). D
 | `POST /prepare/remit` | Prepare permissionless `remit()` |
 | `POST /transactions/status` | Poll confirmation status after broadcast |
 
-See [Rate limits](/docs/developers/REST%20API/rate-limits). For production write volume, use the [SDK](/docs/developers/SDK/installation) with your own RPC.
+See [Rate limits](/docs/developers/REST%20API/rate-limits).
+<IfFeature name="sdk">
+For production write volume, use the [SDK](/docs/developers/SDK/installation) with your own RPC.
+</IfFeature>
 
 ## Remit flow
 

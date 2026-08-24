@@ -77,7 +77,10 @@ Prepare y readiness comparten el bucket **write** (RPM + **write diario**). Por 
 | `POST /prepare/remit` | Prepare `remit()` permissionless |
 | `POST /transactions/status` | Poll de confirmación tras broadcast |
 
-Ver [Límites de tasa](/docs/developers/REST%20API/rate-limits). Para volumen de escrituras en producción, usa el [SDK](/docs/developers/SDK/installation) con tu propio RPC.
+Ver [Límites de tasa](/docs/developers/REST%20API/rate-limits).
+<IfFeature name="sdk">
+Para volumen de escrituras en producción, usa el [SDK](/docs/developers/SDK/installation) con tu propio RPC.
+</IfFeature>
 
 ## Flujo de remit
 

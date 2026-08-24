@@ -11,6 +11,8 @@
 
 // @ts-check
 
+const siteFlags = require('./src/siteFlags');
+
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   // By default, Docusaurus generates a sidebar from the docs folder structure
@@ -25,27 +27,31 @@ const sidebars = {
       label: 'Getting Started',
       collapsed: false,
       items: [
-        'developers/Getting Started/quickstart-sdk',
+        ...(siteFlags.sdk ? ['developers/Getting Started/quickstart-sdk'] : []),
         'developers/Getting Started/quickstart-rest',
         'developers/Getting Started/quickstart-mcp',
       ],
     },
-    {
-      type: 'category',
-      label: 'SDK',
-      collapsed: true,
-      items: [
-        'developers/SDK/installation',
-        'developers/SDK/client-setup',
-        'developers/SDK/reads-and-writes',
-        'developers/SDK/react-hooks',
-        'developers/SDK/subgraph',
-        'developers/SDK/caller',
-        'developers/SDK/amounts-and-dates',
-        'developers/SDK/sdk-errors',
-        'developers/SDK/export-map',
-      ],
-    },
+    ...(siteFlags.sdk
+      ? [
+          {
+            type: 'category',
+            label: 'SDK',
+            collapsed: true,
+            items: [
+              'developers/SDK/installation',
+              'developers/SDK/client-setup',
+              'developers/SDK/reads-and-writes',
+              'developers/SDK/react-hooks',
+              'developers/SDK/subgraph',
+              'developers/SDK/caller',
+              'developers/SDK/amounts-and-dates',
+              'developers/SDK/sdk-errors',
+              'developers/SDK/export-map',
+            ],
+          },
+        ]
+      : []),
     {
       type: 'category',
       label: 'REST API',
