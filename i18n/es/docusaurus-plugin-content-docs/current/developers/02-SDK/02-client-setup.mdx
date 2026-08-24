@@ -53,7 +53,8 @@ Pasa por llamada o establece valores predeterminados vía `ClocktowerClientConfi
 const { hash, gas, receipt } = await client.createSubscription(params, {
   waitForReceipt: true,
   skipSimulation: false,
+  skipReadiness: false, // solo remit() — ignorado por otras escrituras
 })
 ```
 
-`WriteResult` incluye `hash`, `gas` opcional y `receipt` opcional.
+`WriteResult` incluye `hash`, `gas` opcional y `receipt` opcional. `skipReadiness` aplica solo a `remit()`: por defecto el cliente escanea la cola de vencimientos antes de enviar y lanza `RemitNotReadyError` cuando no hay nada vencido. Pasa `{ skipReadiness: true }` cuando ya ejecutaste `checkRemitReadiness`.

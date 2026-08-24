@@ -29,6 +29,7 @@ All SDK errors extend `ClocktowerError`. Catch by `instanceof` or `error.name`.
 | `MulticallItemError` | Batched read failed after retry (e.g. fee balance) |
 | `ClocktowerContractError` | Write simulation or broadcast reverted |
 | `ClocktowerSubgraphError` | Subgraph HTTP/GraphQL failure |
+| `RemitNotReadyError` | `remit()` due-queue precheck found nothing to remit |
 
 ## Example
 

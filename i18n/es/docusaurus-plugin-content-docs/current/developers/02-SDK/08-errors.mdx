@@ -29,6 +29,7 @@ Todos los errores del SDK extienden `ClocktowerError`. Captura por `instanceof` 
 | `MulticallItemError` | Lectura en lote falló tras reintentar (p. ej. saldo de comisión) |
 | `ClocktowerContractError` | Simulación o transmisión de escritura revertida |
 | `ClocktowerSubgraphError` | Fallo HTTP/GraphQL del subgrafo |
+| `RemitNotReadyError` | El precheck de cola de vencimientos de `remit()` no encontró nada que remitir |
 
 ## Ejemplo
 

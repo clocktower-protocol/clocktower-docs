@@ -6,10 +6,12 @@ sidebar_position: 6
 
 # Caller (Remit)
 
-For bots and cron jobs that call `remit()` and earn caller fees:
+For bots and cron jobs that call `remit()` and earn caller fees.
+
+`client.remit()` **prechecks the due queue by default** (same `nextUncheckedDay` + Multicall3 `getIdByTime` scan as `checkRemitReadiness`). If nothing is due it throws `RemitNotReadyError` and does not send a transaction. Pass `{ skipReadiness: true }` for a raw `remit()` (simulation still runs unless you also pass `skipSimulation: true`).
 
 ```typescript
-import { createClocktowerClient } from '@clocktower-protocol/sdk'
+import { createClocktowerClient, RemitNotReadyError } from '@clocktower-protocol/sdk'
 import { checkRemitReadiness, runRemitUntilCaughtUp } from '@clocktower-protocol/sdk/caller'
 
 const readiness = await checkRemitReadiness(client, { from: callerAddress })
@@ -18,16 +20,29 @@ if (!readiness.ready) {
   return
 }
 
+// The loop scans once per round, then calls remit({ skipReadiness: true }).
 const result = await runRemitUntilCaughtUp(client, { from: callerAddress })
 console.log(result.status, result.transactions)
+
+try {
+  await client.remit() // default: scan, then simulate, then send
+} catch (err) {
+  if (err instanceof RemitNotReadyError) {
+    // nothing due
+  }
+}
+
+await client.remit({ skipReadiness: true }) // opt out: encode remit() only
 ```
+
+`checkRemitReadiness` takes any `{ publicClient, contractAddress }` (`ClocktowerClient` works). It reports how many `remit()` transactions may be needed given `maxRemits`. `runRemitUntilCaughtUp` scans once per round, then calls `remit({ skipReadiness: true })`.
 
 ## Exports
 
 | Export | Description |
 |--------|-------------|
-| `checkRemitReadiness(client, { from? })` | `RemitReadinessResult` with `ready`, `errors`, `warnings`, queue size |
-| `runRemitUntilCaughtUp(client, options?)` | Loops `remit()` until caught up or `maxIterations` |
+| `checkRemitReadiness(source, { from? })` | `RemitReadinessResult` with `ready`, `errors`, `warnings`, queue size. `source` is `{ publicClient, contractAddress }` (`ClocktowerClient` works) |
+| `runRemitUntilCaughtUp(client, options?)` | Loops `remit({ skipReadiness: true })` after its own scan until caught up or `maxIterations` |
 | `scanDueSubscriptionIds`, `listDueSubscriptionIds` | Low-level Multicall3 scan helpers |
 | `buildDayFrequencyProbes`, `buildGetIdByTimeCalls`, `multicallGetIdByTime` | Probe/call builders for custom callers |
 

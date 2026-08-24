@@ -6,10 +6,12 @@ sidebar_position: 6
 
 # Caller (Remit)
 
-Para bots y trabajos cron que llaman `remit()` y ganan comisiones de caller:
+Para bots y trabajos cron que llaman `remit()` y ganan comisiones de caller.
+
+`client.remit()` **preverifica la cola de vencimientos por defecto** (el mismo escaneo `nextUncheckedDay` + Multicall3 `getIdByTime` que `checkRemitReadiness`). Si no hay nada vencido lanza `RemitNotReadyError` y no envía una transacción. Pasa `{ skipReadiness: true }` para un `remit()` crudo (la simulación sigue ejecutándose a menos que también pases `skipSimulation: true`).
 
 ```typescript
-import { createClocktowerClient } from '@clocktower-protocol/sdk'
+import { createClocktowerClient, RemitNotReadyError } from '@clocktower-protocol/sdk'
 import { checkRemitReadiness, runRemitUntilCaughtUp } from '@clocktower-protocol/sdk/caller'
 
 const readiness = await checkRemitReadiness(client, { from: callerAddress })
@@ -18,16 +20,29 @@ if (!readiness.ready) {
   return
 }
 
+// El bucle escanea una vez por ronda y luego llama remit({ skipReadiness: true }).
 const result = await runRemitUntilCaughtUp(client, { from: callerAddress })
 console.log(result.status, result.transactions)
+
+try {
+  await client.remit() // por defecto: escanear, simular y enviar
+} catch (err) {
+  if (err instanceof RemitNotReadyError) {
+    // nada vencido
+  }
+}
+
+await client.remit({ skipReadiness: true }) // omitir: solo encode remit()
 ```
+
+`checkRemitReadiness` acepta cualquier `{ publicClient, contractAddress }` (`ClocktowerClient` funciona). Informa cuántas transacciones `remit()` pueden hacer falta dado `maxRemits`. `runRemitUntilCaughtUp` escanea una vez por ronda y luego llama `remit({ skipReadiness: true })`.
 
 ## Exportaciones
 
 | Exportación | Descripción |
 |--------|-------------|
-| `checkRemitReadiness(client, { from? })` | `RemitReadinessResult` con `ready`, `errors`, `warnings`, tamaño de cola |
-| `runRemitUntilCaughtUp(client, options?)` | Bucle `remit()` hasta ponerse al día o `maxIterations` |
+| `checkRemitReadiness(source, { from? })` | `RemitReadinessResult` con `ready`, `errors`, `warnings`, tamaño de cola. `source` es `{ publicClient, contractAddress }` (`ClocktowerClient` funciona) |
+| `runRemitUntilCaughtUp(client, options?)` | Bucle `remit({ skipReadiness: true })` tras su propio escaneo hasta ponerse al día o `maxIterations` |
 | `scanDueSubscriptionIds`, `listDueSubscriptionIds` | Ayudantes de escaneo Multicall3 de bajo nivel |
 | `buildDayFrequencyProbes`, `buildGetIdByTimeCalls`, `multicallGetIdByTime` | Constructores de probes/llamadas para callers personalizados |
 

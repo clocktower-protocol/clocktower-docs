@@ -51,8 +51,8 @@ sequenceDiagram
 
 | Paso | REST | Herramienta MCP | SDK |
 |------|------|----------|-----|
-| 1. Preparación | `POST /check_remit_readiness` | `check_remit_readiness` | `checkRemitReadiness()` |
-| 2. Preparar | `POST /prepare/remit` | `prepare_remit` | `remit()` |
+| 1. Preparación | `POST /check_remit_readiness` | `check_remit_readiness` | `checkRemitReadiness()` (también corre dentro de `remit()` por defecto) |
+| 2. Preparar | `POST /prepare/remit` | `prepare_remit` | `remit()` — escanea salvo `{ skipReadiness: true }` |
 | 3–4. Bucle | Repetir hasta ponerse al día | Igual | `runRemitUntilCaughtUp()` |
 
 ## Consejos
@@ -60,3 +60,7 @@ sequenceDiagram
 - Los backlogs grandes pueden necesitar múltiples transmisiones — consulta `gasSummary.backlogMultiplier` en las respuestas de preparación.
 - Usa `get_subscriptions_due` / `getSubscriptionsDue()` para una lectura ligera de un solo día sin preparar una transacción.
 - En REST, pasa `?chainId=` para que readiness, prepare y status usen la misma cadena. Remit en MCP es solo Base.
+
+<IfFeature name="sdk">
+SDK `remit()` lanza `RemitNotReadyError` y no envía una transacción cuando el precheck de la cola de vencimientos no encuentra trabajo. `runRemitUntilCaughtUp` escanea una vez por ronda y luego llama `remit({ skipReadiness: true })`.
+</IfFeature>

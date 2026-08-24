@@ -39,7 +39,7 @@ Las escrituras de subscribe toman un **id** de suscripción, no un objeto guarda
 | `cancelSubscription(id, options?)` | `WriteResult` | Cancelación por proveedor |
 | `editDetails(id, details, options?)` | `WriteResult` | Actualiza URL/descripción |
 | `editProviderDetails(details, options?)` | `WriteResult` | Campos del perfil de proveedor |
-| `remit(options?)` | `WriteResult` | Un pago permissionless; los bots hacen bucle con `@clocktower-protocol/sdk/caller` |
+| `remit(options?)` | `WriteResult` | Pago permissionless. **Preverifica la cola de vencimientos por defecto** (el mismo escaneo que `checkRemitReadiness`); lanza `RemitNotReadyError` cuando no hay nada vencido. `{ skipReadiness: true }` para un `remit()` crudo. Los bots hacen bucle con `@clocktower-protocol/sdk/caller` |
 
 Todas las escrituras lanzan `WalletRequiredError` cuando no hay `walletClient` con `account` configurado.
 

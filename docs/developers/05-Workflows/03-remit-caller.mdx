@@ -51,8 +51,8 @@ sequenceDiagram
 
 | Step | REST | MCP tool | SDK |
 |------|------|----------|-----|
-| 1. Readiness | `POST /check_remit_readiness` | `check_remit_readiness` | `checkRemitReadiness()` |
-| 2. Prepare | `POST /prepare/remit` | `prepare_remit` | `remit()` |
+| 1. Readiness | `POST /check_remit_readiness` | `check_remit_readiness` | `checkRemitReadiness()` (also runs inside `remit()` by default) |
+| 2. Prepare | `POST /prepare/remit` | `prepare_remit` | `remit()` — scans unless `{ skipReadiness: true }` |
 | 3–4. Loop | Repeat until caught up | Same | `runRemitUntilCaughtUp()` |
 
 ## Tips
@@ -60,3 +60,7 @@ sequenceDiagram
 - Large backlogs may need multiple broadcasts — check `gasSummary.backlogMultiplier` in prepare responses.
 - Use `get_subscriptions_due` / `getSubscriptionsDue()` for a lightweight single-day read without preparing a transaction.
 - On REST, pass `?chainId=` so readiness, prepare, and status poll the same chain. MCP remit is Base-only.
+
+<IfFeature name="sdk">
+SDK `remit()` throws `RemitNotReadyError` and does not send a transaction when the due-queue precheck finds no work. `runRemitUntilCaughtUp` scans once per round, then calls `remit({ skipReadiness: true })`.
+</IfFeature>

@@ -53,7 +53,8 @@ Pass per call or set defaults via `ClocktowerClientConfig.writes`:
 const { hash, gas, receipt } = await client.createSubscription(params, {
   waitForReceipt: true,
   skipSimulation: false,
+  skipReadiness: false, // remit() only — ignored by other writes
 })
 ```
 
-`WriteResult` includes `hash`, optional `gas`, and optional `receipt`.
+`WriteResult` includes `hash`, optional `gas`, and optional `receipt`. `skipReadiness` applies only to `remit()`: by default the client scans the due queue before sending and throws `RemitNotReadyError` when nothing is due. Pass `{ skipReadiness: true }` when you already ran `checkRemitReadiness`.
