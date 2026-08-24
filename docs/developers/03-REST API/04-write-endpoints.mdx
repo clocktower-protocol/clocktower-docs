@@ -50,9 +50,13 @@ When you already have a subscription id, prefer id-only endpoints (chain is sour
 | `POST /prepare/unsubscribe_by_id` | Subscriber unsubscribe with `from` + `id` |
 | `POST /prepare/unsubscribe_by_provider_by_id` | Provider remove with `from` + `id` + `subscriber` |
 
+<IfFeature name="builder">
+Builder sessions (`cts_…`) currently allow **object-form** writes (`/check_subscribe_readiness`, `/prepare/subscribe`, `/prepare/unsubscribe`, …) but **not** the `*_by_id` variants. Those return **403** `FORBIDDEN`. Use object-form prepare/readiness with a Builder token, or by-id routes on free/developer lanes.
+</IfFeature>
+
 ## Endpoints
 
-Prepare and readiness share the **write** rate bucket (RPM + **write daily**). Defaults:
+`POST /prepare/*` plus `POST /check_subscribe_readiness` and `POST /check_remit_readiness` share the **write** rate bucket (RPM + **write daily**). `POST /check_subscribe_readiness_by_id` uses the cheap/global bucket. Defaults:
 
 | Lane | Write RPM | Write / prepare daily |
 |------|-----------|------------------------|
@@ -75,7 +79,7 @@ Prepare and readiness share the **write** rate bucket (RPM + **write daily**). D
 | `POST /prepare/edit_details` | Provider metadata edit |
 | `POST /check_remit_readiness` | Multi-day scan before `remit()` |
 | `POST /prepare/remit` | Prepare permissionless `remit()` |
-| `POST /transactions/status` | Poll confirmation status after broadcast |
+| `POST /transactions/status` | Poll confirmation after broadcast (`{ "txHash": "0x…" }`) |
 
 See [Rate limits](/docs/developers/REST%20API/rate-limits).
 <IfFeature name="sdk">

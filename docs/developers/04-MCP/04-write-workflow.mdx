@@ -26,6 +26,16 @@ Full prepare returns:
 - `gasEstimates` / `gasSummary` — advisory gas budget on Base (MCP is Base-only)
 - `preflight` — operation-specific context
 - `warnings` — non-fatal hints
+- `eip5792` — batch descriptor when `signingMode` is `eip5792`
+- `chainId` — always `8453` (MCP is Base-only)
+
+## Optional request fields
+
+On `prepare_*` tools:
+
+- **`readinessOnly: true`** — preflight only; no unsigned transactions or gas estimates
+- **`simulateFromAddress`** — address for `eth_estimateGas` when the signing wallet differs from the broadcaster
+- **`infiniteApproval: true`** — on `prepare_subscribe` / `prepare_subscribe_by_id`, request max ERC-20 allowance instead of amount-scoped approve
 
 ## Readiness-only mode
 
@@ -35,11 +45,11 @@ Pass `readinessOnly: true` to any `prepare_*` tool:
 - No `unsignedTransactions` or simulation
 - Billed at readiness tier ($0.01; remit path $0.02)
 
-Dedicated readiness tools: `check_subscribe_readiness`, `check_remit_readiness`.
+Dedicated readiness tools: `check_subscribe_readiness`, `check_subscribe_readiness_by_id` (**preferred** when the id is known), `check_remit_readiness`.
 
 ## After broadcast
 
-Poll `get_transaction_status` with the transaction hash. Include `requestId` when reporting issues.
+Poll `get_transaction_status` with `{ "txHash": "0x…" }`. Include `requestId` when reporting issues.
 
 ## Remit
 

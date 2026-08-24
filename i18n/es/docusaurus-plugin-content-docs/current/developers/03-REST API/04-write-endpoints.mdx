@@ -50,9 +50,13 @@ Si ya tienes el id de suscripción, prefiere endpoints solo por id (la cadena es
 | `POST /prepare/unsubscribe_by_id` | Unsubscribe de suscriptor con `from` + `id` |
 | `POST /prepare/unsubscribe_by_provider_by_id` | Baja por provider con `from` + `id` + `subscriber` |
 
+<IfFeature name="builder">
+Las sesiones Builder (`cts_…`) permiten escrituras en **forma objeto** (`/check_subscribe_readiness`, `/prepare/subscribe`, `/prepare/unsubscribe`, …) pero **no** las variantes `*_by_id`. Esas devuelven **403** `FORBIDDEN`. Usa prepare/readiness en forma objeto con token Builder, o las rutas by-id en los lanes free/developer.
+</IfFeature>
+
 ## Endpoints
 
-Prepare y readiness comparten el bucket **write** (RPM + **write diario**). Por defecto:
+`POST /prepare/*` más `POST /check_subscribe_readiness` y `POST /check_remit_readiness` comparten el bucket **write** (RPM + **write diario**). `POST /check_subscribe_readiness_by_id` usa el bucket cheap/global. Por defecto:
 
 | Lane | Write RPM | Write / prepare diario |
 |------|-----------|------------------------|
@@ -75,7 +79,7 @@ Prepare y readiness comparten el bucket **write** (RPM + **write diario**). Por 
 | `POST /prepare/edit_details` | Edición de metadata del provider |
 | `POST /check_remit_readiness` | Escaneo multi-día antes de `remit()` |
 | `POST /prepare/remit` | Prepare `remit()` permissionless |
-| `POST /transactions/status` | Poll de confirmación tras broadcast |
+| `POST /transactions/status` | Poll de confirmación tras broadcast (`{ "txHash": "0x…" }`) |
 
 Ver [Límites de tasa](/docs/developers/REST%20API/rate-limits).
 <IfFeature name="sdk">

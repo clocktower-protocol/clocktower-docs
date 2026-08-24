@@ -102,11 +102,11 @@ Números canónicos: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `wri
 - **Global RPM** — la mayoría de las peticiones
 - **Expensive RPM** — GETs pesados de subgraph / discovery
 - **Subgraph diario** — rutas expensive que pegan a The Graph
-- **Write RPM** — `POST /prepare/*` y checks de readiness (`check_*_readiness*`)
-- **Write diario** — el mismo conjunto prepare/readiness, por día UTC (protege el coste de simulación en Alchemy)
+- **Write RPM** — `POST /prepare/*`, `POST /check_subscribe_readiness` y `POST /check_remit_readiness`
+- **Write diario** — el mismo conjunto, por día UTC (protege el coste de simulación en Alchemy)
 - **Total diario** — cada petición REST ese día para esa identidad
 
-Una llamada prepare consume **write RPM**, **write diario** y **total diario**.
+Una llamada prepare consume **write RPM**, **write diario** y **total diario**. `POST /check_subscribe_readiness_by_id` **no** entra en el bucket write (solo RPM cheap/global — no simula on-chain).
 
 ## Por qué prepare está tan limitado
 

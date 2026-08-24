@@ -18,13 +18,42 @@ All errors return a consistent JSON shape:
 
 ## Error codes
 
-| Code | Description |
-|------|-------------|
-| `VALIDATION_ERROR` | Invalid request body or parameters, including unknown or malformed `chainId` |
-| `NOT_FOUND` | Resource does not exist |
-| `UPSTREAM_ERROR` | RPC or subgraph failure |
-| `RATE_LIMITED` | Tier rate limit exceeded |
-| `PREPARE_FAILURE` | MCP/REST prepare layer failure (may include `requestId`) |
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Invalid request body or parameters, including unknown or malformed <code>chainId</code>. REST prepare and simulation failures also use this code</td>
+</tr>
+<tr>
+<td><code>NOT_FOUND</code></td>
+<td>Resource does not exist</td>
+</tr>
+<tr>
+<td><code>UPSTREAM_ERROR</code></td>
+<td>RPC or subgraph failure</td>
+</tr>
+<tr>
+<td><code>RATE_LIMITED</code></td>
+<td>Tier rate limit exceeded</td>
+</tr>
+<tr>
+<td><code>PREPARE_FAILURE</code></td>
+<td>MCP prepare-layer failure (may include <code>requestId</code>). Not returned by REST</td>
+</tr>
+<IfFeature name="builder">
+<tr>
+<td><code>FORBIDDEN</code></td>
+<td>Builder session outside entitlement scope (HTTP <strong>403</strong>)</td>
+</tr>
+</IfFeature>
+</tbody>
+</table>
 
 Unsupported REST `?chainId=` (for example `1` or `not-a-chain`) returns **400** with `code: "VALIDATION_ERROR"` and a message such as `Unsupported chainId 1`. See [Chain selection](/docs/developers/REST%20API/chain-selection).
 
@@ -44,6 +73,8 @@ Write endpoints may include an `issues` array with field-level details:
 
 ## Prepare failures
 
-Include `requestId` when reporting prepare issues. MCP prepare failures return `code: "PREPARE_FAILURE"` when the error originated in the prepare layer.
+Include `requestId` when reporting prepare issues.
+
+REST prepare and simulation failures return `code: "VALIDATION_ERROR"`. MCP prepare-layer failures return `code: "PREPARE_FAILURE"`.
 
 Simulation failures on MCP throw before x402 payment settles — you are not charged.

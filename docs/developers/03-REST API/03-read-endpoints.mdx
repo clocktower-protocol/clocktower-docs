@@ -24,7 +24,7 @@ Protocol reads accept optional `?chainId=` (decimal or CAIP-2). Omitted uses the
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /subscriptions` | Search/discover subscriptions. Query: `provider`, `token`, `frequency`, `cancelled` (default `false`), `includeDetails`, `first` (max 50), `skip`, plus optional `chainId` |
+| `GET /subscriptions` | Search/discover subscriptions. Query: `provider`, `token`, `frequency`, `cancelled` (default `false`), `includeDetails`, `first` (lane cap: free 10, developer 25), `skip`, plus optional `chainId`. See [Rate limits](/docs/developers/REST%20API/rate-limits) |
 | `GET /subscriptions/due` | Subscriptions due on a given day/frequency |
 | `GET /subscriptions/:id` | Single subscription by ID |
 | `GET /subscriptions/:id/subscribers` | Subscribers for a subscription |
@@ -53,6 +53,10 @@ Protocol reads accept optional `?chainId=` (decimal or CAIP-2). Omitted uses the
 <tr>
 <td><code>GET /accounts/me/subscriptions</code></td>
 <td>Builder session — your subscriptions</td>
+</tr>
+<tr>
+<td><code>GET /accounts/me/activity</code></td>
+<td>Builder session — your combined subscriber + provider activity</td>
 </tr>
 </IfFeature>
 </tbody>

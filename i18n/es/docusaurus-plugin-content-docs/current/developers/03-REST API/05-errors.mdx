@@ -18,13 +18,42 @@ Todos los errores devuelven una estructura JSON consistente:
 
 ## Códigos de error
 
-| Código | Descripción |
-|------|-------------|
-| `VALIDATION_ERROR` | Cuerpo de solicitud o parámetros inválidos, incluido un `chainId` desconocido o malformado |
-| `NOT_FOUND` | El recurso no existe |
-| `UPSTREAM_ERROR` | Fallo de RPC o subgrafo |
-| `RATE_LIMITED` | Límite de tasa del nivel excedido |
-| `PREPARE_FAILURE` | Fallo de la capa de preparación MCP/REST (puede incluir `requestId`) |
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VALIDATION_ERROR</code></td>
+<td>Cuerpo de solicitud o parámetros inválidos, incluido un <code>chainId</code> desconocido o malformado. Los fallos de prepare y simulación en REST también usan este código</td>
+</tr>
+<tr>
+<td><code>NOT_FOUND</code></td>
+<td>El recurso no existe</td>
+</tr>
+<tr>
+<td><code>UPSTREAM_ERROR</code></td>
+<td>Fallo de RPC o subgrafo</td>
+</tr>
+<tr>
+<td><code>RATE_LIMITED</code></td>
+<td>Límite de tasa del nivel excedido</td>
+</tr>
+<tr>
+<td><code>PREPARE_FAILURE</code></td>
+<td>Fallo de la capa de preparación MCP (puede incluir <code>requestId</code>). REST no lo devuelve</td>
+</tr>
+<IfFeature name="builder">
+<tr>
+<td><code>FORBIDDEN</code></td>
+<td>Sesión Builder fuera del alcance de entitlement (HTTP <strong>403</strong>)</td>
+</tr>
+</IfFeature>
+</tbody>
+</table>
 
 Un `?chainId=` REST no soportado (por ejemplo `1` o `not-a-chain`) devuelve **400** con `code: "VALIDATION_ERROR"` y un mensaje como `Unsupported chainId 1`. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
 
@@ -44,6 +73,8 @@ Los endpoints de escritura pueden incluir un array `issues` con detalles a nivel
 
 ## Fallos de preparación
 
-Incluye `requestId` al reportar problemas de preparación. Los fallos de preparación MCP devuelven `code: "PREPARE_FAILURE"` cuando el error se originó en la capa de preparación.
+Incluye `requestId` al reportar problemas de preparación.
+
+Los fallos de prepare y simulación en REST devuelven `code: "VALIDATION_ERROR"`. Los fallos de la capa de preparación MCP devuelven `code: "PREPARE_FAILURE"`.
 
 Los fallos de simulación en MCP lanzan excepción antes de que se liquide el pago x402 — no se te cobra.

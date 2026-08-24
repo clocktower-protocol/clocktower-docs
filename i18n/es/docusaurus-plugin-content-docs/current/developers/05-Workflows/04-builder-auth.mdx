@@ -89,3 +89,5 @@ npm start rest get /accounts/me/subscriptions
 ```
 
 Consulta [Autenticación](/docs/developers/REST%20API/authentication) y [Límites de tasa](/docs/developers/REST%20API/rate-limits).
+
+Las sesiones Builder pueden usar rutas prepare/readiness en forma objeto. Las variantes de escritura `*_by_id` **no** están en el alcance de entitlement Builder y devuelven **403** `FORBIDDEN`. Ver [Endpoints de escritura](/docs/developers/REST%20API/write-endpoints).

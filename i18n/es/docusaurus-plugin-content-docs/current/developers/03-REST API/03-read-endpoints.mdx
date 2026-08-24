@@ -24,7 +24,7 @@ Las lecturas de protocolo aceptan `?chainId=` opcional (decimal o CAIP-2). Si se
 
 | Endpoint | Descripción |
 |----------|-------------|
-| `GET /subscriptions` | Buscar/descubrir suscripciones. Query: `provider`, `token`, `frequency`, `cancelled` (predeterminado `false`), `includeDetails`, `first` (máx. 50), `skip`, más `chainId` opcional |
+| `GET /subscriptions` | Buscar/descubrir suscripciones. Query: `provider`, `token`, `frequency`, `cancelled` (predeterminado `false`), `includeDetails`, `first` (tope por lane: free 10, developer 25), `skip`, más `chainId` opcional. Ver [Límites de tasa](/docs/developers/REST%20API/rate-limits) |
 | `GET /subscriptions/due` | Suscripciones vencidas en un día/frecuencia dado |
 | `GET /subscriptions/:id` | Suscripción individual por ID |
 | `GET /subscriptions/:id/subscribers` | Suscriptores de una suscripción |
@@ -53,6 +53,10 @@ Las lecturas de protocolo aceptan `?chainId=` opcional (decimal o CAIP-2). Si se
 <tr>
 <td><code>GET /accounts/me/subscriptions</code></td>
 <td>Sesión Builder — tus suscripciones</td>
+</tr>
+<tr>
+<td><code>GET /accounts/me/activity</code></td>
+<td>Sesión Builder — tu actividad combinada de suscriptor + proveedor</td>
 </tr>
 </IfFeature>
 </tbody>

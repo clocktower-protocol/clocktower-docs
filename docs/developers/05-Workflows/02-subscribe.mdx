@@ -63,7 +63,11 @@ sequenceDiagram
 
 REST by-id routes need only `from` + subscription `id` (amount/token/provider loaded on-chain). Object form remains on REST/MCP for callers that already hold a full subscription object. The SDK subscribe surface is **id-only**.
 
-On REST, pass the same `?chainId=` on readiness, prepare, and `POST /transactions/status`. MCP subscribe is Base-only. See [Chain selection](/docs/developers/REST%20API/chain-selection).
+On REST, pass the same `?chainId=` on readiness, prepare, and `POST /transactions/status` (`{ "txHash": "0x…" }`). MCP subscribe is Base-only; poll `get_transaction_status` with `txHash`. See [Chain selection](/docs/developers/REST%20API/chain-selection).
+
+<IfFeature name="builder">
+Builder sessions cannot call REST `*_by_id` write routes (403 `FORBIDDEN`). Use object-form `check_subscribe_readiness` / `prepare_subscribe` with a `cts_…` token, or by-id on free/developer lanes. See [Write endpoints](/docs/developers/REST%20API/write-endpoints).
+</IfFeature>
 
 ## Tips
 

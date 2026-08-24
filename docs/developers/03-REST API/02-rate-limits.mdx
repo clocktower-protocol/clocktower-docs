@@ -102,11 +102,11 @@ Canonical numbers: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `write
 - **Global RPM** — most requests
 - **Expensive RPM** — subgraph-heavy / discovery-style GETs
 - **Subgraph daily** — expensive routes that hit The Graph
-- **Write RPM** — `POST /prepare/*` and readiness checks (`check_*_readiness*`)
-- **Write daily** — same prepare/readiness set, per UTC day (protects shared Alchemy simulation cost)
+- **Write RPM** — `POST /prepare/*`, `POST /check_subscribe_readiness`, and `POST /check_remit_readiness`
+- **Write daily** — same set, per UTC day (protects shared Alchemy simulation cost)
 - **Daily total** — every REST request that day for that identity
 
-A prepare call consumes **write RPM**, **write daily**, and **daily total**.
+A prepare call consumes **write RPM**, **write daily**, and **daily total**. `POST /check_subscribe_readiness_by_id` is **not** in the write bucket (cheap / global RPM only — it does not run on-chain simulation).
 
 ## Why prepare is capped tightly
 

@@ -63,7 +63,11 @@ sequenceDiagram
 
 Las rutas REST by-id solo necesitan `from` + `id` de suscripción (amount/token/provider se cargan on-chain). La forma por objeto sigue en REST/MCP si ya tienes el objeto completo. La superficie de subscribe del SDK es **solo por id**.
 
-En REST, pasa el mismo `?chainId=` en readiness, prepare y `POST /transactions/status`. Subscribe en MCP es solo Base. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
+En REST, pasa el mismo `?chainId=` en readiness, prepare y `POST /transactions/status` (`{ "txHash": "0x…" }`). Subscribe en MCP es solo Base; consulta `get_transaction_status` con `txHash`. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
+
+<IfFeature name="builder">
+Las sesiones Builder no pueden llamar rutas REST de escritura `*_by_id` (403 `FORBIDDEN`). Usa `check_subscribe_readiness` / `prepare_subscribe` en forma objeto con token `cts_…`, o by-id en los lanes free/developer. Ver [Endpoints de escritura](/docs/developers/REST%20API/write-endpoints).
+</IfFeature>
 
 ## Consejos
 

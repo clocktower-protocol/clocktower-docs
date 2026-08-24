@@ -76,6 +76,6 @@ Respaldadas por subgrafo. Máx. 200 registros por llamada; incluye `hasMore` par
 | `prepare_edit_details` | Edición de metadatos por proveedor |
 | `check_remit_readiness` | Escaneo multi-día de vencimientos antes de `remit()` |
 | `prepare_remit` | Preparar `remit()` sin permisos |
-| `get_transaction_status` | Consultar confirmación de tx después de transmitir |
+| `get_transaction_status` | Consultar confirmación de tx después de transmitir (`txHash`) |
 
 La preparación completa ejecuta simulación on-chain antes de que se liquide el pago x402. Una simulación fallida lanza excepción — no se te cobra. Prefiere tools `*_by_id` cuando ya conozcas el id de suscripción.

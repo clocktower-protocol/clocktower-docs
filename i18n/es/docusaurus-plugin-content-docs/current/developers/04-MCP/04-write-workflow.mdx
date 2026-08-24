@@ -26,6 +26,16 @@ La preparación completa devuelve:
 - `gasEstimates` / `gasSummary` — presupuesto de gas orientativo en Base (MCP es solo Base)
 - `preflight` — contexto específico de la operación
 - `warnings` — sugerencias no fatales
+- `eip5792` — descriptor de lote cuando `signingMode` es `eip5792`
+- `chainId` — siempre `8453` (MCP es solo Base)
+
+## Campos de request opcionales
+
+En herramientas `prepare_*`:
+
+- **`readinessOnly: true`** — solo preflight; sin transacciones sin firmar ni estimaciones de gas
+- **`simulateFromAddress`** — dirección para `eth_estimateGas` cuando el firmante difiere del broadcaster
+- **`infiniteApproval: true`** — en `prepare_subscribe` / `prepare_subscribe_by_id`, allowance ERC-20 máxima en lugar de approve acotado al amount
 
 ## Modo solo preparación
 
@@ -35,11 +45,11 @@ Pasa `readinessOnly: true` a cualquier herramienta `prepare_*`:
 - Sin `unsignedTransactions` ni simulación
 - Facturado al nivel de preparación ($0.01; ruta remit $0.02)
 
-Herramientas dedicadas de preparación: `check_subscribe_readiness`, `check_remit_readiness`.
+Herramientas dedicadas de preparación: `check_subscribe_readiness`, `check_subscribe_readiness_by_id` (**preferida** si conoces el id), `check_remit_readiness`.
 
 ## Después de transmitir
 
-Consulta `get_transaction_status` con el hash de la transacción. Incluye `requestId` al reportar problemas.
+Consulta `get_transaction_status` con `{ "txHash": "0x…" }`. Incluye `requestId` al reportar problemas.
 
 ## Remit
 

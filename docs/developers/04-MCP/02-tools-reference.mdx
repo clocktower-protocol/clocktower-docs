@@ -76,6 +76,6 @@ Subgraph-backed. Max 200 records per call; includes `hasMore` for pagination.
 | `prepare_edit_details` | Provider metadata edit |
 | `check_remit_readiness` | Multi-day due scan before `remit()` |
 | `prepare_remit` | Prepare permissionless `remit()` |
-| `get_transaction_status` | Poll tx confirmation after broadcast |
+| `get_transaction_status` | Poll confirmation after broadcast (`txHash`) |
 
 Full prepare runs on-chain simulation before x402 payment settles. Failed simulation throws — you are not charged. Prefer `*_by_id` tools when the subscription id is known.
