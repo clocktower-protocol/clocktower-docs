@@ -4,6 +4,7 @@
  * Set on the Docusaurus build (Cloudflare Pages build env), not at request time:
  *   DOCUSAURUS_ENABLE_SDK=true
  *   DOCUSAURUS_ENABLE_I18N=true
+ *   DOCUSAURUS_ENABLE_BUILDER=true
  *
  * Explicit `true` / `false` always wins. Otherwise they default on in `docusaurus
  * start` and off in `docusaurus build`.
@@ -22,6 +23,7 @@ function envFlag(name) {
 const siteFlags = {
   sdk: envFlag('DOCUSAURUS_ENABLE_SDK'),
   i18n: envFlag('DOCUSAURUS_ENABLE_I18N'),
+  builder: envFlag('DOCUSAURUS_ENABLE_BUILDER'),
 };
 
 module.exports = siteFlags;

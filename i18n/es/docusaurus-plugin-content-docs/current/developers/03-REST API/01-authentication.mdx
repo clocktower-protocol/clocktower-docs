@@ -10,16 +10,38 @@ URL base: `https://api.clocktower.finance`. Las rutas siguientes son relativas a
 
 La API REST **no** usa x402. MCP usa x402 únicamente.
 
-La selección de cadena (`?chainId=`) es independiente de la autenticación. SIWE y el entitlement Builder se evalúan siempre en **Base** (8453), aunque una llamada de protocolo apunte a otra cadena. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
+La selección de cadena (`?chainId=`) es independiente de la autenticación.<IfFeature name="builder"> SIWE y el entitlement Builder se evalúan siempre en **Base** (8453), aunque una llamada de protocolo apunte a otra cadena.</IfFeature> Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
 
-| Método | Cuándo |
-|--------|--------|
-| Ninguno | Nivel **gratis** — llama endpoints con límites por IP |
-| `Authorization: Bearer ctk_…` | Nivel **developer** — API key gratuita (más límites de lectura) |
-| `Authorization: Bearer cts_…` | Nivel **Builder** — sesión SIWE tras entitlement on-chain (opcional; puede estar desactivado) |
-| x402 | **Solo MCP** — no se usa en REST |
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ninguno</td>
+<td>Nivel <strong>gratis</strong> — llama endpoints con límites por IP</td>
+</tr>
+<tr>
+<td><code>Authorization: Bearer ctk_…</code></td>
+<td>Nivel <strong>developer</strong> — API key gratuita (más límites de lectura)</td>
+</tr>
+<IfFeature name="builder">
+<tr>
+<td><code>Authorization: Bearer cts_…</code></td>
+<td>Nivel <strong>Builder</strong> — sesión SIWE tras entitlement on-chain (opcional; puede estar desactivado)</td>
+</tr>
+</IfFeature>
+<tr>
+<td>x402</td>
+<td><strong>Solo MCP</strong> — no se usa en REST</td>
+</tr>
+</tbody>
+</table>
 
-Las respuestas REST correctas incluyen `X-Clocktower-Lane: free | developer | builder`.
+Las respuestas REST correctas incluyen `X-Clocktower-Lane: free | developer<IfFeature name="builder"> | builder</IfFeature>`.
 
 ## Nivel gratis (free)
 
@@ -27,7 +49,9 @@ No se requieren credenciales. Envía las peticiones directamente. Los límites s
 
 - Presupuestos estrictos de prepare/readiness (la simulación es costosa en el RPC compartido).
 - Límites de búsqueda: `first` ≤ 10; `includeDetails=true` no permitido.
+<IfFeature name="builder">
 - Las rutas `:me` devuelven 403 — usa una dirección explícita.
+</IfFeature>
 
 ## Nivel developer (API key)
 
@@ -54,6 +78,7 @@ Keys inválidas o revocadas devuelven **401** (no caen al nivel gratis).
 
 Ver [Límites de tasa](/docs/developers/REST%20API/rate-limits).
 
+<IfFeature name="builder">
 ## Nivel Builder (sesión SIWE, opcional)
 
 El acceso Builder requiere una suscripción on-chain **ACTIVE** en **Base** a un entitlement de Builder configurado (`BUILDER_SUB_ID` / `BUILDER_SUB_IDS`). El entitlement se comprueba siempre en Base, aunque la llamada REST use otro `?chainId=`. Si no hay IDs configurados, Builder está **desactivado** (`builderAuthEnabled: false` en `GET /catalog`). Challenge/verify SIWE usan chain ID `8453`.
@@ -74,6 +99,7 @@ El acceso Builder requiere una suscripción on-chain **ACTIVE** en **Base** a un
 Usa free o developer keys para lecturas públicas cross-account cuando Builder esté off o fuera de alcance.
 
 Ver [Flujo de auth Builder](/docs/developers/Workflows/builder-auth).
+</IfFeature>
 
 ## Basic Auth opcional
 
@@ -81,4 +107,4 @@ HTTP Basic Auth se controla con `API_REQUIRE_BASIC_AUTH` (por defecto `false`).
 
 ## CORS
 
-Las peticiones cross-origin del navegador están desactivadas por defecto. Ops debe permitir orígenes con `API_CORS_ALLOWED_ORIGINS`. CORS no es autenticación y no se concede por una key ni por una suscripción Builder.
+Las peticiones cross-origin del navegador están desactivadas por defecto. Ops debe permitir orígenes con `API_CORS_ALLOWED_ORIGINS`. CORS no es autenticación y no se concede por una key<IfFeature name="builder"> ni por una suscripción Builder</IfFeature>.

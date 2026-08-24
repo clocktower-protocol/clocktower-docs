@@ -14,7 +14,7 @@ All MCP tool calls require payment via the [x402 protocol](https://github.com/co
 - USDC balance on Base for micropayments
 - `PRIVATE_KEY` or wallet configured in your agent for payment signing
 
-REST does **not** use x402. Use REST free tier, developer API keys (`ctk_…`), or optional Builder SIWE — never send API keys to MCP for payment.
+REST does **not** use x402. Use REST free tier or developer API keys (`ctk_…`)<IfFeature name="builder">, or optional Builder SIWE</IfFeature> — never send API keys to MCP for payment.
 
 ## Payment flow
 

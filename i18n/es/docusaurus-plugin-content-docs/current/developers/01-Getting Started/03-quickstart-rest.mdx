@@ -8,7 +8,7 @@ sidebar_position: 2
 
 Es la forma más rápida de probar Clocktower desde cualquier stack que hable HTTP. Obtienes lecturas y escrituras preparadas sin cliente MCP ni SDK on-chain — solo `curl`, `fetch` o el cliente HTTP que ya uses.
 
-La API REST expone las mismas capacidades que MCP por HTTP estándar. **No se requiere pago x402** — el acceso se controla con límites free, **API keys de developer** opcionales (`ctk_…`) y sesiones Builder SIWE opcionales. Empieza por el catálogo y una búsqueda de suscripciones; tendrás datos reales del protocolo en menos de un minuto.
+La API REST expone las mismas capacidades que MCP por HTTP estándar. **No se requiere pago x402** — el acceso se controla con límites free y **API keys de developer** opcionales (`ctk_…`)<IfFeature name="builder">, más sesiones Builder SIWE opcionales</IfFeature>. Empieza por el catálogo y una búsqueda de suscripciones; tendrás datos reales del protocolo en menos de un minuto.
 
 ## URL base
 
@@ -84,6 +84,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 Ver [Autenticación](/docs/developers/REST%20API/authentication) y [Límites de tasa](/docs/developers/REST%20API/rate-limits).
 
+<IfFeature name="builder">
 ## Sesión Builder (opcional)
 
 Cuando el entitlement Builder está configurado en el servidor, SIWE desbloquea más límites y rutas `:me`:
@@ -107,6 +108,7 @@ curl -s https://api.clocktower.finance/accounts/me/subscriptions \
 ```
 
 Ver [Flujo de auth Builder](/docs/developers/Workflows/builder-auth). Builder puede estar **desactivado** si no hay IDs de entitlement (`GET /catalog` → `builderAuthEnabled`).
+</IfFeature>
 
 ## CLI de ayuda
 

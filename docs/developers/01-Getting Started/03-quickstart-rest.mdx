@@ -8,7 +8,7 @@ sidebar_position: 2
 
 This is the fastest way to poke at Clocktower from any stack that speaks HTTP. You get reads and prepared writes without an MCP client or on-chain SDK — just `curl`, `fetch`, or whatever HTTP client you already use.
 
-The REST API exposes the same capabilities as MCP over standard HTTP. **No x402 payment is required** — access is controlled by free rate limits, optional **developer API keys** (`ctk_…`), and optional Builder SIWE sessions. Start with the catalog and a subscription search; you will have real protocol data in under a minute.
+The REST API exposes the same capabilities as MCP over standard HTTP. **No x402 payment is required** — access is controlled by free rate limits and optional **developer API keys** (`ctk_…`)<IfFeature name="builder">, plus optional Builder SIWE sessions</IfFeature>. Start with the catalog and a subscription search; you will have real protocol data in under a minute.
 
 ## Base URL
 
@@ -84,6 +84,7 @@ Authorization: Bearer <YOUR_API_KEY>
 
 See [Authentication](/docs/developers/REST%20API/authentication) and [Rate limits](/docs/developers/REST%20API/rate-limits).
 
+<IfFeature name="builder">
 ## Builder session (optional)
 
 When Builder entitlement is configured on the server, SIWE unlocks higher limits and `:me` routes:
@@ -107,6 +108,7 @@ curl -s https://api.clocktower.finance/accounts/me/subscriptions \
 ```
 
 See [Builder auth workflow](/docs/developers/Workflows/builder-auth). Builder may be **disabled** when no entitlement IDs are set (`GET /catalog` → `builderAuthEnabled`).
+</IfFeature>
 
 ## CLI helper
 

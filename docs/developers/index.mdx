@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # Developer Overview
 
-Clocktower is a subscription protocol on EVM chains. REST defaults to **Base** (chainId 8453) and accepts optional `?chainId=` on protocol routes. **MCP, x402, SIWE, and Builder entitlement stay on Base.**
+Clocktower is a subscription protocol on EVM chains. REST defaults to **Base** (chainId 8453) and accepts optional `?chainId=` on protocol routes. **MCP, x402<IfFeature name="builder">, SIWE, and Builder entitlement</IfFeature> stay on Base.**
 
 If you are building an app, backend, or AI agent that needs to work with recurring payments, subscriber accounts, or protocol data, you do not have to stitch everything together from raw contract calls alone.
 
@@ -49,7 +49,7 @@ Production endpoints at `api.clocktower.finance` and `mcp.clocktower.finance` ma
 <tr>
 <td><a href="/docs/developers/REST%20API/authentication">REST API</a></td>
 <td>Backends, scripts, browser apps (with CORS)</td>
-<td>Free (IP), developer API key (<code>ctk_…</code>), or optional Builder SIWE (<code>cts_…</code>)</td>
+<td>Free (IP), developer API key (<code>ctk_…</code>)<IfFeature name="builder">, or optional Builder SIWE (<code>cts_…</code>)</IfFeature></td>
 <td>Prepare-only — sign in wallet; tight prepare caps</td>
 </tr>
 <tr>
@@ -73,19 +73,53 @@ For raw on-chain contract structs and function signatures, see the [Contract Tec
 
 ## Access tiers
 
-| Lane | Surface | Auth | Default limits (approx.) |
-|------|---------|------|---------------------------|
-| **Free** | REST | None (IP) | 20 rpm; expensive 3 rpm; subgraph 100/day; prepare **2/min · 20/day**; **500 req/day** |
-| **Developer** | REST | `Authorization: Bearer ctk_…` | 80 rpm; expensive 40; subgraph 3k/day; prepare **5/min · 100/day**; **5k req/day** |
-| **Builder** | REST | SIWE `Bearer cts_…` | Higher limits + `:me` when entitlement IDs are configured (may be off) |
-| **Agent** | MCP | x402 | 300 rpm; writes 60/min — **not API keys** |
+<table>
+<thead>
+<tr>
+<th>Lane</th>
+<th>Surface</th>
+<th>Auth</th>
+<th>Default limits (approx.)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Free</strong></td>
+<td>REST</td>
+<td>None (IP)</td>
+<td>20 rpm; expensive 3 rpm; subgraph 100/day; prepare <strong>2/min · 20/day</strong>; <strong>500 req/day</strong></td>
+</tr>
+<tr>
+<td><strong>Developer</strong></td>
+<td>REST</td>
+<td><code>Authorization: Bearer ctk_…</code></td>
+<td>80 rpm; expensive 40; subgraph 3k/day; prepare <strong>5/min · 100/day</strong>; <strong>5k req/day</strong></td>
+</tr>
+<IfFeature name="builder">
+<tr>
+<td><strong>Builder</strong></td>
+<td>REST</td>
+<td>SIWE <code>Bearer cts_…</code></td>
+<td>Higher limits + <code>:me</code> when entitlement IDs are configured (may be off)</td>
+</tr>
+</IfFeature>
+<tr>
+<td><strong>Agent</strong></td>
+<td>MCP</td>
+<td>x402</td>
+<td>300 rpm; writes 60/min — <strong>not API keys</strong></td>
+</tr>
+</tbody>
+</table>
 
 - **Free** — try without signup; highly metered.
 - **Developer** — free API key for integrators; **higher read** limits. Prepare stays intentionally tight (simulation costs shared RPC). Mint keys via the developer portal / admin path.
+<IfFeature name="builder">
 - **Builder** — optional on-chain entitlement + SIWE for wallet-scoped routes. See [Builder auth](/docs/developers/Workflows/builder-auth).
+</IfFeature>
 - **MCP** — pay per tool; do not send `ctk_` keys to MCP.
 
-See `GET /catalog` on `api.clocktower.finance` for the live tier manifest (`writeRpm`, `writeDaily`, `dailyTotalRequests`, `developerKeysEnabled`, `builderAuthEnabled`) and the `chains[]` registry. REST chain selection: [Chain selection](/docs/developers/REST%20API/chain-selection).
+See `GET /catalog` on `api.clocktower.finance` for the live tier manifest (`writeRpm`, `writeDaily`, `dailyTotalRequests`, `developerKeysEnabled`<IfFeature name="builder">, `builderAuthEnabled`</IfFeature>) and the `chains[]` registry. REST chain selection: [Chain selection](/docs/developers/REST%20API/chain-selection).
 
 ## Write model (prepare-only)
 

@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # Visión general para desarrolladores
 
-Clocktower es un protocolo de suscripciones en cadenas EVM. REST usa **Base** por defecto (chainId 8453) y acepta `?chainId=` opcional en rutas de protocolo. **MCP, x402, SIWE y el entitlement Builder permanecen en Base.**
+Clocktower es un protocolo de suscripciones en cadenas EVM. REST usa **Base** por defecto (chainId 8453) y acepta `?chainId=` opcional en rutas de protocolo. **MCP, x402<IfFeature name="builder">, SIWE y el entitlement Builder</IfFeature> permanecen en Base.**
 
 Si construyes una app, backend o agente de IA que necesita pagos recurrentes, cuentas de suscriptores o datos del protocolo, no tienes que montarlo todo solo con llamadas crudas al contrato.
 
@@ -49,7 +49,7 @@ Los endpoints de producción en `api.clocktower.finance` y `mcp.clocktower.finan
 <tr>
 <td><a href="/docs/developers/REST%20API/authentication">API REST</a></td>
 <td>Backends, scripts, apps de navegador (con CORS)</td>
-<td>Free (IP), API key developer (<code>ctk_…</code>) o Builder SIWE opcional (<code>cts_…</code>)</td>
+<td>Free (IP), API key developer (<code>ctk_…</code>)<IfFeature name="builder"> o Builder SIWE opcional (<code>cts_…</code>)</IfFeature></td>
 <td>Solo prepare — firma en wallet; prepare con cupos bajos</td>
 </tr>
 <tr>
@@ -73,19 +73,53 @@ Para structs y firmas de funciones del contrato, ver la [referencia técnica del
 
 ## Niveles de acceso
 
-| Lane | Superficie | Auth | Límites por defecto (aprox.) |
-|------|------------|------|------------------------------|
-| **Free** | REST | Ninguno (IP) | 20 rpm; expensive 3 rpm; subgraph 100/día; prepare **2/min · 20/día**; **500 req/día** |
-| **Developer** | REST | `Authorization: Bearer ctk_…` | 80 rpm; expensive 40; subgraph 3k/día; prepare **5/min · 100/día**; **5k req/día** |
-| **Builder** | REST | SIWE `Bearer cts_…` | Más límites + `:me` cuando hay entitlement configurado (puede estar off) |
-| **Agent** | MCP | x402 | 300 rpm; writes 60/min — **no son API keys** |
+<table>
+<thead>
+<tr>
+<th>Lane</th>
+<th>Superficie</th>
+<th>Auth</th>
+<th>Límites por defecto (aprox.)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Free</strong></td>
+<td>REST</td>
+<td>Ninguno (IP)</td>
+<td>20 rpm; expensive 3 rpm; subgraph 100/día; prepare <strong>2/min · 20/día</strong>; <strong>500 req/día</strong></td>
+</tr>
+<tr>
+<td><strong>Developer</strong></td>
+<td>REST</td>
+<td><code>Authorization: Bearer ctk_…</code></td>
+<td>80 rpm; expensive 40; subgraph 3k/día; prepare <strong>5/min · 100/día</strong>; <strong>5k req/día</strong></td>
+</tr>
+<IfFeature name="builder">
+<tr>
+<td><strong>Builder</strong></td>
+<td>REST</td>
+<td>SIWE <code>Bearer cts_…</code></td>
+<td>Más límites + <code>:me</code> cuando hay entitlement configurado (puede estar off)</td>
+</tr>
+</IfFeature>
+<tr>
+<td><strong>Agent</strong></td>
+<td>MCP</td>
+<td>x402</td>
+<td>300 rpm; writes 60/min — <strong>no son API keys</strong></td>
+</tr>
+</tbody>
+</table>
 
 - **Free** — prueba sin registro; muy medido.
 - **Developer** — API key gratuita para integradores; **más límites de lectura**. Prepare sigue estrecho a propósito (la simulación cuesta RPC compartido). Emite keys vía portal / admin.
+<IfFeature name="builder">
 - **Builder** — entitlement on-chain opcional + SIWE para rutas ligadas a wallet. Ver [auth Builder](/docs/developers/Workflows/builder-auth).
+</IfFeature>
 - **MCP** — pago por tool; no envíes keys `ctk_` a MCP.
 
-Consulta `GET /catalog` en `api.clocktower.finance` para el manifiesto en vivo (`writeRpm`, `writeDaily`, `dailyTotalRequests`, `developerKeysEnabled`, `builderAuthEnabled`) y el registro `chains[]`. Selección de cadena REST: [Selección de cadena](/docs/developers/REST%20API/chain-selection).
+Consulta `GET /catalog` en `api.clocktower.finance` para el manifiesto en vivo (`writeRpm`, `writeDaily`, `dailyTotalRequests`, `developerKeysEnabled`<IfFeature name="builder">, `builderAuthEnabled`</IfFeature>) y el registro `chains[]`. Selección de cadena REST: [Selección de cadena](/docs/developers/REST%20API/chain-selection).
 
 ## Modelo de escritura (solo prepare)
 

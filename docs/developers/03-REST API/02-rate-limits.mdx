@@ -10,21 +10,90 @@ Paths are relative to `https://api.clocktower.finance`.
 
 Limits are **per identity** (not one shared pool for all users):
 
-| Lane | Identity |
-|------|----------|
-| Free | Client **IP** |
-| Developer | **API key** (`ctk_…`) |
-| Builder | Wallet **address** (session) |
-| MCP | **IP** (x402; separate surface) |
+<table>
+<thead>
+<tr>
+<th>Lane</th>
+<th>Identity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free</td>
+<td>Client <strong>IP</strong></td>
+</tr>
+<tr>
+<td>Developer</td>
+<td><strong>API key</strong> (<code>ctk_…</code>)</td>
+</tr>
+<IfFeature name="builder">
+<tr>
+<td>Builder</td>
+<td>Wallet <strong>address</strong> (session)</td>
+</tr>
+</IfFeature>
+<tr>
+<td>MCP</td>
+<td><strong>IP</strong> (x402; separate surface)</td>
+</tr>
+</tbody>
+</table>
 
 ## Default limits (approx.)
 
-| Lane | Auth | Global | Expensive | Subgraph / day | Prepare / readiness | All requests / day |
-|------|------|--------|-----------|----------------|---------------------|--------------------|
-| **Free** | None | 20 rpm | 3 rpm | 100 | **2/min · 20/day** | **500** |
-| **Developer** | `Bearer ctk_…` | 80 rpm | 40 rpm | 3,000 | **5/min · 100/day** | **5,000** |
-| **Builder** | `Bearer cts_…` | 120 rpm | 120 rpm | 10,000 | 30/min | Unlimited (when enabled) |
-| **MCP** | x402 | 300 rpm | 300 rpm | — | 60/min | — |
+<table>
+<thead>
+<tr>
+<th>Lane</th>
+<th>Auth</th>
+<th>Global</th>
+<th>Expensive</th>
+<th>Subgraph / day</th>
+<th>Prepare / readiness</th>
+<th>All requests / day</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Free</strong></td>
+<td>None</td>
+<td>20 rpm</td>
+<td>3 rpm</td>
+<td>100</td>
+<td><strong>2/min · 20/day</strong></td>
+<td><strong>500</strong></td>
+</tr>
+<tr>
+<td><strong>Developer</strong></td>
+<td><code>Bearer ctk_…</code></td>
+<td>80 rpm</td>
+<td>40 rpm</td>
+<td>3,000</td>
+<td><strong>5/min · 100/day</strong></td>
+<td><strong>5,000</strong></td>
+</tr>
+<IfFeature name="builder">
+<tr>
+<td><strong>Builder</strong></td>
+<td><code>Bearer cts_…</code></td>
+<td>120 rpm</td>
+<td>120 rpm</td>
+<td>10,000</td>
+<td>30/min</td>
+<td>Unlimited (when enabled)</td>
+</tr>
+</IfFeature>
+<tr>
+<td><strong>MCP</strong></td>
+<td>x402</td>
+<td>300 rpm</td>
+<td>300 rpm</td>
+<td>—</td>
+<td>60/min</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
 
 Canonical numbers: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `writeDaily`, `dailyTotalRequests`, …).
 
@@ -47,13 +116,17 @@ Full prepare runs **on-chain simulation and gas estimation**. The server never r
 
 - Cross-account and provider reads allowed under the expensive bucket
 - Search: `first` ≤ 10; no `includeDetails=true`
+<IfFeature name="builder">
 - `:me` routes require Builder (403 otherwise)
+</IfFeature>
 
 ## Developer tier notes
 
 - Higher read and discovery limits than free
 - Search: `first` ≤ 25; `includeDetails` allowed
+<IfFeature name="builder">
 - Still no `:me` (keys are not wallet-bound)
+</IfFeature>
 - Invalid/revoked keys → **401**, not free-tier fallback
 
 ## Exceeding a limit

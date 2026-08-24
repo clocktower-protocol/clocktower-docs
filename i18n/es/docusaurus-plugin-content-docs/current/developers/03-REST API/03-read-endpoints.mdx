@@ -33,11 +33,30 @@ Las lecturas de protocolo aceptan `?chainId=` opcional (decimal o CAIP-2). Si se
 
 ## Cuentas
 
-| Endpoint | Descripción |
-|----------|-------------|
-| `GET /accounts/:address/subscriptions` | Suscripciones de una cuenta (enriquecidas) |
-| `GET /accounts/:address` | Cuenta enriquecida: arrays `subscribedTo` y `created` |
-| `GET /accounts/me/subscriptions` | Sesión Builder — tus suscripciones |
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /accounts/:address/subscriptions</code></td>
+<td>Suscripciones de una cuenta (enriquecidas)</td>
+</tr>
+<tr>
+<td><code>GET /accounts/:address</code></td>
+<td>Cuenta enriquecida: arrays <code>subscribedTo</code> y <code>created</code></td>
+</tr>
+<IfFeature name="builder">
+<tr>
+<td><code>GET /accounts/me/subscriptions</code></td>
+<td>Sesión Builder — tus suscripciones</td>
+</tr>
+</IfFeature>
+</tbody>
+</table>
 
 ## Tokens
 

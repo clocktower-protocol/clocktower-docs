@@ -65,12 +65,6 @@ curl -s https://api.clocktower.finance/catalog \
           "revoke": "https://api.clocktower.finance/developer/keys/:id",
           "adminAuth": "Bearer <DEVELOPER_KEYS_ADMIN_SECRET> or X-Clocktower-Admin-Key"
         }
-      },
-      "builder": {
-        "auth": "SIWE session (Bearer cts_…)",
-        "enabled": false,
-        "limits": { "...": "..." },
-        "authEndpoints": ["/auth/challenge", "/auth/verify"]
       }
     },
     "mcp": {
@@ -80,7 +74,6 @@ curl -s https://api.clocktower.finance/catalog \
   },
   "apiEnabled": true,
   "developerKeysEnabled": true,
-  "builderAuthEnabled": false,
   "routes": [
     { "method": "GET", "path": "/api/catalog", "description": "..." }
   ]
@@ -92,5 +85,9 @@ curl -s https://api.clocktower.finance/catalog \
 - Catalog itself is not filtered by chain, but an unsupported `?chainId=` on the request still returns 400.
 
 Use the catalog to discover endpoints and to verify which auth modes and limits apply at runtime. Limit fields include `writeRpm`, `writeDaily`, and `dailyTotalRequests`.
+
+<IfFeature name="builder">
+When Builder entitlement is configured, the catalog also includes `builderAuthEnabled` and `access.rest.builder` (SIWE session, `cts_…`, auth endpoints `/auth/challenge` and `/auth/verify`).
+</IfFeature>
 
 See [Chain selection](/docs/developers/REST%20API/chain-selection).

@@ -6,7 +6,7 @@ sidebar_position: 2
 
 # Chain Selection
 
-REST protocol routes are chain-aware. Pass optional `?chainId=` to read or prepare against a protocol chain. **MCP, x402, SIWE, and Builder entitlement stay on Base** (chainId `8453`).
+REST protocol routes are chain-aware. Pass optional `?chainId=` to read or prepare against a protocol chain. **MCP, x402<IfFeature name="builder">, SIWE, and Builder entitlement</IfFeature> stay on Base** (chainId `8453`).
 
 ## Query parameter
 
@@ -38,7 +38,7 @@ curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=
 |--------------------|------------------|
 | Protocol state, subscriptions, accounts, approved tokens | `GET /catalog` (still lists `chains`) |
 | Discovery, history, profiles | `GET /status`, `/` |
-| Prepare, readiness, `POST /transactions/status` | Auth (`/auth/*`), developer keys |
+| Prepare, readiness, `POST /transactions/status` | Developer keys<IfFeature name="builder">, auth (`/auth/*`)</IfFeature> |
 
 `GET /catalog` is not filtered by chain. It reports the REST default as `chainId` and the full registry as `chains[]`. Passing an unsupported `chainId` on any REST path still returns 400 because the worker validates the query before routing.
 
@@ -71,15 +71,17 @@ curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=
 
 The registry currently ships **Base mainnet** as the only REST-enabled chain. Additional EVM chains can be enabled without changing the request shape — keep using `?chainId=` and read `chains[]` at runtime.
 
-## MCP, SIWE, and Builder
+## MCP<IfFeature name="builder">, SIWE, and Builder</IfFeature>
 
 These stay on Base even when REST `?chainId=` selects another protocol chain:
 
 - **MCP** — no `chainId` argument; tools and x402 USDC payments are Base-only
+<IfFeature name="builder">
 - **SIWE** — challenge/verify use Base chain ID `8453`
 - **Builder entitlement** — `BUILDER_SUB_ID` / `BUILDER_SUB_IDS` is always checked on Base
+</IfFeature>
 
-Changing `DEFAULT_REST_CHAIN_ID` does not move MCP, SIWE, or Builder.
+Changing `DEFAULT_REST_CHAIN_ID` does not move MCP<IfFeature name="builder">, SIWE, or Builder</IfFeature>.
 
 ## Writes
 

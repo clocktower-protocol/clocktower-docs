@@ -33,11 +33,30 @@ Protocol reads accept optional `?chainId=` (decimal or CAIP-2). Omitted uses the
 
 ## Accounts
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /accounts/:address/subscriptions` | Subscriptions for an account (rich) |
-| `GET /accounts/:address` | Enriched account: `subscribedTo` and `created` arrays |
-| `GET /accounts/me/subscriptions` | Builder session — your subscriptions |
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /accounts/:address/subscriptions</code></td>
+<td>Subscriptions for an account (rich)</td>
+</tr>
+<tr>
+<td><code>GET /accounts/:address</code></td>
+<td>Enriched account: <code>subscribedTo</code> and <code>created</code> arrays</td>
+</tr>
+<IfFeature name="builder">
+<tr>
+<td><code>GET /accounts/me/subscriptions</code></td>
+<td>Builder session — your subscriptions</td>
+</tr>
+</IfFeature>
+</tbody>
+</table>
 
 ## Tokens
 

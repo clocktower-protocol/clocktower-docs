@@ -6,7 +6,7 @@ sidebar_position: 2
 
 # Selección de cadena
 
-Las rutas de protocolo REST son conscientes de la cadena. Pasa `?chainId=` opcional para leer o preparar contra una cadena del protocolo. **MCP, x402, SIWE y el entitlement Builder permanecen en Base** (chainId `8453`).
+Las rutas de protocolo REST son conscientes de la cadena. Pasa `?chainId=` opcional para leer o preparar contra una cadena del protocolo. **MCP, x402<IfFeature name="builder">, SIWE y el entitlement Builder</IfFeature> permanecen en Base** (chainId `8453`).
 
 ## Parámetro de query
 
@@ -38,7 +38,7 @@ curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=
 |---------------------|------------------------|
 | Estado del protocolo, suscripciones, cuentas, tokens aprobados | `GET /catalog` (igual lista `chains`) |
 | Discovery, historial, perfiles | `GET /status`, `/` |
-| Prepare, readiness, `POST /transactions/status` | Auth (`/auth/*`), developer keys |
+| Prepare, readiness, `POST /transactions/status` | Developer keys<IfFeature name="builder">, auth (`/auth/*`)</IfFeature> |
 
 `GET /catalog` no se filtra por cadena. Reporta el default REST como `chainId` y el registro completo como `chains[]`. Pasar un `chainId` no soportado en cualquier ruta REST igual devuelve 400 porque el worker valida el query antes de enrutar.
 
@@ -71,15 +71,17 @@ curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=
 
 El registro actualmente envía **Base mainnet** como la única cadena habilitada para REST. Se pueden activar más cadenas EVM sin cambiar la forma de la petición — sigue usando `?chainId=` y lee `chains[]` en runtime.
 
-## MCP, SIWE y Builder
+## MCP<IfFeature name="builder">, SIWE y Builder</IfFeature>
 
 Estos permanecen en Base aunque REST `?chainId=` seleccione otra cadena de protocolo:
 
 - **MCP** — no hay argumento `chainId`; tools y pagos x402 USDC son solo Base
+<IfFeature name="builder">
 - **SIWE** — challenge/verify usan chain ID de Base `8453`
 - **Entitlement Builder** — `BUILDER_SUB_ID` / `BUILDER_SUB_IDS` se comprueba siempre en Base
+</IfFeature>
 
-Cambiar `DEFAULT_REST_CHAIN_ID` no mueve MCP, SIWE ni Builder.
+Cambiar `DEFAULT_REST_CHAIN_ID` no mueve MCP<IfFeature name="builder">, SIWE ni Builder</IfFeature>.
 
 ## Escrituras
 

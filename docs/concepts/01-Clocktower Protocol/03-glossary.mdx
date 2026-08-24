@@ -28,7 +28,7 @@ The Caller is the name given to user to calls the contract at its regular timely
 
 ## REST API
 
-HTTP interface to Clocktower protocol data and write preparation. Free tier with rate limits; optional Builder session for higher limits. See [Developers](/docs/developers/).
+HTTP interface to Clocktower protocol data and write preparation. Free tier with rate limits<IfFeature name="builder">; optional Builder session for higher limits</IfFeature>. See [Developers](/docs/developers/).
 
 ## MCP (Model Context Protocol)
 
@@ -44,6 +44,8 @@ Agent-facing tool interface at `mcp.clocktower.finance`. Paid per call via x402 
 
 Micropayment protocol used by the MCP server. Agents pay USDC on Base per tool call. See [x402 Payments](/docs/developers/MCP/x402-payments).
 
+<IfFeature name="builder">
 ## Builder lane
 
 REST access tier requiring SIWE wallet authentication and an on-chain Builder entitlement subscription. See [Builder Auth](/docs/developers/Workflows/builder-auth).
+</IfFeature>

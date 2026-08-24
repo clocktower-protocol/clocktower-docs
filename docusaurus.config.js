@@ -35,6 +35,7 @@ const config = {
     features: {
       sdk: siteFlags.sdk,
       i18n: siteFlags.i18n,
+      builder: siteFlags.builder,
     },
   },
 
@@ -107,6 +108,7 @@ const config = {
                   '**/02-SDK/**',
                   '**/01-Getting Started/02-quickstart-sdk.mdx',
                 ]),
+            ...(siteFlags.builder ? [] : ['**/05-Workflows/04-builder-auth.mdx']),
           ],
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
