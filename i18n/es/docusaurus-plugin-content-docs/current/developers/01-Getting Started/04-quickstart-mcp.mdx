@@ -54,7 +54,7 @@ npm start mcp call prepare_subscribe '{
 La preparación completa devuelve `unsignedTransactions`, `signingMode`, `instructions` y `requestId`. Firma y transmite desde tu wallet, luego:
 
 ```bash
-npm start mcp call get_transaction_status '{"hash":"0x..."}'
+npm start mcp call get_transaction_status '{"txHash":"0x..."}'
 ```
 
 ## Flujo de escritura

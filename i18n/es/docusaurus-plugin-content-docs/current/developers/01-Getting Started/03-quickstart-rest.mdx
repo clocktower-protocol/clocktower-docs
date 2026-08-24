@@ -66,7 +66,7 @@ Firma `unsignedTransactions` en tu wallet, haz broadcast a la cadena en `unsigne
 ```bash
 curl -s -X POST "https://api.clocktower.finance/transactions/status?chainId=8453" \
   -H "Content-Type: application/json" \
-  -d '{ "hash": "0x..." }' | jq .
+  -d '{ "txHash": "0x..." }' | jq .
 ```
 
 Prepare/readiness tiene **límites de tasa** (free: 2/min · 20/día; developer: 5/min · 100/día).
