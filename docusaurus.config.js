@@ -284,6 +284,10 @@ const config = {
                 label: 'Whitepaper',
                 to: '/whitepaper',
               },
+              {
+                label: 'Terms of Use',
+                to: '/terms',
+              },
               // IPFS App link disabled until the deployment is stable.
               // {
               //   label: 'IPFS App',
