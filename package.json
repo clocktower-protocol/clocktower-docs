@@ -52,13 +52,14 @@
     "@babel/plugin-transform-modules-systemjs": ">=7.29.4 <8",
     "webpack-dev-server": ">=5.2.6",
     "http-proxy-middleware": ">=2.0.10",
-    "js-yaml": ">=4.3.0",
+    "js-yaml": ">=4.3.1 <5",
     "postcss": ">=8.5.23",
     "body-parser": ">=1.20.6",
     "dompurify": ">=3.4.12",
     "shell-quote": ">=1.8.5",
     "sharp": ">=0.35.0",
     "image-size": "npm:image-size-next@2.1.1",
+    "nanoid": ">=3.3.18 <4",
     "gray-matter": {
       "js-yaml": "3.15.0"
     },
