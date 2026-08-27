@@ -32,6 +32,11 @@ const sidebars = {
         'developers/Getting Started/quickstart-mcp',
       ],
     },
+    {
+      type: 'link',
+      label: 'API keys',
+      href: 'https://developers.clocktower.finance',
+    },
     ...(siteFlags.sdk
       ? [
           {
