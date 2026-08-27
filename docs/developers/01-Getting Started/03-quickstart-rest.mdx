@@ -43,7 +43,26 @@ curl -s "https://api.clocktower.finance/subscriptions?first=10" | jq .
 
 Free tier: `first` max 10, no `includeDetails`. Developer: `first` max 25, `includeDetails` allowed.
 
-## Preferred: prepare subscribe by id
+## Create a subscription
+
+`amount` is a human-readable token string (e.g. `"10"`), not protocol wei. `frequency` is `0` weekly, `1` monthly, `2` quarterly, `3` yearly.
+
+```bash
+curl -s -X POST "https://api.clocktower.finance/prepare/create_subscription?chainId=8453" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "0xProviderAddress",
+    "amount": "10",
+    "token": "0x...",
+    "details": { "url": "https://example.com/", "description": "Premium" },
+    "frequency": 1,
+    "dueDay": 15
+  }' | jq .
+```
+
+See [Create subscription workflow](/docs/developers/Workflows/create-subscription).
+
+## Subscribe
 
 When you already know the subscription id, use **by-id** endpoints (amount, token, and provider are loaded on-chain):
 
@@ -57,9 +76,7 @@ curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=
   -d '{ "from": "0xYourAddress", "id": "0x..." }' | jq .
 ```
 
-Optional: `"readinessOnly": true` on prepare for preflight without unsigned transactions.
-
-Object-based `prepare/subscribe` still works when you already hold a full subscription object. Human-readable `subscription.amount` strings (e.g. `"10"`) are required when creating or passing amounts — not protocol wei.
+Optional: `"readinessOnly": true` on prepare for preflight without unsigned transactions. Object-based `prepare/subscribe` still works when you already hold a full subscription object.
 
 Sign `unsignedTransactions` in your wallet, broadcast to the chain in `unsignedTransactions[].chainId`, then poll status (pass the same `?chainId=`):
 

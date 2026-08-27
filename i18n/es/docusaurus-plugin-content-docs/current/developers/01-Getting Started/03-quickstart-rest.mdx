@@ -43,7 +43,26 @@ curl -s "https://api.clocktower.finance/subscriptions?first=10" | jq .
 
 Nivel free: `first` máx. 10, sin `includeDetails`. Developer: `first` máx. 25, `includeDetails` permitido.
 
-## Preferido: prepare subscribe por id
+## Crear una suscripción
+
+`amount` es un string de token legible (p. ej. `"10"`), no wei del protocolo. `frequency` es `0` semanal, `1` mensual, `2` trimestral, `3` anual.
+
+```bash
+curl -s -X POST "https://api.clocktower.finance/prepare/create_subscription?chainId=8453" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "0xProviderAddress",
+    "amount": "10",
+    "token": "0x...",
+    "details": { "url": "https://example.com/", "description": "Premium" },
+    "frequency": 1,
+    "dueDay": 15
+  }' | jq .
+```
+
+Ver el [flujo de crear suscripción](/docs/developers/Workflows/create-subscription).
+
+## Suscribirse
 
 Si ya conoces el id de la suscripción, usa endpoints **by-id** (amount, token y provider se cargan on-chain):
 
@@ -57,9 +76,7 @@ curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=
   -d '{ "from": "0xYourAddress", "id": "0x..." }' | jq .
 ```
 
-Opcional: `"readinessOnly": true` en prepare para preflight sin transacciones sin firmar.
-
-La forma por objeto `prepare/subscribe` sigue valiendo cuando ya tienes el objeto completo. Al crear o pasar amounts se requieren strings **human-readable** (p. ej. `"10"`), no wei del protocolo.
+Opcional: `"readinessOnly": true` en prepare para preflight sin transacciones sin firmar. La forma por objeto `prepare/subscribe` sigue valiendo cuando ya tienes el objeto completo.
 
 Firma `unsignedTransactions` en tu wallet, haz broadcast a la cadena en `unsignedTransactions[].chainId` y consulta el estado (pasa el mismo `?chainId=`):
 

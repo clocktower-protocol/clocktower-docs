@@ -41,12 +41,27 @@ npm start mcp call search_subscriptions '{"first":10}'
 npm start mcp call get_subscription '{"id":"0x..."}'
 ```
 
-## Example: prepare subscribe
+## Create a subscription
+
+`amount` is a human-readable token string (e.g. `"10"`). `frequency` is `0` weekly, `1` monthly, `2` quarterly, `3` yearly.
 
 ```bash
-npm start mcp call prepare_subscribe '{
+npm start mcp call prepare_create_subscription '{
+  "from": "0xProviderAddress",
+  "amount": "10",
+  "token": "0x...",
+  "details": { "url": "https://example.com/", "description": "Premium" },
+  "frequency": 1,
+  "dueDay": 15
+}'
+```
+
+## Subscribe
+
+```bash
+npm start mcp call prepare_subscribe_by_id '{
   "from": "0xYourAddress",
-  "subscription": { "id": "0x..." },
+  "id": "0x...",
   "readinessOnly": true
 }'
 ```
