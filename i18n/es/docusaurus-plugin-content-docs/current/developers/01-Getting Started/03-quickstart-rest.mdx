@@ -45,7 +45,11 @@ Nivel free: `first` máx. 10, sin `includeDetails`. Developer: `first` máx. 25,
 
 ## Crear una suscripción
 
-`amount` es un string de token legible (p. ej. `"10"`), no wei del protocolo. `frequency` es `0` semanal, `1` mensual, `2` trimestral, `3` anual.
+`amount` es un string de token legible (p. ej. `"10"`), no wei del protocolo.
+
+`frequency` es `0` semanal, `1` mensual, `2` trimestral, `3` anual.
+
+`details.url` y `details.description` pueden ser strings vacíos.
 
 ```bash
 curl -s -X POST "https://api.clocktower.finance/prepare/create_subscription?chainId=8453" \

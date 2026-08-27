@@ -45,7 +45,11 @@ Free tier: `first` max 10, no `includeDetails`. Developer: `first` max 25, `incl
 
 ## Create a subscription
 
-`amount` is a human-readable token string (e.g. `"10"`), not protocol wei. `frequency` is `0` weekly, `1` monthly, `2` quarterly, `3` yearly.
+`amount` is a human-readable token string (e.g. `"10"`), not protocol wei.
+
+`frequency` is `0` weekly, `1` monthly, `2` quarterly, `3` yearly.
+
+`details.url` and `details.description` may be empty strings.
 
 ```bash
 curl -s -X POST "https://api.clocktower.finance/prepare/create_subscription?chainId=8453" \

@@ -43,7 +43,11 @@ npm start mcp call get_subscription '{"id":"0x..."}'
 
 ## Crear una suscripción
 
-`amount` es un string de token legible (p. ej. `"10"`). `frequency` es `0` semanal, `1` mensual, `2` trimestral, `3` anual.
+`amount` es un string de token legible (p. ej. `"10"`), no wei del protocolo.
+
+`frequency` es `0` semanal, `1` mensual, `2` trimestral, `3` anual.
+
+`details.url` y `details.description` pueden ser strings vacíos.
 
 ```bash
 npm start mcp call prepare_create_subscription '{
