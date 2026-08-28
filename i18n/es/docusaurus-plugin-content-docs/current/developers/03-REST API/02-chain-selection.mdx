@@ -2,12 +2,12 @@
 id: chain-selection
 title: Selección de cadena
 sidebar_position: 2
-description: Selecciona una cadena de protocolo en REST con ?chainId= opcional. MCP y x402 permanecen en Base.
+description: Selecciona una cadena de protocolo en REST con ?chainId= opcional. MCP permanece en Base.
 ---
 
 # Selección de cadena
 
-Las rutas de protocolo REST son conscientes de la cadena. Pasa `?chainId=` opcional para leer o preparar contra una cadena del protocolo. **MCP, x402<IfFeature name="builder">, SIWE y el entitlement Builder</IfFeature> permanecen en Base** (chainId `8453`).
+Las rutas de protocolo REST son conscientes de la cadena. Pasa `?chainId=` opcional para leer o preparar contra una cadena del protocolo. **MCP permanece en Base** (chainId `8453`)<IfFeature name="builder">, igual que SIWE y el entitlement Builder</IfFeature>.
 
 ## Parámetro de query
 
@@ -76,7 +76,7 @@ El registro actualmente envía **Base mainnet** como la única cadena habilitada
 
 Estos permanecen en Base aunque REST `?chainId=` seleccione otra cadena de protocolo:
 
-- **MCP** — no hay argumento `chainId`; tools y pagos x402 USDC son solo Base
+- **MCP** — no hay argumento `chainId`; las tools son solo Base
 <IfFeature name="builder">
 - **SIWE** — challenge/verify usan chain ID de Base `8453`
 - **Entitlement Builder** — `BUILDER_SUB_ID` / `BUILDER_SUB_IDS` se comprueba siempre en Base

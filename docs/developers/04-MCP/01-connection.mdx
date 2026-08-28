@@ -16,21 +16,41 @@ https://mcp.clocktower.finance
 
 The MCP client connects to the subdomain root — no `/mcp` path suffix.
 
+## Access
+
+MCP uses the same **free** (per IP) and **developer** (`ctk_…`) lanes as REST. Each tool call counts against those [rate limits](/docs/developers/REST%20API/rate-limits). Mint a key at [developers.clocktower.finance](https://developers.clocktower.finance) when you need higher read limits. See [REST authentication](/docs/developers/REST%20API/authentication).
+
+Invalid or revoked keys fail the request (**401**). They do **not** fall back to the free tier.
+
 ## Client setup
 
 Connect using any MCP-compatible client. Your client must support:
 
 1. MCP transport to `mcp.clocktower.finance` (Streamable HTTP; no `/mcp` path suffix)
-2. x402 USDC payments on Base for tool calls
-3. Wallet signing for prepared transactions
+2. Wallet signing for prepared transactions
 
-Example client config:
+Example client config (free tier — no key):
 
 ```json
 {
   "mcpServers": {
     "clocktower": {
       "url": "https://mcp.clocktower.finance"
+    }
+  }
+}
+```
+
+With a developer key, send the same `Authorization` header REST uses:
+
+```json
+{
+  "mcpServers": {
+    "clocktower": {
+      "url": "https://mcp.clocktower.finance",
+      "headers": {
+        "Authorization": "Bearer ctk_…"
+      }
     }
   }
 }
@@ -48,12 +68,12 @@ Then call tools by name with JSON arguments. See the [MCP quickstart](/docs/deve
 | Write (prepare) | `prepare_subscribe`, `prepare_create_subscription`, `prepare_remit` |
 | Status | `get_transaction_status`, `check_subscribe_readiness` |
 
-See [Tools reference](/docs/developers/MCP/tools-reference) for the full list and pricing.
+See [Tools reference](/docs/developers/MCP/tools-reference) for the full list.
 
 ## Protocol
 
 - **Chain:** Base mainnet (chainId 8453). MCP does **not** accept `chainId`; tools always run on Base.
-- **Payments:** x402 USDC micropayments per tool call
+- **Auth:** same free and developer credentials as REST
 - **Writes:** prepare-only — server never relays signed transactions
 
 REST can select a protocol chain with `?chainId=`. That does not apply to MCP. See [Chain selection](/docs/developers/REST%20API/chain-selection).

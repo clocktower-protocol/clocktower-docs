@@ -8,7 +8,7 @@ sidebar_position: 3
 
 Rutas relativas a `https://api.clocktower.finance`.
 
-Los límites son **por identidad** (no un único cupo compartido para todos los usuarios):
+Los límites son **por identidad** (no un único cupo compartido para todos los usuarios). REST y MCP comparten estas identidades: una API key de developer usada en ambas superficies cuenta contra los mismos buckets.
 
 <table>
 <thead>
@@ -32,10 +32,6 @@ Los límites son **por identidad** (no un único cupo compartido para todos los 
 <td><strong>Dirección</strong> de wallet (sesión)</td>
 </tr>
 </IfFeature>
-<tr>
-<td>MCP</td>
-<td><strong>IP</strong> (x402; superficie aparte)</td>
-</tr>
 </tbody>
 </table>
 
@@ -83,19 +79,10 @@ Los límites son **por identidad** (no un único cupo compartido para todos los 
 <td>Ilimitado (cuando está activo)</td>
 </tr>
 </IfFeature>
-<tr>
-<td><strong>MCP</strong></td>
-<td>x402</td>
-<td>300 rpm</td>
-<td>300 rpm</td>
-<td>—</td>
-<td>60/min</td>
-<td>—</td>
-</tr>
 </tbody>
 </table>
 
-Números canónicos: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `writeDaily`, `dailyTotalRequests`, …).
+Números canónicos: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `writeDaily`, `dailyTotalRequests`, …). Las llamadas a tools MCP usan las mismas cifras free y developer.
 
 ## Buckets de tasa
 
@@ -104,9 +91,11 @@ Números canónicos: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `wri
 - **Subgraph diario** — rutas expensive que pegan a The Graph
 - **Write RPM** — `POST /prepare/*`, `POST /check_subscribe_readiness` y `POST /check_remit_readiness`
 - **Write diario** — el mismo conjunto, por día UTC (protege el coste de simulación en Alchemy)
-- **Total diario** — cada petición REST ese día para esa identidad
+- **Total diario** — cada petición REST y cada llamada a tool MCP ese día para esa identidad
 
-Una llamada prepare consume **write RPM**, **write diario** y **total diario**. `POST /check_subscribe_readiness_by_id` **no** entra en el bucket write (solo RPM cheap/global — no simula on-chain).
+Una llamada prepare consume **write RPM**, **write diario** y **total diario**. `POST /check_subscribe_readiness_by_id` (y la tool MCP `check_subscribe_readiness_by_id`) **no** entra en el bucket write (solo RPM cheap/global — no simula on-chain).
+
+Las tools MCP `prepare_*` y de readiness usan los mismos buckets write que las rutas REST equivalentes.
 
 ## Por qué prepare está tan limitado
 

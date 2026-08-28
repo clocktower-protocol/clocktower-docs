@@ -14,7 +14,7 @@ If you are building an app, backend, or AI agent that needs to work with recurri
 We provide two HTTP surfaces<IfFeature name="sdk"> plus a TypeScript SDK</IfFeature>:
 
 - **REST API** (`api.clocktower.finance`) — query subscriptions, accounts, and history on a selected protocol chain; prepare transactions your users sign in their own wallet.
-- **MCP server** (`mcp.clocktower.finance`) — the same capabilities exposed as tools for AI agents and MCP clients, with per-call x402 pricing on Base.
+- **MCP server** (`mcp.clocktower.finance`) — the same capabilities exposed as tools for AI agents and MCP clients, using the same free and developer access as REST.
 <IfFeature name="sdk">
 - **TypeScript SDK** — read and write on-chain directly when you already have a wallet and RPC.
 </IfFeature>
@@ -31,13 +31,13 @@ Production endpoints at `api.clocktower.finance` and `mcp.clocktower.finance` ma
 
 **With REST**, you can power dashboards, backends, and browser apps: look up providers and subscribers, inspect payment history, check whether a subscription is ready to process, and get prepared calldata for creates, updates, cancels, and remits. Your app prepares; the user signs.
 
-**With MCP**, you can let an agent reason over live protocol state: discover subscriptions, inspect accounts, and request prepared writes through standard MCP tools. Each tool call is paid via x402 in USDC on Base — a good fit when the caller is an autonomous agent rather than your own server.
+**With MCP**, you can let an agent reason over live protocol state: discover subscriptions, inspect accounts, and request prepared writes through standard MCP tools. Access uses the same free rate limits and optional developer API keys as REST — a good fit when the caller is an agent rather than your own server.
 
 <IfFeature name="sdk">
 **With the SDK**, you skip the API for writes and talk to Base or Base Sepolia through viem. Use it for bots, scripts, and dApps that already manage their own keys and RPC (recommended for production write volume). Subscribe and provider-unsubscribe take a subscription **id** — the client loads the rest from chain.
 </IfFeature>
 
-(REST defaults to Base (chainId 8453) and accepts optional `?chainId=` on protocol routes. MCP, x402<IfFeature name="builder">, SIWE, and Builder entitlement</IfFeature> stay on Base.)
+(REST defaults to Base (chainId 8453) and accepts optional `?chainId=` on protocol routes. MCP<IfFeature name="builder">, SIWE, and Builder entitlement</IfFeature> stay on Base.)
 
 ## Choose your integration path
 
@@ -60,7 +60,7 @@ Production endpoints at `api.clocktower.finance` and `mcp.clocktower.finance` ma
 <tr>
 <td><a href="/docs/developers/MCP/connection">MCP Server</a></td>
 <td>AI agents and MCP clients</td>
-<td>x402 USDC micropayments on Base</td>
+<td>Free (IP), developer API key (<code>ctk_…</code>) — same as REST</td>
 <td>Prepare-only — sign in wallet</td>
 </tr>
 <IfFeature name="sdk">
@@ -90,13 +90,13 @@ For raw on-chain contract structs and function signatures, see the [Contract Tec
 <tbody>
 <tr>
 <td><strong>Free</strong></td>
-<td>REST</td>
+<td>REST and MCP</td>
 <td>None (IP)</td>
 <td>20 rpm; expensive 3 rpm; subgraph 100/day; prepare <strong>2/min · 20/day</strong>; <strong>500 req/day</strong></td>
 </tr>
 <tr>
 <td><strong>Developer</strong></td>
-<td>REST</td>
+<td>REST and MCP</td>
 <td><code>Authorization: Bearer ctk_…</code></td>
 <td>80 rpm; expensive 40; subgraph 3k/day; prepare <strong>5/min · 100/day</strong>; <strong>5k req/day</strong></td>
 </tr>
@@ -108,12 +108,6 @@ For raw on-chain contract structs and function signatures, see the [Contract Tec
 <td>Higher limits + <code>:me</code> when entitlement IDs are configured (may be off)</td>
 </tr>
 </IfFeature>
-<tr>
-<td><strong>Agent</strong></td>
-<td>MCP</td>
-<td>x402</td>
-<td>300 rpm; writes 60/min — <strong>not API keys</strong></td>
-</tr>
 </tbody>
 </table>
 
@@ -122,7 +116,7 @@ For raw on-chain contract structs and function signatures, see the [Contract Tec
 <IfFeature name="builder">
 - **Builder** — optional on-chain entitlement + SIWE for wallet-scoped routes. See [Builder auth](/docs/developers/Workflows/builder-auth).
 </IfFeature>
-- **MCP** — pay per tool; do not send `ctk_` keys to MCP.
+- **MCP** — same free and developer credentials and limits as REST; send `ctk_…` as `Authorization` on the MCP connection.
 
 See `GET /catalog` on `api.clocktower.finance` for the live tier manifest (`writeRpm`, `writeDaily`, `dailyTotalRequests`, `developerKeysEnabled`<IfFeature name="builder">, `builderAuthEnabled`</IfFeature>) and the `chains[]` registry. REST chain selection: [Chain selection](/docs/developers/REST%20API/chain-selection).
 

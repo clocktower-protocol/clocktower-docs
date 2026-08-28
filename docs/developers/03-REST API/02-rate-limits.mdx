@@ -8,7 +8,7 @@ sidebar_position: 3
 
 Paths are relative to `https://api.clocktower.finance`.
 
-Limits are **per identity** (not one shared pool for all users):
+Limits are **per identity** (not one shared pool for all users). REST and MCP share these identities: a developer key used on both surfaces counts against the same buckets.
 
 <table>
 <thead>
@@ -32,10 +32,6 @@ Limits are **per identity** (not one shared pool for all users):
 <td>Wallet <strong>address</strong> (session)</td>
 </tr>
 </IfFeature>
-<tr>
-<td>MCP</td>
-<td><strong>IP</strong> (x402; separate surface)</td>
-</tr>
 </tbody>
 </table>
 
@@ -83,19 +79,10 @@ Limits are **per identity** (not one shared pool for all users):
 <td>Unlimited (when enabled)</td>
 </tr>
 </IfFeature>
-<tr>
-<td><strong>MCP</strong></td>
-<td>x402</td>
-<td>300 rpm</td>
-<td>300 rpm</td>
-<td>—</td>
-<td>60/min</td>
-<td>—</td>
-</tr>
 </tbody>
 </table>
 
-Canonical numbers: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `writeDaily`, `dailyTotalRequests`, …).
+Canonical numbers: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `writeDaily`, `dailyTotalRequests`, …). MCP tool calls use the same free and developer figures.
 
 ## Rate buckets
 
@@ -104,9 +91,11 @@ Canonical numbers: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `write
 - **Subgraph daily** — expensive routes that hit The Graph
 - **Write RPM** — `POST /prepare/*`, `POST /check_subscribe_readiness`, and `POST /check_remit_readiness`
 - **Write daily** — same set, per UTC day (protects shared Alchemy simulation cost)
-- **Daily total** — every REST request that day for that identity
+- **Daily total** — every REST request and MCP tool call that day for that identity
 
-A prepare call consumes **write RPM**, **write daily**, and **daily total**. `POST /check_subscribe_readiness_by_id` is **not** in the write bucket (cheap / global RPM only — it does not run on-chain simulation).
+A prepare call consumes **write RPM**, **write daily**, and **daily total**. `POST /check_subscribe_readiness_by_id` (and the MCP `check_subscribe_readiness_by_id` tool) is **not** in the write bucket (cheap / global RPM only — it does not run on-chain simulation).
+
+MCP `prepare_*` and readiness tools use the same write buckets as the matching REST routes.
 
 ## Why prepare is capped tightly
 

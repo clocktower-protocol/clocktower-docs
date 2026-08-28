@@ -2,12 +2,12 @@
 id: chain-selection
 title: Chain Selection
 sidebar_position: 2
-description: Select a protocol chain on REST with optional ?chainId=. MCP and x402 stay on Base.
+description: Select a protocol chain on REST with optional ?chainId=. MCP stays on Base.
 ---
 
 # Chain Selection
 
-REST protocol routes are chain-aware. Pass optional `?chainId=` to read or prepare against a protocol chain. **MCP, x402<IfFeature name="builder">, SIWE, and Builder entitlement</IfFeature> stay on Base** (chainId `8453`).
+REST protocol routes are chain-aware. Pass optional `?chainId=` to read or prepare against a protocol chain. **MCP stays on Base** (chainId `8453`)<IfFeature name="builder">, as do SIWE and Builder entitlement</IfFeature>.
 
 ## Query parameter
 
@@ -76,7 +76,7 @@ The registry currently ships **Base mainnet** as the only REST-enabled chain. Ad
 
 These stay on Base even when REST `?chainId=` selects another protocol chain:
 
-- **MCP** — no `chainId` argument; tools and x402 USDC payments are Base-only
+- **MCP** — no `chainId` argument; tools are Base-only
 <IfFeature name="builder">
 - **SIWE** — challenge/verify use Base chain ID `8453`
 - **Builder entitlement** — `BUILDER_SUB_ID` / `BUILDER_SUB_IDS` is always checked on Base

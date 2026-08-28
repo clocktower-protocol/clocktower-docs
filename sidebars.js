@@ -78,7 +78,6 @@ const sidebars = {
       items: [
         'developers/MCP/connection',
         'developers/MCP/tools-reference',
-        'developers/MCP/x402-payments',
         'developers/MCP/write-workflow',
       ],
     },

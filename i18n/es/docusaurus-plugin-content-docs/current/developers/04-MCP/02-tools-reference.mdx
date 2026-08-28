@@ -6,25 +6,7 @@ sidebar_position: 2
 
 # Referencia de Herramientas MCP
 
-Todas las herramientas MCP se pagan vía x402 (USDC en Base). REST `/api` proporciona las mismas capacidades de forma gratuita (con límites de tasa).
-
-## Precios
-
-| Herramienta | Precio MCP |
-|------|-----------|
-| `get_protocol_state`, `get_subscription`, `get_account_subscriptions`, `get_subscribers`, `get_approved_token`, `list_approved_tokens`, `get_fee_balance` | $0.01 |
-| `get_subscriptions_due` | $0.02 |
-| `get_account` | $0.03 |
-| `get_subscription_details`, `get_provider_profile` | $0.02 |
-| `get_subscription_history` | $0.03 + $0.01 por 50 filas (máx. 200 → $0.06) |
-| `get_subscription_details_history` | $0.02 + $0.01 por 50 filas (máx. → $0.05) |
-| `get_account_activity` | $0.04 + $0.01 por 50 filas (máx. → $0.07) |
-| `search_subscriptions` | $0.05 + $0.01 × `first` (máx. 50) + $0.01 si `includeDetails` |
-| `check_subscribe_readiness`, `get_transaction_status` | $0.01 |
-| `check_remit_readiness` | $0.02 |
-| `prepare_*` completo (simulación + gas) | $0.02 |
-| `prepare_*` con `readinessOnly: true` | $0.01 (remit: $0.02) |
-| `prepare_remit` completo | $0.03 |
+Las tools MCP comparten los lanes **free** y **developer** de REST. Cada llamada cuenta contra esos [límites de tasa](/docs/developers/REST%20API/rate-limits). REST `/api` expone las mismas capacidades por HTTP.
 
 ## Herramientas de lectura
 
@@ -78,4 +60,4 @@ Respaldadas por subgrafo. Máx. 200 registros por llamada; incluye `hasMore` par
 | `prepare_remit` | Preparar `remit()` sin permisos |
 | `get_transaction_status` | Consultar confirmación de tx después de transmitir (`txHash`) |
 
-La preparación completa ejecuta simulación on-chain antes de que se liquide el pago x402. Una simulación fallida lanza excepción — no se te cobra. Prefiere tools `*_by_id` cuando ya conozcas el id de suscripción.
+La preparación completa ejecuta simulación on-chain. Una simulación fallida lanza excepción. Prefiere tools `*_by_id` cuando ya conozcas el id de suscripción.

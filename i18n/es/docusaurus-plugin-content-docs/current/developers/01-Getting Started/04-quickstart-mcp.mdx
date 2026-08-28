@@ -8,7 +8,7 @@ sidebar_position: 3
 
 Usa esta ruta cuando quien *llama* es un agente de IA, no tu propio backend. El servidor MCP expone herramientas del protocolo Clocktower para que un agente descubra suscripciones, inspeccione cuentas y solicite transacciones preparadas mediante una interfaz estándar de herramientas.
 
-Conecta cualquier cliente compatible con MCP a `mcp.clocktower.finance`. Cada llamada a herramienta se paga vía x402 en USDC en Base — consulta [pagos x402](/docs/developers/MCP/x402-payments) antes de ejecutar tu primera llamada. MCP es solo Base y no admite un argumento `chainId`.
+Conecta cualquier cliente compatible con MCP a `mcp.clocktower.finance`. El acceso usa los mismos límites free y **API keys de developer** opcionales (`ctk_…`) que REST — consulta [autenticación REST](/docs/developers/REST%20API/authentication) y [límites de tasa](/docs/developers/REST%20API/rate-limits). MCP es solo Base y no admite un argumento `chainId`.
 
 ## Endpoint
 
@@ -21,14 +21,12 @@ El cliente se conecta a la raíz del subdominio — sin sufijo `/mcp`.
 ## Requisitos
 
 - Cliente compatible con MCP y transporte Streamable HTTP (o equivalente)
-- Soporte x402 para pagos en USDC en Base (todas las llamadas a herramientas son de pago)
+- API key de developer opcional (`ctk_…`) para más límites
 - Wallet para firmar transacciones preparadas
-
-Consulta [Pagos x402](/docs/developers/MCP/x402-payments) para precios y flujo de pago.
 
 ## Añadir el servidor
 
-Apunta tu cliente MCP al endpoint. Ejemplo de configuración usado por muchos clientes:
+Apunta tu cliente MCP al endpoint. Ejemplo de configuración usado por muchos clientes (nivel free):
 
 ```json
 {
@@ -40,7 +38,7 @@ Apunta tu cliente MCP al endpoint. Ejemplo de configuración usado por muchos cl
 }
 ```
 
-Configura la wallet x402 / USDC según ese cliente. Luego lista las tools (el cliente mostrará nombres como `get_protocol_state` y `search_subscriptions`) y llámalas con los argumentos JSON de abajo.
+Para usar una API key de developer, añade `"headers": { "Authorization": "Bearer ctk_…" }` en esa entrada. Luego lista las tools (el cliente mostrará nombres como `get_protocol_state` y `search_subscriptions`) y llámalas con los argumentos JSON de abajo.
 
 ## Ejemplo: leer estado del protocolo
 

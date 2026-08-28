@@ -14,7 +14,7 @@ Si construyes una app, backend o agente de IA que necesita pagos recurrentes, cu
 Ofrecemos dos superficies HTTP<IfFeature name="sdk"> más un SDK TypeScript</IfFeature>:
 
 - **API REST** (`api.clocktower.finance`) — consulta suscripciones, cuentas e historial en una cadena de protocolo seleccionada; prepara transacciones que el usuario firma en su wallet.
-- **Servidor MCP** (`mcp.clocktower.finance`) — las mismas capacidades como tools para agentes y clientes MCP, con precios x402 por llamada en Base.
+- **Servidor MCP** (`mcp.clocktower.finance`) — las mismas capacidades como tools para agentes y clientes MCP, con el mismo acceso free y developer que REST.
 <IfFeature name="sdk">
 - **SDK TypeScript** — lectura y escritura on-chain directa cuando ya tienes wallet y RPC.
 </IfFeature>
@@ -31,13 +31,13 @@ Los endpoints de producción en `api.clocktower.finance` y `mcp.clocktower.finan
 
 **Con REST**, dashboards, backends y apps de navegador: proveedores y suscriptores, historial de pagos, readiness y calldata preparado para creates, updates, cancels y remits. Tu app prepara; el usuario firma.
 
-**Con MCP**, un agente razona sobre el estado vivo del protocolo: discovery, cuentas y writes preparados con tools MCP estándar. Cada tool se paga con x402 en USDC en Base — ideal cuando el llamador es un agente autónomo.
+**Con MCP**, un agente razona sobre el estado vivo del protocolo: discovery, cuentas y writes preparados con tools MCP estándar. El acceso usa los mismos límites free y API keys de developer opcionales que REST — ideal cuando el llamador es un agente y no tu propio servidor.
 
 <IfFeature name="sdk">
 **Con el SDK**, saltas la API para escrituras y hablas con Base o Base Sepolia vía viem. Úsalo en bots, scripts y dApps que ya gestionan claves y RPC (recomendado para volumen de escrituras en producción). Subscribe y provider-unsubscribe toman un **id** de suscripción — el cliente carga el resto desde la cadena.
 </IfFeature>
 
-(REST usa Base por defecto (chainId 8453) y acepta `?chainId=` opcional en rutas de protocolo. MCP, x402<IfFeature name="builder">, SIWE y el entitlement Builder</IfFeature> permanecen en Base.)
+(REST usa Base por defecto (chainId 8453) y acepta `?chainId=` opcional en rutas de protocolo. MCP<IfFeature name="builder">, SIWE y el entitlement Builder</IfFeature> permanecen en Base.)
 
 ## Elige tu camino de integración
 
@@ -60,7 +60,7 @@ Los endpoints de producción en `api.clocktower.finance` y `mcp.clocktower.finan
 <tr>
 <td><a href="/docs/developers/MCP/connection">Servidor MCP</a></td>
 <td>Agentes de IA y clientes MCP</td>
-<td>Micropagos x402 USDC en Base</td>
+<td>Free (IP), API key developer (<code>ctk_…</code>) — igual que REST</td>
 <td>Solo prepare — firma en wallet</td>
 </tr>
 <IfFeature name="sdk">
@@ -90,13 +90,13 @@ Para structs y firmas de funciones del contrato, ver la [referencia técnica del
 <tbody>
 <tr>
 <td><strong>Free</strong></td>
-<td>REST</td>
+<td>REST y MCP</td>
 <td>Ninguno (IP)</td>
 <td>20 rpm; expensive 3 rpm; subgraph 100/día; prepare <strong>2/min · 20/día</strong>; <strong>500 req/día</strong></td>
 </tr>
 <tr>
 <td><strong>Developer</strong></td>
-<td>REST</td>
+<td>REST y MCP</td>
 <td><code>Authorization: Bearer ctk_…</code></td>
 <td>80 rpm; expensive 40; subgraph 3k/día; prepare <strong>5/min · 100/día</strong>; <strong>5k req/día</strong></td>
 </tr>
@@ -108,12 +108,6 @@ Para structs y firmas de funciones del contrato, ver la [referencia técnica del
 <td>Más límites + <code>:me</code> cuando hay entitlement configurado (puede estar off)</td>
 </tr>
 </IfFeature>
-<tr>
-<td><strong>Agent</strong></td>
-<td>MCP</td>
-<td>x402</td>
-<td>300 rpm; writes 60/min — <strong>no son API keys</strong></td>
-</tr>
 </tbody>
 </table>
 
@@ -122,7 +116,7 @@ Para structs y firmas de funciones del contrato, ver la [referencia técnica del
 <IfFeature name="builder">
 - **Builder** — entitlement on-chain opcional + SIWE para rutas ligadas a wallet. Ver [auth Builder](/docs/developers/Workflows/builder-auth).
 </IfFeature>
-- **MCP** — pago por tool; no envíes keys `ctk_` a MCP.
+- **MCP** — las mismas credenciales y límites free y developer que REST; envía `ctk_…` como `Authorization` en la conexión MCP.
 
 Consulta `GET /catalog` en `api.clocktower.finance` para el manifiesto en vivo (`writeRpm`, `writeDaily`, `dailyTotalRequests`, `developerKeysEnabled`<IfFeature name="builder">, `builderAuthEnabled`</IfFeature>) y el registro `chains[]`. Selección de cadena REST: [Selección de cadena](/docs/developers/REST%20API/chain-selection).
 

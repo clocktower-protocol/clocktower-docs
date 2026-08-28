@@ -6,25 +6,7 @@ sidebar_position: 2
 
 # MCP Tools Reference
 
-All MCP tools are paid via x402 (USDC on Base). REST `/api` provides the same capabilities for free (rate-limited).
-
-## Pricing
-
-| Tool | MCP price |
-|------|-----------|
-| `get_protocol_state`, `get_subscription`, `get_account_subscriptions`, `get_subscribers`, `get_approved_token`, `list_approved_tokens`, `get_fee_balance` | $0.01 |
-| `get_subscriptions_due` | $0.02 |
-| `get_account` | $0.03 |
-| `get_subscription_details`, `get_provider_profile` | $0.02 |
-| `get_subscription_history` | $0.03 + $0.01 per 50 rows (max 200 → $0.06) |
-| `get_subscription_details_history` | $0.02 + $0.01 per 50 rows (max → $0.05) |
-| `get_account_activity` | $0.04 + $0.01 per 50 rows (max → $0.07) |
-| `search_subscriptions` | $0.05 + $0.01 × `first` (max 50) + $0.01 if `includeDetails` |
-| `check_subscribe_readiness`, `get_transaction_status` | $0.01 |
-| `check_remit_readiness` | $0.02 |
-| `prepare_*` full (simulation + gas) | $0.02 |
-| `prepare_*` with `readinessOnly: true` | $0.01 (remit: $0.02) |
-| `prepare_remit` full | $0.03 |
+MCP tools share the REST **free** and **developer** lanes. Each tool call counts against those [rate limits](/docs/developers/REST%20API/rate-limits). REST `/api` exposes the same capabilities over HTTP.
 
 ## Read tools
 
@@ -78,4 +60,4 @@ Subgraph-backed. Max 200 records per call; includes `hasMore` for pagination.
 | `prepare_remit` | Prepare permissionless `remit()` |
 | `get_transaction_status` | Poll confirmation after broadcast (`txHash`) |
 
-Full prepare runs on-chain simulation before x402 payment settles. Failed simulation throws — you are not charged. Prefer `*_by_id` tools when the subscription id is known.
+Full prepare runs on-chain simulation. Failed simulation throws. Prefer `*_by_id` tools when the subscription id is known.

@@ -8,7 +8,7 @@ sidebar_position: 1
 
 URL base: `https://api.clocktower.finance`. Las rutas siguientes son relativas a ese host (sin prefijo `/api` en el host de producción de la API).
 
-La API REST **no** usa x402. MCP usa x402 únicamente.
+MCP usa las mismas credenciales free y developer. Envía `Authorization: Bearer ctk_…` en las cabeceras del cliente MCP cuando quieras el lane developer. Ver [conexión MCP](/docs/developers/MCP/connection).
 
 El uso de la API alojada se rige por los [Términos de uso](/terms).
 
@@ -36,10 +36,6 @@ La selección de cadena (`?chainId=`) es independiente de la autenticación.<IfF
 <td>Nivel <strong>Builder</strong> — sesión SIWE tras entitlement on-chain (opcional; puede estar desactivado)</td>
 </tr>
 </IfFeature>
-<tr>
-<td>x402</td>
-<td><strong>Solo MCP</strong> — no se usa en REST</td>
-</tr>
 </tbody>
 </table>
 

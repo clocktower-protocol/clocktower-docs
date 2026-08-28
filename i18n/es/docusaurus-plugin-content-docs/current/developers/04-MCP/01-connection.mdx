@@ -16,21 +16,41 @@ https://mcp.clocktower.finance
 
 El cliente MCP se conecta a la raíz del subdominio — sin sufijo de ruta `/mcp`.
 
+## Acceso
+
+MCP usa los mismos lanes **free** (por IP) y **developer** (`ctk_…`) que REST. Cada llamada a herramienta cuenta contra esos [límites de tasa](/docs/developers/REST%20API/rate-limits). Emite una key en [developers.clocktower.finance](https://developers.clocktower.finance) cuando necesites más límites de lectura. Ver [autenticación REST](/docs/developers/REST%20API/authentication).
+
+Las keys inválidas o revocadas fallan la petición (**401**). **No** caen al nivel free.
+
 ## Configuración del cliente
 
 Conéctate usando cualquier cliente compatible con MCP. Tu cliente debe admitir:
 
 1. Transporte MCP a `mcp.clocktower.finance` (Streamable HTTP; sin sufijo `/mcp`)
-2. Pagos x402 en USDC en Base para llamadas a herramientas
-3. Firma con wallet para transacciones preparadas
+2. Firma con wallet para transacciones preparadas
 
-Ejemplo de configuración:
+Ejemplo de configuración (nivel free — sin key):
 
 ```json
 {
   "mcpServers": {
     "clocktower": {
       "url": "https://mcp.clocktower.finance"
+    }
+  }
+}
+```
+
+Con una API key de developer, envía la misma cabecera `Authorization` que REST:
+
+```json
+{
+  "mcpServers": {
+    "clocktower": {
+      "url": "https://mcp.clocktower.finance",
+      "headers": {
+        "Authorization": "Bearer ctk_…"
+      }
     }
   }
 }
@@ -48,12 +68,12 @@ Luego llama tools por nombre con argumentos JSON. Consulta el [inicio rápido MC
 | Escritura (preparación) | `prepare_subscribe`, `prepare_create_subscription`, `prepare_remit` |
 | Estado | `get_transaction_status`, `check_subscribe_readiness` |
 
-Consulta la [referencia de herramientas](/docs/developers/MCP/tools-reference) para la lista completa y precios.
+Consulta la [referencia de herramientas](/docs/developers/MCP/tools-reference) para la lista completa.
 
 ## Protocolo
 
 - **Cadena:** Base mainnet (chainId 8453). MCP **no** admite `chainId`; las tools siempre corren en Base.
-- **Pagos:** micropagos x402 en USDC por llamada a herramienta
+- **Auth:** las mismas credenciales free y developer que REST
 - **Escrituras:** solo preparación — el servidor nunca retransmite transacciones firmadas
 
 REST puede seleccionar una cadena de protocolo con `?chainId=`. Eso no aplica a MCP. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
