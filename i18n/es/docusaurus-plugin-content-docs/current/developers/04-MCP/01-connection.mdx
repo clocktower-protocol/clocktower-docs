@@ -20,9 +20,23 @@ El cliente MCP se conecta a la raíz del subdominio — sin sufijo de ruta `/mcp
 
 Conéctate usando cualquier cliente compatible con MCP. Tu cliente debe admitir:
 
-1. Transporte MCP a `mcp.clocktower.finance`
+1. Transporte MCP a `mcp.clocktower.finance` (Streamable HTTP; sin sufijo `/mcp`)
 2. Pagos x402 en USDC en Base para llamadas a herramientas
 3. Firma con wallet para transacciones preparadas
+
+Ejemplo de configuración:
+
+```json
+{
+  "mcpServers": {
+    "clocktower": {
+      "url": "https://mcp.clocktower.finance"
+    }
+  }
+}
+```
+
+Luego llama tools por nombre con argumentos JSON. Consulta el [inicio rápido MCP](/docs/developers/Getting%20Started/quickstart-mcp).
 
 ## Categorías de herramientas
 
@@ -35,16 +49,6 @@ Conéctate usando cualquier cliente compatible con MCP. Tu cliente debe admitir:
 | Estado | `get_transaction_status`, `check_subscribe_readiness` |
 
 Consulta la [referencia de herramientas](/docs/developers/MCP/tools-reference) para la lista completa y precios.
-
-## CLI auxiliar
-
-El repositorio [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) proporciona un CLI en Node:
-
-```bash
-cd clocktower-agent
-npm start mcp list
-npm start mcp call get_protocol_state
-```
 
 ## Protocolo
 

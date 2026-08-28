@@ -16,29 +16,52 @@ Connect any MCP-compatible client to `mcp.clocktower.finance`. Every tool call i
 https://mcp.clocktower.finance
 ```
 
+The client connects to the subdomain root — no `/mcp` path suffix.
+
 ## Requirements
 
-- MCP-compatible client
+- MCP-compatible client with Streamable HTTP (or equivalent) transport
 - x402 support for USDC payments on Base (all tool calls are paid)
 - Wallet for signing prepared transactions
 
 See [x402 payments](/docs/developers/MCP/x402-payments) for pricing and payment flow.
 
-## List and call tools
+## Add the server
 
-Using [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent):
+Point your MCP client at the endpoint. Example config used by many clients:
 
-```bash
-cd clocktower-agent
-npm start mcp list
-npm start mcp call get_protocol_state
-npm start mcp call search_subscriptions '{"first":10}'
+```json
+{
+  "mcpServers": {
+    "clocktower": {
+      "url": "https://mcp.clocktower.finance"
+    }
+  }
+}
+```
+
+Configure the client's x402 / USDC wallet according to that client. Then list tools (your client will show names such as `get_protocol_state` and `search_subscriptions`) and call them with the JSON arguments below.
+
+## Example: read protocol state
+
+**Tool:** `get_protocol_state`
+
+```json
+{}
+```
+
+**Tool:** `search_subscriptions`
+
+```json
+{ "first": 10 }
 ```
 
 ## Example: read subscription
 
-```bash
-npm start mcp call get_subscription '{"id":"0x..."}'
+**Tool:** `get_subscription`
+
+```json
+{ "id": "0x..." }
 ```
 
 ## Create a subscription
@@ -49,31 +72,37 @@ npm start mcp call get_subscription '{"id":"0x..."}'
 
 `details.url` and `details.description` may be empty strings.
 
-```bash
-npm start mcp call prepare_create_subscription '{
+**Tool:** `prepare_create_subscription`
+
+```json
+{
   "from": "0xProviderAddress",
   "amount": "10",
   "token": "0x...",
   "details": { "url": "https://example.com/", "description": "Premium" },
   "frequency": 1,
   "dueDay": 15
-}'
+}
 ```
 
 ## Subscribe
 
-```bash
-npm start mcp call prepare_subscribe_by_id '{
+**Tool:** `prepare_subscribe_by_id`
+
+```json
+{
   "from": "0xYourAddress",
   "id": "0x...",
   "readinessOnly": true
-}'
+}
 ```
 
 Full prepare returns `unsignedTransactions`, `signingMode`, `instructions`, and `requestId`. Sign and broadcast from your wallet, then:
 
-```bash
-npm start mcp call get_transaction_status '{"txHash":"0x..."}'
+**Tool:** `get_transaction_status`
+
+```json
+{ "txHash": "0x..." }
 ```
 
 ## Write workflow
@@ -83,10 +112,3 @@ check_*_readiness (optional) → prepare_* → sign → broadcast → get_transa
 ```
 
 See [MCP write workflow](/docs/developers/MCP/write-workflow) and [Subscribe workflow](/docs/developers/Workflows/subscribe).
-
-## Environment
-
-| Variable | Purpose |
-|----------|---------|
-| `MCP_URL` | MCP endpoint (`https://mcp.clocktower.finance`) |
-| `PRIVATE_KEY` | x402 payments<IfFeature name="builder"> + SIWE signing for builder auth</IfFeature> |

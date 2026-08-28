@@ -16,29 +16,52 @@ Conecta cualquier cliente compatible con MCP a `mcp.clocktower.finance`. Cada ll
 https://mcp.clocktower.finance
 ```
 
+El cliente se conecta a la raíz del subdominio — sin sufijo `/mcp`.
+
 ## Requisitos
 
-- Cliente compatible con MCP
+- Cliente compatible con MCP y transporte Streamable HTTP (o equivalente)
 - Soporte x402 para pagos en USDC en Base (todas las llamadas a herramientas son de pago)
 - Wallet para firmar transacciones preparadas
 
 Consulta [Pagos x402](/docs/developers/MCP/x402-payments) para precios y flujo de pago.
 
-## Listar y llamar herramientas
+## Añadir el servidor
 
-Usando [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent):
+Apunta tu cliente MCP al endpoint. Ejemplo de configuración usado por muchos clientes:
 
-```bash
-cd clocktower-agent
-npm start mcp list
-npm start mcp call get_protocol_state
-npm start mcp call search_subscriptions '{"first":10}'
+```json
+{
+  "mcpServers": {
+    "clocktower": {
+      "url": "https://mcp.clocktower.finance"
+    }
+  }
+}
+```
+
+Configura la wallet x402 / USDC según ese cliente. Luego lista las tools (el cliente mostrará nombres como `get_protocol_state` y `search_subscriptions`) y llámalas con los argumentos JSON de abajo.
+
+## Ejemplo: leer estado del protocolo
+
+**Tool:** `get_protocol_state`
+
+```json
+{}
+```
+
+**Tool:** `search_subscriptions`
+
+```json
+{ "first": 10 }
 ```
 
 ## Ejemplo: leer suscripción
 
-```bash
-npm start mcp call get_subscription '{"id":"0x..."}'
+**Tool:** `get_subscription`
+
+```json
+{ "id": "0x..." }
 ```
 
 ## Crear una suscripción
@@ -49,31 +72,37 @@ npm start mcp call get_subscription '{"id":"0x..."}'
 
 `details.url` y `details.description` pueden ser strings vacíos.
 
-```bash
-npm start mcp call prepare_create_subscription '{
+**Tool:** `prepare_create_subscription`
+
+```json
+{
   "from": "0xProviderAddress",
   "amount": "10",
   "token": "0x...",
   "details": { "url": "https://example.com/", "description": "Premium" },
   "frequency": 1,
   "dueDay": 15
-}'
+}
 ```
 
 ## Suscribirse
 
-```bash
-npm start mcp call prepare_subscribe_by_id '{
+**Tool:** `prepare_subscribe_by_id`
+
+```json
+{
   "from": "0xYourAddress",
   "id": "0x...",
   "readinessOnly": true
-}'
+}
 ```
 
 La preparación completa devuelve `unsignedTransactions`, `signingMode`, `instructions` y `requestId`. Firma y transmite desde tu wallet, luego:
 
-```bash
-npm start mcp call get_transaction_status '{"txHash":"0x..."}'
+**Tool:** `get_transaction_status`
+
+```json
+{ "txHash": "0x..." }
 ```
 
 ## Flujo de escritura
@@ -83,10 +112,3 @@ check_*_readiness (opcional) → prepare_* → firmar → transmitir → get_tra
 ```
 
 Consulta el [flujo de escritura MCP](/docs/developers/MCP/write-workflow) y el [flujo de suscripción](/docs/developers/Workflows/subscribe).
-
-## Entorno
-
-| Variable | Propósito |
-|----------|---------|
-| `MCP_URL` | Endpoint MCP (`https://mcp.clocktower.finance`) |
-| `PRIVATE_KEY` | Pagos x402<IfFeature name="builder"> + firma SIWE para autenticación builder</IfFeature> |

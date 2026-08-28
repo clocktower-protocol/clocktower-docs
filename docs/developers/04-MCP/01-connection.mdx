@@ -20,9 +20,23 @@ The MCP client connects to the subdomain root — no `/mcp` path suffix.
 
 Connect using any MCP-compatible client. Your client must support:
 
-1. MCP transport to `mcp.clocktower.finance`
+1. MCP transport to `mcp.clocktower.finance` (Streamable HTTP; no `/mcp` path suffix)
 2. x402 USDC payments on Base for tool calls
 3. Wallet signing for prepared transactions
+
+Example client config:
+
+```json
+{
+  "mcpServers": {
+    "clocktower": {
+      "url": "https://mcp.clocktower.finance"
+    }
+  }
+}
+```
+
+Then call tools by name with JSON arguments. See the [MCP quickstart](/docs/developers/Getting%20Started/quickstart-mcp).
 
 ## Tool categories
 
@@ -35,16 +49,6 @@ Connect using any MCP-compatible client. Your client must support:
 | Status | `get_transaction_status`, `check_subscribe_readiness` |
 
 See [Tools reference](/docs/developers/MCP/tools-reference) for the full list and pricing.
-
-## CLI helper
-
-The [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) repo provides a Node CLI:
-
-```bash
-cd clocktower-agent
-npm start mcp list
-npm start mcp call get_protocol_state
-```
 
 ## Protocol
 
