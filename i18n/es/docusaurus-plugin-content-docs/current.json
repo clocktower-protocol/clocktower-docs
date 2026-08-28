@@ -51,8 +51,8 @@
     "message": "Flujos de Trabajo",
     "description": "The label for category Workflows in sidebar developersSidebar"
   },
-  "sidebar.developersSidebar.link.API keys": {
-    "message": "API keys",
-    "description": "The label for link API keys in sidebar developersSidebar"
+  "sidebar.developersSidebar.link.API Keys": {
+    "message": "API Keys",
+    "description": "The label for link API Keys in sidebar developersSidebar"
   }
 }

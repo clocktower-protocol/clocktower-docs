@@ -34,7 +34,7 @@ const sidebars = {
     },
     {
       type: 'link',
-      label: 'API keys',
+      label: 'API Keys',
       href: 'https://developers.clocktower.finance',
     },
     ...(siteFlags.sdk
