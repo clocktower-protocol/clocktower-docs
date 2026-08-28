@@ -281,6 +281,10 @@ const config = {
                 href: 'https://github.com/clocktower-protocol',
               },
               {
+                label: 'API Keys',
+                href: 'https://developers.clocktower.finance',
+              },
+              {
                 label: 'Whitepaper',
                 to: '/whitepaper',
               },

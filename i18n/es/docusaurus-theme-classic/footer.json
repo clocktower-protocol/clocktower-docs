@@ -43,6 +43,10 @@
     "message": "GitHub",
     "description": "The label of footer link with label=GitHub linking to https://github.com/clocktower-protocol"
   },
+  "link.item.label.API Keys": {
+    "message": "API Keys",
+    "description": "The label of footer link with label=API Keys linking to https://developers.clocktower.finance"
+  },
   "link.item.label.Sitio en Español": {
     "message": "Sitio en Español",
     "description": "The label of footer link with label=Sitio en Español linking to /es/docs/concepts/Clocktower Protocol/whatis"
