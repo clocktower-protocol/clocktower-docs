@@ -7,7 +7,7 @@ description: Developer docs for the Clocktower REST API and MCP server on EVM ch
 
 # Developer Overview
 
-Clocktower is a subscription protocol on EVM chains. REST defaults to **Base** (chainId 8453) and accepts optional `?chainId=` on protocol routes. **MCP, x402<IfFeature name="builder">, SIWE, and Builder entitlement</IfFeature> stay on Base.**
+Clocktower is a subscription protocol on EVM chains.
 
 If you are building an app, backend, or AI agent that needs to work with recurring payments, subscriber accounts, or protocol data, you do not have to stitch everything together from raw contract calls alone.
 
@@ -19,7 +19,7 @@ We provide two HTTP surfaces<IfFeature name="sdk"> plus a TypeScript SDK</IfFeat
 - **TypeScript SDK** — read and write on-chain directly when you already have a wallet and RPC.
 </IfFeature>
 
-These surfaces answer the same kinds of questions: *Who is subscribed to what? What is due next? What transaction should the user sign?*
+These surfaces answer the same kinds of questions: *Who is subscribed to what? What is due next? How do I create a transaction that subscribes? What transaction should the user sign?*
 
 Hosted REST and MCP usage is governed by the [Terms of Use](/terms).
 
@@ -36,6 +36,8 @@ Production endpoints at `api.clocktower.finance` and `mcp.clocktower.finance` ma
 <IfFeature name="sdk">
 **With the SDK**, you skip the API for writes and talk to Base or Base Sepolia through viem. Use it for bots, scripts, and dApps that already manage their own keys and RPC (recommended for production write volume). Subscribe and provider-unsubscribe take a subscription **id** — the client loads the rest from chain.
 </IfFeature>
+
+(REST defaults to Base (chainId 8453) and accepts optional `?chainId=` on protocol routes. MCP, x402<IfFeature name="builder">, SIWE, and Builder entitlement</IfFeature> stay on Base.)
 
 ## Choose your integration path
 
@@ -148,8 +150,27 @@ For high-volume production writes, use the **SDK with your own RPC** instead of 
 
 ## Source repositories
 
-| Repo | Description |
-|------|-------------|
-| [clocktower-api](https://github.com/clocktower-protocol/api) | REST and MCP server |
-| [clocktower-sdk](https://github.com/clocktower-protocol/sdk) | `@clocktower-protocol/sdk` TypeScript library |
-| [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) | CLI for testing REST and MCP |
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/clocktower-protocol/api">clocktower-api</a></td>
+<td>REST and MCP server</td>
+</tr>
+<IfFeature name="sdk">
+<tr>
+<td><a href="https://github.com/clocktower-protocol/sdk">clocktower-sdk</a></td>
+<td><code>@clocktower-protocol/sdk</code> TypeScript library</td>
+</tr>
+</IfFeature>
+<tr>
+<td><a href="https://github.com/clocktower-protocol/clocktower-agent">clocktower-agent</a></td>
+<td>CLI for testing REST and MCP</td>
+</tr>
+</tbody>
+</table>

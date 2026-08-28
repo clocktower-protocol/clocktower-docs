@@ -7,7 +7,7 @@ description: Documentación para desarrolladores de la API REST y el servidor MC
 
 # Visión general para desarrolladores
 
-Clocktower es un protocolo de suscripciones en cadenas EVM. REST usa **Base** por defecto (chainId 8453) y acepta `?chainId=` opcional en rutas de protocolo. **MCP, x402<IfFeature name="builder">, SIWE y el entitlement Builder</IfFeature> permanecen en Base.**
+Clocktower es un protocolo de suscripciones en cadenas EVM.
 
 Si construyes una app, backend o agente de IA que necesita pagos recurrentes, cuentas de suscriptores o datos del protocolo, no tienes que montarlo todo solo con llamadas crudas al contrato.
 
@@ -19,7 +19,7 @@ Ofrecemos dos superficies HTTP<IfFeature name="sdk"> más un SDK TypeScript</IfF
 - **SDK TypeScript** — lectura y escritura on-chain directa cuando ya tienes wallet y RPC.
 </IfFeature>
 
-Estas superficies responden a las mismas preguntas: *¿Quién está suscrito a qué? ¿Qué vence después? ¿Qué transacción debe firmar el usuario?*
+Estas superficies responden a las mismas preguntas: *¿Quién está suscrito a qué? ¿Qué vence después? ¿Cómo creo una transacción que suscribe? ¿Qué transacción debe firmar el usuario?*
 
 El uso de REST y MCP alojados se rige por los [Términos de uso](/terms).
 
@@ -36,6 +36,8 @@ Los endpoints de producción en `api.clocktower.finance` y `mcp.clocktower.finan
 <IfFeature name="sdk">
 **Con el SDK**, saltas la API para escrituras y hablas con Base o Base Sepolia vía viem. Úsalo en bots, scripts y dApps que ya gestionan claves y RPC (recomendado para volumen de escrituras en producción). Subscribe y provider-unsubscribe toman un **id** de suscripción — el cliente carga el resto desde la cadena.
 </IfFeature>
+
+(REST usa Base por defecto (chainId 8453) y acepta `?chainId=` opcional en rutas de protocolo. MCP, x402<IfFeature name="builder">, SIWE y el entitlement Builder</IfFeature> permanecen en Base.)
 
 ## Elige tu camino de integración
 
@@ -148,8 +150,27 @@ Para mucho volumen de escrituras en producción, usa el **SDK con tu propio RPC*
 
 ## Repositorios de código
 
-| Repo | Descripción |
-|------|-------------|
-| [clocktower-api](https://github.com/clocktower-protocol/api) | Servidor REST y MCP |
-| [clocktower-sdk](https://github.com/clocktower-protocol/sdk) | Librería TypeScript `@clocktower-protocol/sdk` |
-| [clocktower-agent](https://github.com/clocktower-protocol/clocktower-agent) | CLI para probar REST y MCP |
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/clocktower-protocol/api">clocktower-api</a></td>
+<td>Servidor REST y MCP</td>
+</tr>
+<IfFeature name="sdk">
+<tr>
+<td><a href="https://github.com/clocktower-protocol/sdk">clocktower-sdk</a></td>
+<td>Librería TypeScript <code>@clocktower-protocol/sdk</code></td>
+</tr>
+</IfFeature>
+<tr>
+<td><a href="https://github.com/clocktower-protocol/clocktower-agent">clocktower-agent</a></td>
+<td>CLI para probar REST y MCP</td>
+</tr>
+</tbody>
+</table>
