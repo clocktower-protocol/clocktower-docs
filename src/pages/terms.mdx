@@ -5,7 +5,7 @@ description: Terms of Use for the hosted Clocktower REST API and MCP server.
 
 # Clocktower API Terms of Use
 
-**Last updated:** August 25, 2026
+**Last updated:** August 28, 2026
 
 These Terms of Use ("Terms") govern access to the hosted Clocktower API and MCP services operated by **Clocktower LLC** ("Clocktower", "we", "us"). They apply to use of:
 
@@ -29,7 +29,7 @@ The **official** hosted API is the service above. Documentation may reference le
 Clocktower provides read access to **Clocktower Protocol** data and prepare-only write helpers (unsigned calldata) for protocol operations.
 
 - **REST** defaults to **Base** (chain ID 8453). Protocol routes may accept optional `?chainId=` (decimal or CAIP-2) for REST-enabled chains listed in [`GET /catalog`](/docs/developers/REST%20API/catalog). Omitted `chainId` uses the server default (currently 8453).
-- **MCP**, **x402** payments, **SIWE**, and **Builder entitlement** (when that lane is enabled) stay on Base regardless of REST `chainId`.
+- **MCP**, **SIWE**, and **Builder entitlement** (when that lane is enabled) stay on Base regardless of REST `chainId`.
 - The server **does not** custody user keys, relay signed transactions, or broadcast transactions on your behalf. You sign and submit from your own wallet.
 - Subscription `amount` values on API inputs are **human token-unit strings** (for example `"10"` or `"100.5"`), not protocol wei.
 - Live routes, chain registry, and rate limits are in `GET /catalog`. Catalog values control what is actually enabled.
@@ -57,7 +57,7 @@ Successful REST responses include an `X-Clocktower-Lane` header (`free`, `develo
 - Keys are issued via Clocktower's developer portal or an admin mint path. The plaintext token is shown **once** at creation. Clocktower stores a **SHA-256 hash** of the key, not the plaintext.
 - Invalid, unknown, or revoked keys return **401**. They do **not** fall back to the free tier.
 - Do not share, sell, or transfer keys. Do not embed long-lived `ctk_…` keys in public client-side applications.
-- Developer API keys **do not** authenticate MCP. Sending a `ctk_…` key to the MCP host does not waive x402 payment.
+- The same developer key authenticates MCP when sent as `Authorization: Bearer ctk_…` on the MCP connection.
 
 ### Builder REST tier (optional; may be off)
 
@@ -68,19 +68,19 @@ Successful REST responses include an `X-Clocktower-Lane` header (`free`, `develo
 
 ### MCP (agents)
 
-- Requires **x402** payment per tool invocation in USDC on Base, as configured by the server (see [x402 payments](/docs/developers/MCP/x402-payments)).
-- Subject to MCP-specific rate limits.
-- Your MCP client must support the x402 payment flow on Base.
-- API keys and SIWE sessions are **not** MCP credentials.
+- Uses the same **free** (per IP) and **developer** (`ctk_…`) lanes as REST. Each tool call counts against those rate limits.
+- Optional: send `Authorization: Bearer ctk_…` in the MCP client headers for the developer lane.
+- Invalid or revoked keys fail the request. They do **not** fall back to the free tier.
+- Builder SIWE sessions (`cts_…`) are REST credentials, not MCP credentials.
 
-You must not circumvent tier restrictions (rate limits, entitlement checks, or payment requirements).
+You must not circumvent tier restrictions (rate limits or entitlement checks).
 
 ## 4. Acceptable use
 
 You agree **not** to:
 
 - Abuse rate limits, scrape at scale, or use the API in a way that degrades the service for others
-- Bypass authentication, geo-restrictions, or payment requirements
+- Bypass authentication, geo-restrictions, or rate limits
 - Probe or attack the service (DDoS, credential stuffing, injection attempts, etc.)
 - Mine or farm prepare/readiness as a substitute for your own RPC
 - Misrepresent affiliation with Clocktower
@@ -109,8 +109,7 @@ Do not rely on the API as the sole source of truth for financial or legal decisi
 
 ## 7. Fees and payments
 
-- **REST (free and developer):** No x402 payment. Access is rate-limited. Developer keys are issued without a Clocktower usage fee.
-- **MCP:** x402 charges apply as listed by the server. Payments are processed via the x402 facilitator; Clocktower receives USDC at its configured recipient address.
+- **REST and MCP (free and developer):** No usage fee. Access is rate-limited. Developer keys are issued without a Clocktower usage fee.
 - **Builder entitlement (when enabled):** On-chain subscription fees to Clocktower LLC are separate from API usage and are governed by the Clocktower Protocol smart contracts.
 - **Gas:** You pay network gas for any transaction you broadcast.
 
@@ -121,7 +120,7 @@ Fees are non-refundable except where required by law.
 The service is provided on a **best-effort** basis. We do not guarantee uptime, latency, or continued availability of any endpoint. We may:
 
 - Enable maintenance mode (`API_ENABLED=false` or equivalent) for REST without taking MCP down
-- Change rate limits, pricing, or tier rules
+- Change rate limits or tier rules
 - Modify or discontinue endpoints or chains
 
 Material changes to these Terms will be reflected here and in the API repository `TERMS.md` with an updated "Last updated" date. Continued use after changes constitutes acceptance.
@@ -154,7 +153,7 @@ CLOCKTOWER DOES NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, SECURE, OR E
 
 TO THE MAXIMUM EXTENT PERMITTED BY LAW, CLOCKTOWER LLC AND ITS AFFILIATES, OFFICERS, AND CONTRIBUTORS WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS, DATA, OR GOODWILL, ARISING FROM YOUR USE OF THE HOSTED SERVICES.
 
-OUR TOTAL LIABILITY FOR ANY CLAIM ARISING FROM THESE TERMS OR THE SERVICE IS LIMITED TO THE GREATER OF (A) USD $100 OR (B) THE AMOUNT YOU PAID TO CLOCKTOWER FOR MCP x402 USAGE IN THE TWELVE (12) MONTHS BEFORE THE CLAIM.
+OUR TOTAL LIABILITY FOR ANY CLAIM ARISING FROM THESE TERMS OR THE SERVICE IS LIMITED TO USD $100.
 
 Some jurisdictions do not allow certain limitations; in those cases, our liability is limited to the fullest extent permitted by law.
 
