@@ -24,7 +24,7 @@ Las respuestas de prepare completo incluyen:
 | `unsignedTransactions` | Calldata: `to`, `data`, `value`, `chainId`, `from` |
 | `signingMode` | `raw` (una tx) o `eip5792` (lote multi-tx) |
 | `eip5792` | Descriptor de lote cuando `signingMode` es `eip5792` |
-| `simulation` | Simulación on-chain (debe tener éxito antes de liquidar pago MCP) |
+| `simulation` | Resultados de simulación on-chain. Si falla, se devuelve un error antes de las transacciones sin firmar |
 | `chainId` | Cadena REST seleccionada (default 8453) |
 | `gasEstimates` | Presupuesto de gas por tx en la cadena seleccionada |
 | `gasSummary` | Totales agregados; backlogs de remit incluyen `backlogMultiplier` |
@@ -56,7 +56,7 @@ Las sesiones Builder (`cts_…`) permiten escrituras en **forma objeto** (`/chec
 
 ## Endpoints
 
-`POST /prepare/*` más `POST /check_subscribe_readiness` y `POST /check_remit_readiness` comparten el bucket **write** (RPM + **write diario**). `POST /check_subscribe_readiness_by_id` usa el bucket cheap/global. Por defecto:
+`POST /prepare/*` más `POST /check_subscribe_readiness` y `POST /check_remit_readiness` comparten el bucket **write** (RPM + **write diario**). REST `POST /check_subscribe_readiness_by_id` usa el bucket cheap/global; la tool MCP del mismo nombre usa el bucket write/readiness. Por defecto:
 
 | Lane | Write RPM | Write / prepare diario |
 |------|-----------|------------------------|

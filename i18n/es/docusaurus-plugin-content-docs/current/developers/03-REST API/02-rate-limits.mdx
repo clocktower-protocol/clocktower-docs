@@ -93,9 +93,11 @@ Números canónicos: `GET /catalog` → `access.rest.*.limits` (`writeRpm`, `wri
 - **Write diario** — el mismo conjunto, por día UTC (protege el coste de simulación en Alchemy)
 - **Total diario** — cada petición REST y cada llamada a tool MCP ese día para esa identidad
 
-Una llamada prepare consume **write RPM**, **write diario** y **total diario**. `POST /check_subscribe_readiness_by_id` (y la tool MCP `check_subscribe_readiness_by_id`) **no** entra en el bucket write (solo RPM cheap/global — no simula on-chain).
+Una llamada prepare consume **write RPM**, **write diario** y **total diario**.
 
-Las tools MCP `prepare_*` y de readiness usan los mismos buckets write que las rutas REST equivalentes.
+REST `POST /check_subscribe_readiness_by_id` **no** entra en el bucket write (solo RPM cheap/global — no simula on-chain). La tool MCP `check_subscribe_readiness_by_id` **sí** consume el bucket write/readiness.
+
+Las tools MCP `prepare_*` y las otras tools de readiness (`check_subscribe_readiness`, `check_remit_readiness`) usan los mismos buckets write que las rutas REST equivalentes.
 
 ## Por qué prepare está tan limitado
 
