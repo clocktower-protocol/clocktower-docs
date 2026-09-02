@@ -57,6 +57,7 @@ REST `GET /catalog` → `chains[].mcp` es el mismo flag alojado.
 }
 ```
 
+<IfFeature name="x402">
 ## Qué permanece en Base
 
 Esto **no** sigue un `chainId` de protocolo:
@@ -68,6 +69,7 @@ Esto **no** sigue un `chainId` de protocolo:
 - **x402** (cuando `MCP_X402_ENABLED=true`) — liquidación USDC en Base, aunque la tool apunte a otra cadena de protocolo
 
 Cambiar `DEFAULT_REST_CHAIN_ID` no mueve el default MCP.
+</IfFeature>
 
 ## Escrituras
 

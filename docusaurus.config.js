@@ -36,6 +36,7 @@ const config = {
       sdk: siteFlags.sdk,
       i18n: siteFlags.i18n,
       builder: siteFlags.builder,
+      x402: siteFlags.x402,
     },
   },
 

@@ -5,6 +5,7 @@
  *   DOCUSAURUS_ENABLE_SDK=true
  *   DOCUSAURUS_ENABLE_I18N=true
  *   DOCUSAURUS_ENABLE_BUILDER=true
+ *   DOCUSAURUS_ENABLE_X402=true
  *
  * Explicit `true` / `false` always wins. Otherwise they default on in `docusaurus
  * start` and off in `docusaurus build`.
@@ -24,6 +25,7 @@ const siteFlags = {
   sdk: envFlag('DOCUSAURUS_ENABLE_SDK'),
   i18n: envFlag('DOCUSAURUS_ENABLE_I18N'),
   builder: envFlag('DOCUSAURUS_ENABLE_BUILDER'),
+  x402: envFlag('DOCUSAURUS_ENABLE_X402'),
 };
 
 module.exports = siteFlags;

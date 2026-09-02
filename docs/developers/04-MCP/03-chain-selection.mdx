@@ -57,6 +57,7 @@ REST `GET /catalog` → `chains[].mcp` is the same hosted flag.
 }
 ```
 
+<IfFeature name="x402">
 ## What stays on Base
 
 These do **not** follow a protocol `chainId`:
@@ -68,6 +69,7 @@ These do **not** follow a protocol `chainId`:
 - **x402** (when `MCP_X402_ENABLED=true`) — USDC settlement on Base, even if the tool targeted another protocol chain
 
 Changing `DEFAULT_REST_CHAIN_ID` does not change the MCP default.
+</IfFeature>
 
 ## Writes
 
