@@ -62,7 +62,7 @@ Luego llama tools por nombre con argumentos JSON. Consulta el [inicio rápido MC
 
 | Categoría | Ejemplos |
 |----------|----------|
-| Lectura | `get_protocol_state`, `get_subscription`, `get_account` |
+| Lectura | `list_chains`, `get_protocol_state`, `get_subscription`, `get_account` |
 | Descubrimiento | `search_subscriptions`, `get_subscription_details` |
 | Historial | `get_subscription_history`, `get_account_activity` |
 | Escritura (preparación) | `prepare_subscribe`, `prepare_create_subscription`, `prepare_remit` |
@@ -72,8 +72,8 @@ Consulta la [referencia de herramientas](/docs/developers/MCP/tools-reference) p
 
 ## Protocolo
 
-- **Cadena:** Base mainnet (chainId 8453). MCP **no** admite `chainId`; las tools siempre corren en Base.
+- **Cadena:** `chainId` opcional en las tools de protocolo; si se omite, se usa Base (`8453`). Ver [Selección de cadena MCP](/docs/developers/MCP/mcp-chain-selection).
 - **Auth:** las mismas credenciales free y developer que REST
 - **Escrituras:** solo preparación — el servidor nunca retransmite transacciones firmadas
 
-REST puede seleccionar una cadena de protocolo con `?chainId=`. Eso no aplica a MCP. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
+REST usa `?chainId=` en el query string. MCP usa un argumento de tool. SIWE<IfFeature name="builder"> / el entitlement Builder</IfFeature> y los pagos x402 permanecen en Base.

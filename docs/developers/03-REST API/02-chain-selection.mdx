@@ -2,12 +2,12 @@
 id: chain-selection
 title: Chain Selection
 sidebar_position: 2
-description: Select a protocol chain on REST with optional ?chainId=. MCP stays on Base.
+description: Select a protocol chain on REST with optional ?chainId=. MCP tools take optional chainId (default Base).
 ---
 
 # Chain Selection
 
-REST protocol routes are chain-aware. Pass optional `?chainId=` to read or prepare against a protocol chain. **MCP stays on Base** (chainId `8453`)<IfFeature name="builder">, as do SIWE and Builder entitlement</IfFeature>.
+REST protocol routes are chain-aware. Pass optional `?chainId=` to read or prepare against a protocol chain. MCP protocol tools take optional `chainId` (default Base) — see [MCP chain selection](/docs/developers/MCP/mcp-chain-selection)<IfFeature name="builder">. SIWE and Builder entitlement stay on Base</IfFeature>.
 
 ## Query parameter
 
@@ -67,22 +67,23 @@ curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=
 |-------|---------|
 | `chainId` (top-level) | REST default when the client omits `?chainId=` |
 | `chains[].rest` | Protocol routes may target this chain |
-| `chains[].mcp` | MCP tools run here (Base only) |
+| `chains[].mcp` | MCP tools may target this chain (`list_chains` / optional tool `chainId`) |
 | `chains[].default` | This row is `DEFAULT_REST_CHAIN_ID` |
 
 The registry currently ships **Base mainnet** as the only REST-enabled chain. Additional EVM chains can be enabled without changing the request shape — keep using `?chainId=` and read `chains[]` at runtime.
 
 ## MCP<IfFeature name="builder">, SIWE, and Builder</IfFeature>
 
-These stay on Base even when REST `?chainId=` selects another protocol chain:
+MCP protocol tools select a chain with optional `chainId` (default Base). That is independent of REST `?chainId=` and of `DEFAULT_REST_CHAIN_ID`. See [MCP chain selection](/docs/developers/MCP/mcp-chain-selection).
 
-- **MCP** — no `chainId` argument; tools are Base-only
 <IfFeature name="builder">
+These stay on Base even when REST or MCP selects another protocol chain:
+
 - **SIWE** — challenge/verify use Base chain ID `8453`
 - **Builder entitlement** — `BUILDER_SUB_ID` / `BUILDER_SUB_IDS` is always checked on Base
-</IfFeature>
 
-Changing `DEFAULT_REST_CHAIN_ID` does not move MCP<IfFeature name="builder">, SIWE, or Builder</IfFeature>.
+Changing `DEFAULT_REST_CHAIN_ID` does not move SIWE or Builder.
+</IfFeature>
 
 ## Writes
 

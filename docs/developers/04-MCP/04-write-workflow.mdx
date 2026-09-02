@@ -23,16 +23,17 @@ Full prepare returns:
 - `signingMode` — `raw` or `eip5792` (approve + subscribe batch)
 - `instructions` — ordered signing steps
 - `simulation` — on-chain simulation results
-- `gasEstimates` / `gasSummary` — advisory gas budget on Base (MCP is Base-only)
+- `gasEstimates` / `gasSummary` — advisory gas budget on the selected chain
 - `preflight` — operation-specific context
 - `warnings` — non-fatal hints
 - `eip5792` — batch descriptor when `signingMode` is `eip5792`
-- `chainId` — always `8453` (MCP is Base-only)
+- `chainId` — selected protocol chain (omitted tool `chainId` → Base `8453`)
 
 ## Optional request fields
 
 On `prepare_*` tools:
 
+- **`chainId`** — protocol chain (`8453`, `"8453"`, or `"eip155:8453"`). Omitted uses Base. See [MCP chain selection](/docs/developers/MCP/mcp-chain-selection).
 - **`readinessOnly: true`** — preflight only; no unsigned transactions or gas estimates
 - **`simulateFromAddress`** — address for `eth_estimateGas` when the signing wallet differs from the broadcaster
 - **`infiniteApproval: true`** — on `prepare_subscribe` / `prepare_subscribe_by_id`, request max ERC-20 allowance instead of amount-scoped approve
@@ -49,7 +50,7 @@ Dedicated readiness tools: `check_subscribe_readiness`, `check_subscribe_readine
 
 ## After broadcast
 
-Poll `get_transaction_status` with `{ "txHash": "0x…" }`. Include `requestId` when reporting issues.
+Poll `get_transaction_status` with `{ "txHash": "0x…" }` (same `chainId` as prepare). Include `requestId` when reporting issues.
 
 ## Remit
 

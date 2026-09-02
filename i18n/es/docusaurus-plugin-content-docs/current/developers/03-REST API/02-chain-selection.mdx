@@ -2,12 +2,12 @@
 id: chain-selection
 title: Selección de cadena
 sidebar_position: 2
-description: Selecciona una cadena de protocolo en REST con ?chainId= opcional. MCP permanece en Base.
+description: Selecciona una cadena de protocolo en REST con ?chainId= opcional. Las tools MCP aceptan chainId opcional (default Base).
 ---
 
 # Selección de cadena
 
-Las rutas de protocolo REST son conscientes de la cadena. Pasa `?chainId=` opcional para leer o preparar contra una cadena del protocolo. **MCP permanece en Base** (chainId `8453`)<IfFeature name="builder">, igual que SIWE y el entitlement Builder</IfFeature>.
+Las rutas de protocolo REST son conscientes de la cadena. Pasa `?chainId=` opcional para leer o preparar contra una cadena del protocolo. Las tools MCP de protocolo aceptan `chainId` opcional (default Base) — ver [Selección de cadena MCP](/docs/developers/MCP/mcp-chain-selection)<IfFeature name="builder">. SIWE y el entitlement Builder permanecen en Base</IfFeature>.
 
 ## Parámetro de query
 
@@ -67,22 +67,23 @@ curl -s -X POST "https://api.clocktower.finance/prepare/subscribe_by_id?chainId=
 |-------|-------------|
 | `chainId` (nivel superior) | Default REST cuando el cliente omite `?chainId=` |
 | `chains[].rest` | Las rutas de protocolo pueden apuntar a esta cadena |
-| `chains[].mcp` | Las tools MCP corren aquí (solo Base) |
+| `chains[].mcp` | Las tools MCP pueden apuntar a esta cadena (`list_chains` / `chainId` opcional de la tool) |
 | `chains[].default` | Esta fila es `DEFAULT_REST_CHAIN_ID` |
 
 El registro actualmente envía **Base mainnet** como la única cadena habilitada para REST. Se pueden activar más cadenas EVM sin cambiar la forma de la petición — sigue usando `?chainId=` y lee `chains[]` en runtime.
 
 ## MCP<IfFeature name="builder">, SIWE y Builder</IfFeature>
 
-Estos permanecen en Base aunque REST `?chainId=` seleccione otra cadena de protocolo:
+Las tools MCP de protocolo seleccionan una cadena con `chainId` opcional (default Base). Es independiente de REST `?chainId=` y de `DEFAULT_REST_CHAIN_ID`. Ver [Selección de cadena MCP](/docs/developers/MCP/mcp-chain-selection).
 
-- **MCP** — no hay argumento `chainId`; las tools son solo Base
 <IfFeature name="builder">
+Estos permanecen en Base aunque REST o MCP seleccione otra cadena de protocolo:
+
 - **SIWE** — challenge/verify usan chain ID de Base `8453`
 - **Entitlement Builder** — `BUILDER_SUB_ID` / `BUILDER_SUB_IDS` se comprueba siempre en Base
-</IfFeature>
 
-Cambiar `DEFAULT_REST_CHAIN_ID` no mueve MCP<IfFeature name="builder">, SIWE ni Builder</IfFeature>.
+Cambiar `DEFAULT_REST_CHAIN_ID` no mueve SIWE ni Builder.
+</IfFeature>
 
 ## Escrituras
 

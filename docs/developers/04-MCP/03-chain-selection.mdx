@@ -1,0 +1,76 @@
+---
+id: mcp-chain-selection
+title: Chain Selection
+sidebar_position: 2
+description: Select a protocol chain on MCP with optional chainId. Omitted uses Base (8453).
+---
+
+# MCP Chain Selection
+
+Protocol MCP tools accept optional `chainId` on each call — the same idea as REST `?chainId=`, but as a tool argument instead of a query parameter. Omitted `chainId` uses **Base** (`8453`). That default does **not** follow `DEFAULT_REST_CHAIN_ID`.
+
+Only Base is MCP-enabled today. Additional chains can be turned on with `mcpEnabled` without changing the tool shape.
+
+See also [REST chain selection](/docs/developers/REST%20API/chain-selection).
+
+## Tool argument
+
+Pass `chainId` on protocol reads, prepares, history, discovery, approved tokens, and `get_transaction_status`.
+
+| Format | Example |
+|--------|---------|
+| JSON number | `"chainId": 8453` |
+| Decimal string | `"chainId": "8453"` |
+| CAIP-2 | `"chainId": "eip155:8453"` |
+
+Unknown, malformed, or MCP-disabled values return a tool error with `code: "INVALID_INPUT"` (not an HTTP 400).
+
+```json
+{ "chainId": 8453 }
+```
+
+```json
+{ "id": "0x...", "chainId": "eip155:8453" }
+```
+
+`list_chains` has no `chainId` argument — it lists the registry.
+
+## Discover live chains
+
+Call **`list_chains`**. Top-level `chainId` is the MCP default (always Base). Each `chains[]` row includes `mcp` (selectable from MCP tools) and `rest` (selectable from REST `?chainId=`). `default` is the MCP default (Base), not the REST default.
+
+REST `GET /catalog` → `chains[].mcp` is the same hosted flag.
+
+```json
+{
+  "chainId": 8453,
+  "chains": [
+    {
+      "chainId": 8453,
+      "caip2": "eip155:8453",
+      "name": "base",
+      "rest": true,
+      "mcp": true,
+      "default": true
+    }
+  ]
+}
+```
+
+## What stays on Base
+
+These do **not** follow a protocol `chainId`:
+
+<IfFeature name="builder">
+- **SIWE** — challenge/verify use Base chain ID `8453`
+- **Builder entitlement** — always checked on Base
+</IfFeature>
+- **x402** (when `MCP_X402_ENABLED=true`) — USDC settlement on Base, even if the tool targeted another protocol chain
+
+Changing `DEFAULT_REST_CHAIN_ID` does not change the MCP default.
+
+## Writes
+
+Prepare responses include `chainId` on the payload, `unsignedTransactions`, `gasEstimates`, and `gasSummary`. Connect the wallet to that chain before signing, then broadcast there. Pass the same `chainId` on `get_transaction_status`.
+
+See [Write workflow](/docs/developers/MCP/write-workflow) and [Tools reference](/docs/developers/MCP/tools-reference).

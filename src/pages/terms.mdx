@@ -5,7 +5,7 @@ description: Terms of Use for the hosted Clocktower REST API and MCP server.
 
 # Clocktower API Terms of Use
 
-**Last updated:** August 28, 2026
+**Last updated:** September 2, 2026
 
 These Terms of Use ("Terms") govern access to the hosted Clocktower API and MCP services operated by **Clocktower LLC** ("Clocktower", "we", "us"). They apply to use of:
 
@@ -29,14 +29,14 @@ The **official** hosted API is the service above. Documentation may reference le
 Clocktower provides read access to **Clocktower Protocol** data and prepare-only write helpers (unsigned calldata) for protocol operations.
 
 - **REST** defaults to **Base** (chain ID 8453). Protocol routes may accept optional `?chainId=` (decimal or CAIP-2) for REST-enabled chains listed in [`GET /catalog`](/docs/developers/REST%20API/catalog). Omitted `chainId` uses the server default (currently 8453).
-- **MCP**, **SIWE**, and **Builder entitlement** (when that lane is enabled) stay on Base regardless of REST `chainId`.
+- **MCP** protocol tools may accept optional `chainId` (decimal, CAIP-2, or JSON number) for MCP-enabled chains listed in `GET /catalog` / `list_chains`. Omitted MCP `chainId` uses Base (8453) and does not follow the REST default. **SIWE** and **Builder entitlement** (when that lane is enabled) stay on Base. **x402** on MCP, when enabled, is also Base-only.
 - The server **does not** custody user keys, relay signed transactions, or broadcast transactions on your behalf. You sign and submit from your own wallet.
 - Subscription `amount` values on API inputs are **human token-unit strings** (for example `"10"` or `"100.5"`), not protocol wei.
 - Live routes, chain registry, and rate limits are in `GET /catalog`. Catalog values control what is actually enabled.
 
 We may add, change, or remove endpoints, chains, limits, or features at any time.
 
-See [REST authentication](/docs/developers/REST%20API/authentication), [chain selection](/docs/developers/REST%20API/chain-selection), and [MCP connection](/docs/developers/MCP/connection).
+See [REST authentication](/docs/developers/REST%20API/authentication), [REST chain selection](/docs/developers/REST%20API/chain-selection), [MCP chain selection](/docs/developers/MCP/mcp-chain-selection), and [MCP connection](/docs/developers/MCP/connection).
 
 ## 3. Access tiers and authentication
 

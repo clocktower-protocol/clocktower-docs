@@ -33,7 +33,7 @@ Hosted REST and MCP usage is governed by the [Terms of Use](/terms).
 **With the SDK**, you skip the API for writes and talk to Base or Base Sepolia through viem. Use it for bots, scripts, and dApps that already manage their own keys and RPC (recommended for production write volume). Subscribe and provider-unsubscribe take a subscription **id** — the client loads the rest from chain.
 </IfFeature>
 
-(REST defaults to Base (chainId 8453) and accepts optional `?chainId=` on protocol routes. MCP<IfFeature name="builder">, SIWE, and Builder entitlement</IfFeature> stay on Base.)
+(REST defaults to Base (chainId 8453) and accepts optional `?chainId=` on protocol routes. MCP tools take optional `chainId` and default to Base<IfFeature name="builder">. SIWE and Builder entitlement stay on Base</IfFeature>.)
 
 ## Choose your integration path
 

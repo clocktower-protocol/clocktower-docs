@@ -33,7 +33,7 @@ El uso de REST y MCP alojados se rige por los [Términos de uso](/terms).
 **Con el SDK**, saltas la API para escrituras y hablas con Base o Base Sepolia vía viem. Úsalo en bots, scripts y dApps que ya gestionan claves y RPC (recomendado para volumen de escrituras en producción). Subscribe y provider-unsubscribe toman un **id** de suscripción — el cliente carga el resto desde la cadena.
 </IfFeature>
 
-(REST usa Base por defecto (chainId 8453) y acepta `?chainId=` opcional en rutas de protocolo. MCP<IfFeature name="builder">, SIWE y el entitlement Builder</IfFeature> permanecen en Base.)
+(REST usa Base por defecto (chainId 8453) y acepta `?chainId=` opcional en rutas de protocolo. Las tools MCP aceptan `chainId` opcional y usan Base por defecto<IfFeature name="builder">. SIWE y el entitlement Builder permanecen en Base</IfFeature>.)
 
 ## Elige tu camino de integración
 

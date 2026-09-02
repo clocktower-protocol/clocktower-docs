@@ -1,17 +1,20 @@
 ---
 id: tools-reference
 title: Referencia de Herramientas
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Referencia de Herramientas MCP
 
 Las tools MCP comparten los lanes **free** y **developer** de REST. Cada llamada cuenta contra esos [límites de tasa](/docs/developers/REST%20API/rate-limits). REST `/api` expone las mismas capacidades por HTTP.
 
+Las tools de protocolo aceptan `chainId` opcional (`8453`, `"8453"` o `"eip155:8453"`). Si se omite, se usa Base. Valores inválidos devuelven `INVALID_INPUT`. Ver [Selección de cadena MCP](/docs/developers/MCP/mcp-chain-selection).
+
 ## Herramientas de lectura
 
 | Herramienta | Descripción |
 |------|-------------|
+| `list_chains` | Cadenas de protocolo disponibles para MCP (`default` es Base; las filas con `mcp: true` son seleccionables) |
 | `get_protocol_state` | Configuración actual de comisiones |
 | `get_subscription` | Suscripción individual por ID |
 | `get_account_subscriptions` | Lista suscripciones de una cuenta. Requiere `account` y `bySubscriber` (`true` = suscrito a, `false` = creadas como provider) |

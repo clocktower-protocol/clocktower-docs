@@ -8,7 +8,7 @@ sidebar_position: 3
 
 Use this path when the *caller* is an AI agent, not your own backend. The MCP server exposes Clocktower protocol tools so an agent can discover subscriptions, inspect accounts, and request prepared transactions through a standard tool interface.
 
-Connect any MCP-compatible client to `mcp.clocktower.finance`. Access uses the same free rate limits and optional **developer API keys** (`ctk_…`) as REST — see [REST authentication](/docs/developers/REST%20API/authentication) and [rate limits](/docs/developers/REST%20API/rate-limits). MCP is Base-only and does not take a `chainId` argument.
+Connect any MCP-compatible client to `mcp.clocktower.finance`. Access uses the same free rate limits and optional **developer API keys** (`ctk_…`) as REST — see [REST authentication](/docs/developers/REST%20API/authentication) and [rate limits](/docs/developers/REST%20API/rate-limits). Protocol tools take optional `chainId` (default Base). See [MCP chain selection](/docs/developers/MCP/mcp-chain-selection).
 
 ## Endpoint
 
@@ -43,6 +43,12 @@ To use a developer key, add `"headers": { "Authorization": "Bearer ctk_…" }` o
 ## Example: read protocol state
 
 **Tool:** `get_protocol_state`
+
+```json
+{ "chainId": 8453 }
+```
+
+**Tool:** `list_chains`
 
 ```json
 {}

@@ -18,7 +18,7 @@ https://api.clocktower.finance
 
 En este host, las rutas **omiten** el prefijo `/api` (p. ej. `GET /catalog`). Las URLs legacy `*.workers.dev` mantienen `/api`.
 
-Las rutas de protocolo aceptan `?chainId=` opcional (decimal o CAIP-2, p. ej. `8453` o `eip155:8453`). Si se omite, se usa Base (`8453`). Consulta `GET /catalog` → `chains[]` para ver qué cadenas están activas. MCP no admite `chainId`. Ver [Selección de cadena](/docs/developers/REST%20API/chain-selection).
+Las rutas de protocolo aceptan `?chainId=` opcional (decimal o CAIP-2, p. ej. `8453` o `eip155:8453`). Si se omite, se usa Base (`8453`). Consulta `GET /catalog` → `chains[]` para ver qué cadenas están activas. Las tools MCP aceptan `chainId` opcional (default Base) — ver [Selección de cadena MCP](/docs/developers/MCP/mcp-chain-selection). Ver [Selección de cadena REST](/docs/developers/REST%20API/chain-selection).
 
 ## Leer el estado del protocolo
 

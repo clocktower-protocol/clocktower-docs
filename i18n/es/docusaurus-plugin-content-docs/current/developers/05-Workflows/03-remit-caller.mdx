@@ -22,7 +22,7 @@ Un **caller** ejecuta la función sin permisos `remit()` para procesar pagos de 
 
 1. **Verificar preparación de remit** — escanea cuántas suscripciones están vencidas y si `remit()` puede ejecutarse ahora.
 2. **Preparar remit** — obtén calldata `remit()` sin firmar más estimaciones de gas.
-3. **Firmar y transmitir** — la wallet del caller firma y tu bot envía a la cadena en `unsignedTransactions[].chainId` (MCP: Base).
+3. **Firmar y transmitir** — la wallet del caller firma y tu bot envía a la cadena en `unsignedTransactions[].chainId`.
 4. **Repetir** — un `remit()` liquida como máximo `maxRemits` pagos; repite hasta que el backlog esté al día.
 
 El caller paga gas por cada transmisión (a diferencia del cron del operador del protocolo).
@@ -59,7 +59,7 @@ sequenceDiagram
 
 - Los backlogs grandes pueden necesitar múltiples transmisiones — consulta `gasSummary.backlogMultiplier` en las respuestas de preparación.
 - Usa `get_subscriptions_due` / `getSubscriptionsDue()` para una lectura ligera de un solo día sin preparar una transacción.
-- En REST, pasa `?chainId=` para que readiness, prepare y status usen la misma cadena. Remit en MCP es solo Base.
+- En REST, pasa `?chainId=` para que readiness, prepare y status usen la misma cadena. En MCP, pasa el mismo `chainId` en esas tools (si se omite, se usa Base).
 
 <IfFeature name="sdk">
 SDK `remit()` lanza `RemitNotReadyError` y no envía una transacción cuando el precheck de la cola de vencimientos no encuentra trabajo. `runRemitUntilCaughtUp` escanea una vez por ronda y luego llama `remit({ skipReadiness: true })`.

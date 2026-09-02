@@ -1,0 +1,76 @@
+---
+id: mcp-chain-selection
+title: Selección de cadena
+sidebar_position: 2
+description: Selecciona una cadena de protocolo en MCP con chainId opcional. Si se omite, se usa Base (8453).
+---
+
+# Selección de cadena MCP
+
+Las tools de protocolo MCP aceptan `chainId` opcional en cada llamada — la misma idea que REST `?chainId=`, pero como argumento de la tool en lugar de un query param. Si omites `chainId` se usa **Base** (`8453`). Ese default **no** sigue `DEFAULT_REST_CHAIN_ID`.
+
+Hoy solo Base está habilitada para MCP. Se pueden activar más cadenas con `mcpEnabled` sin cambiar la forma de las tools.
+
+Ver también [Selección de cadena REST](/docs/developers/REST%20API/chain-selection).
+
+## Argumento de la tool
+
+Pasa `chainId` en lecturas de protocolo, prepares, historial, discovery, tokens aprobados y `get_transaction_status`.
+
+| Formato | Ejemplo |
+|--------|---------|
+| Número JSON | `"chainId": 8453` |
+| Cadena decimal | `"chainId": "8453"` |
+| CAIP-2 | `"chainId": "eip155:8453"` |
+
+Valores desconocidos, malformados o no habilitados para MCP devuelven un error de tool con `code: "INVALID_INPUT"` (no un HTTP 400).
+
+```json
+{ "chainId": 8453 }
+```
+
+```json
+{ "id": "0x...", "chainId": "eip155:8453" }
+```
+
+`list_chains` no tiene argumento `chainId` — lista el registro.
+
+## Descubrir cadenas activas
+
+Llama **`list_chains`**. El `chainId` de nivel superior es el default MCP (siempre Base). Cada fila de `chains[]` incluye `mcp` (seleccionable desde tools MCP) y `rest` (seleccionable con REST `?chainId=`). `default` es el default MCP (Base), no el default REST.
+
+REST `GET /catalog` → `chains[].mcp` es el mismo flag alojado.
+
+```json
+{
+  "chainId": 8453,
+  "chains": [
+    {
+      "chainId": 8453,
+      "caip2": "eip155:8453",
+      "name": "base",
+      "rest": true,
+      "mcp": true,
+      "default": true
+    }
+  ]
+}
+```
+
+## Qué permanece en Base
+
+Esto **no** sigue un `chainId` de protocolo:
+
+<IfFeature name="builder">
+- **SIWE** — challenge/verify usan chain ID de Base `8453`
+- **Entitlement Builder** — siempre se comprueba en Base
+</IfFeature>
+- **x402** (cuando `MCP_X402_ENABLED=true`) — liquidación USDC en Base, aunque la tool apunte a otra cadena de protocolo
+
+Cambiar `DEFAULT_REST_CHAIN_ID` no mueve el default MCP.
+
+## Escrituras
+
+Las respuestas de prepare incluyen `chainId` en el payload, `unsignedTransactions`, `gasEstimates` y `gasSummary`. Conecta la wallet a esa cadena antes de firmar y haz broadcast ahí. Pasa el mismo `chainId` en `get_transaction_status`.
+
+Ver [Flujo de escritura](/docs/developers/MCP/write-workflow) y [Referencia de tools](/docs/developers/MCP/tools-reference).

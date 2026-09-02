@@ -1,17 +1,20 @@
 ---
 id: tools-reference
 title: Tools Reference
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # MCP Tools Reference
 
 MCP tools share the REST **free** and **developer** lanes. Each tool call counts against those [rate limits](/docs/developers/REST%20API/rate-limits). REST `/api` exposes the same capabilities over HTTP.
 
+Protocol tools accept optional `chainId` (`8453`, `"8453"`, or `"eip155:8453"`). Omitted uses Base. Invalid values return `INVALID_INPUT`. See [MCP chain selection](/docs/developers/MCP/mcp-chain-selection).
+
 ## Read tools
 
 | Tool | Description |
 |------|-------------|
+| `list_chains` | Protocol chains available to MCP (`default` is Base; `mcp: true` rows are selectable) |
 | `get_protocol_state` | Current fee configuration |
 | `get_subscription` | Single subscription by ID |
 | `get_account_subscriptions` | List subscriptions for an account. Requires `account` and `bySubscriber` (`true` = subscribed to, `false` = created as provider) |

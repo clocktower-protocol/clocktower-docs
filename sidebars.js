@@ -77,6 +77,7 @@ const sidebars = {
       collapsed: true,
       items: [
         'developers/MCP/connection',
+        'developers/MCP/mcp-chain-selection',
         'developers/MCP/tools-reference',
         'developers/MCP/write-workflow',
       ],
