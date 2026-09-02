@@ -43,7 +43,7 @@ Protocol reads accept optional `?chainId=` (decimal or CAIP-2). Omitted uses the
 <tbody>
 <tr>
 <td><code>GET /accounts/:address/subscriptions</code></td>
-<td>Subscriptions for an account (rich)</td>
+<td>Subscriptions for an account. Query: <code>bySubscriber=true|false</code> (default <code>false</code> = created as provider; <code>true</code> = subscribed to)</td>
 </tr>
 <tr>
 <td><code>GET /accounts/:address</code></td>

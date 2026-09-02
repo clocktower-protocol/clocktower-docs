@@ -43,7 +43,7 @@ Las lecturas de protocolo aceptan `?chainId=` opcional (decimal o CAIP-2). Si se
 <tbody>
 <tr>
 <td><code>GET /accounts/:address/subscriptions</code></td>
-<td>Suscripciones de una cuenta (enriquecidas)</td>
+<td>Suscripciones de una cuenta. Query: <code>bySubscriber=true|false</code> (por defecto <code>false</code> = creadas como provider; <code>true</code> = suscrito a)</td>
 </tr>
 <tr>
 <td><code>GET /accounts/:address</code></td>

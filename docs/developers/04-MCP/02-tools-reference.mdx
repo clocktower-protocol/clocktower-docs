@@ -14,7 +14,7 @@ MCP tools share the REST **free** and **developer** lanes. Each tool call counts
 |------|-------------|
 | `get_protocol_state` | Current fee configuration |
 | `get_subscription` | Single subscription by ID |
-| `get_account_subscriptions` | List subscriptions for an account |
+| `get_account_subscriptions` | List subscriptions for an account. Requires `account` and `bySubscriber` (`true` = subscribed to, `false` = created as provider) |
 | `get_account` | Enriched account: `subscribedTo` + `created` |
 | `get_fee_balance` | Fee balance for a subscriber on a subscription |
 | `get_subscribers` | Subscribers and fee balances |

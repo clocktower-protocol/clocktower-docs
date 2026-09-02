@@ -14,7 +14,7 @@ Las tools MCP comparten los lanes **free** y **developer** de REST. Cada llamada
 |------|-------------|
 | `get_protocol_state` | Configuración actual de comisiones |
 | `get_subscription` | Suscripción individual por ID |
-| `get_account_subscriptions` | Lista suscripciones de una cuenta |
+| `get_account_subscriptions` | Lista suscripciones de una cuenta. Requiere `account` y `bySubscriber` (`true` = suscrito a, `false` = creadas como provider) |
 | `get_account` | Cuenta enriquecida: `subscribedTo` + `created` |
 | `get_fee_balance` | Saldo de comisiones de un suscriptor en una suscripción |
 | `get_subscribers` | Suscriptores y saldos de comisiones |
