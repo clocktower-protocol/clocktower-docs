@@ -43,7 +43,7 @@ Pass `readinessOnly: true` to any `prepare_*` tool:
 
 - Returns `ready`, `errors`, `warnings`, `details`
 - No `unsignedTransactions` or simulation
-- Billed at readiness tier ($0.01; remit path $0.02)
+- Counts against the same free/developer [rate limits](/docs/developers/REST%20API/rate-limits) as other MCP tool calls — there is no per-call payment
 
 Dedicated readiness tools: `check_subscribe_readiness`, `check_subscribe_readiness_by_id` (**preferred** when the id is known), `check_remit_readiness`.
 

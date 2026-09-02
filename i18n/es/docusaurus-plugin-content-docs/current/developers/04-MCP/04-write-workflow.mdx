@@ -43,7 +43,7 @@ Pasa `readinessOnly: true` a cualquier herramienta `prepare_*`:
 
 - Devuelve `ready`, `errors`, `warnings`, `details`
 - Sin `unsignedTransactions` ni simulación
-- Facturado al nivel de preparación ($0.01; ruta remit $0.02)
+- Cuenta contra los mismos [límites de tasa](/docs/developers/REST%20API/rate-limits) free/developer que el resto de tools MCP — no hay un cobro por llamada
 
 Herramientas dedicadas de preparación: `check_subscribe_readiness`, `check_subscribe_readiness_by_id` (**preferida** si conoces el id), `check_remit_readiness`.
 
