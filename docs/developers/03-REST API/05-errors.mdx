@@ -46,12 +46,22 @@ All errors return a consistent JSON shape:
 <td><code>PREPARE_FAILURE</code></td>
 <td>MCP prepare-layer failure (may include <code>requestId</code>). Not returned by REST</td>
 </tr>
-<IfFeature name="builder">
+<tr>
+<td><code>UNAUTHORIZED</code></td>
+<td>Invalid or revoked developer API key (HTTP <strong>401</strong>). Does not fall back to the free tier</td>
+</tr>
 <tr>
 <td><code>FORBIDDEN</code></td>
-<td>Builder session outside entitlement scope (HTTP <strong>403</strong>)</td>
+<td>Credential is not allowed for this request (HTTP <strong>403</strong>). Includes MCP rejecting Builder <code>cts_…</code> sessions and <code>:me</code> routes without Builder<IfFeature name="builder">, plus Builder sessions outside entitlement scope</IfFeature></td>
 </tr>
-</IfFeature>
+<tr>
+<td><code>AUTH_RATE_LIMITED</code></td>
+<td>Too many failed auth attempts from this IP (HTTP <strong>429</strong>)</td>
+</tr>
+<tr>
+<td><code>API_DISABLED</code></td>
+<td>REST is temporarily unavailable (HTTP <strong>503</strong>)</td>
+</tr>
 </tbody>
 </table>
 
