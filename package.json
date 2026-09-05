@@ -81,9 +81,9 @@
     "node": ">=22.0.0"
   },
   "allowScripts": {
-    "@swc/core@1.16.1": true,
-    "esbuild@0.28.2": true,
-    "workerd@1.20260831.1": true,
+    "@swc/core": true,
+    "esbuild": true,
+    "workerd": true,
     "core-js": false
   }
 }
